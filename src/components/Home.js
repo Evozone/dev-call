@@ -23,7 +23,7 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 
 const drawerWidth = 470;
 
-export default function PermanentDrawerLeft({ themeChange, mode }) {
+export default function Home({ themeChange, mode }) {
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />

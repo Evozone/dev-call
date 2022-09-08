@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import './App.css';
-import PermanentDrawerLeft from './components/Drawer';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+
+import './App.css';
+import Home from './components/Home';
 
 const App = () => {
     const localTheme = window.localStorage.getItem('devcallTheme');
@@ -24,7 +25,7 @@ const App = () => {
     return (
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
-            <PermanentDrawerLeft themeChange={themeChange} mode={mode} />
+            <Home themeChange={themeChange} mode={mode} />
         </ThemeProvider>
     );
 };

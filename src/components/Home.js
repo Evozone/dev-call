@@ -21,9 +21,11 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 
+import TabsNav from './TabsNav';
+
 const drawerWidth = 470;
 
-export default function PermanentDrawerLeft({ themeChange, mode }) {
+export default function Home({ themeChange, mode }) {
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -34,6 +36,7 @@ export default function PermanentDrawerLeft({ themeChange, mode }) {
                     '& .MuiDrawer-paper': {
                         width: drawerWidth,
                         boxSizing: 'border-box',
+                        borderRight: 'none',
                     },
                 }}
                 variant='permanent'
@@ -41,14 +44,19 @@ export default function PermanentDrawerLeft({ themeChange, mode }) {
             >
                 <Box
                     sx={{
-                        height: '70px',
+                        height: '75px',
                         display: 'flex',
                         alignItems: 'center',
                         pl: 2,
+                        backgroundColor: 'info.main',
+                        // edit the below @bhargav
+                        borderRight: '5px solid red',
                     }}
                 >
                     <Avatar sx={{ width: 50, height: 50, mr: 2 }}>i</Avatar>
-                    <Typography variant='h5'>itsvishal2417</Typography>
+                    <Typography sx={{ color: 'white' }} variant='h5'>
+                        itsvishal2417
+                    </Typography>
                     <Grid pr='10px' container justifyContent='flex-end'>
                         <Tooltip title='Toggle Theme'>
                             <IconButton
@@ -56,15 +64,15 @@ export default function PermanentDrawerLeft({ themeChange, mode }) {
                                 sx={{ mr: '10px' }}
                             >
                                 {mode === 'dark' ? (
-                                    <LightModeIcon color='primary' />
+                                    <LightModeIcon />
                                 ) : (
-                                    <DarkModeIcon color='primary' />
+                                    <DarkModeIcon sx={{ color: 'white' }} />
                                 )}
                             </IconButton>
                         </Tooltip>
                         <Tooltip title='Install'>
                             <IconButton sx={{ mr: '10px' }}>
-                                <DownloadIcon color='primary' />
+                                <DownloadIcon sx={{ color: 'white' }} />
                             </IconButton>
                         </Tooltip>
                         <Tooltip title='Logout'>
@@ -74,33 +82,30 @@ export default function PermanentDrawerLeft({ themeChange, mode }) {
                         </Tooltip>
                     </Grid>
                 </Box>
-                <Divider />
-                <List>
-                    {['Inbox', 'Starred', 'Send email', 'Drafts'].map(
-                        (text, index) => (
-                            <ListItem key={text} disablePadding>
-                                <ListItemButton>
-                                    <ListItemIcon>
-                                        {index % 2 === 0 ? (
-                                            <InboxIcon />
-                                        ) : (
-                                            <MailIcon />
-                                        )}
-                                    </ListItemIcon>
-                                    <ListItemText primary={text} />
-                                </ListItemButton>
-                            </ListItem>
-                        )
-                    )}
-                </List>
-                <Divider />
+                <Box
+                    sx={{
+                        height: 'calc(100% - 75px)',
+                        ...(mode === 'dark'
+                            ? {
+                                  borderRight:
+                                      '1px solid rgba(255, 255, 255, 0.12)',
+                              }
+                            : { borderRight: '1px solid rgba(0, 0, 0, 0.12)' }),
+                    }}
+                >
+                    <TabsNav mode={mode} />
+                </Box>
             </Drawer>
             <Box
                 component='main'
                 sx={{ flexGrow: 1, bgcolor: 'background.default', p: 0 }}
             >
-                <Toolbar sx={{ height: '70px' }} />
-                <Divider />
+                <Toolbar
+                    sx={{
+                        height: '75px',
+                        backgroundColor: 'info.main',
+                    }}
+                />
                 <Box sx={{ p: 3 }}>
                     <Typography paragraph>Testing some changes</Typography>
                     <Typography paragraph>

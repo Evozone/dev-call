@@ -1,26 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import {
-    Avatar,
-    Divider,
-    List,
-    ListItem,
-    ListItemAvatar,
-    InputAdornment,
-    ListItemButton,
-    ListItemText,
-    Paper,
-    Input,
-    IconButton,
-    TextField,
-} from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import Divider from '@mui/material/Divider';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import List from '@mui/material/List';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
-import CloseIcon from '@mui/icons-material/Close';
+// import CloseIcon from '@mui/icons-material/Close';
 
 const data = [
     {

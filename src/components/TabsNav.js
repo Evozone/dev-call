@@ -150,6 +150,7 @@ export default function TabsNav({ mode }) {
                             width: '93%',
                             '& .MuiOutlinedInput-root': {
                                 paddingRight: '6px',
+                                borderRadius: '20px',
                             },
                         }}
                         InputProps={{
@@ -164,6 +165,7 @@ export default function TabsNav({ mode }) {
                         size='small'
                     />
                 )}
+                <Divider />
                 {data.map((item) => {
                     return (
                         <TabPanel

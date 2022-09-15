@@ -1,8 +1,8 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
+import Divider from '@mui/material/Divider';
 import CssBaseline from '@mui/material/CssBaseline';
-import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import Grid from '@mui/material/Grid';
@@ -12,8 +12,12 @@ import DownloadIcon from '@mui/icons-material/Download';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+import VideoCallIcon from '@mui/icons-material/VideoCall';
+import TextField from '@mui/material/TextField';
+import SendIcon from '@mui/icons-material/Send';
 
 import TabsNav from './TabsNav';
+import TextBody from './TextBody';
 
 const drawerWidth = 470;
 
@@ -62,7 +66,7 @@ export default function Home({ themeChange, mode }) {
                                 )}
                             </IconButton>
                         </Tooltip>
-                        <Tooltip title='Install'>
+                        <Tooltip title='Install App '>
                             <IconButton sx={{ mr: '10px' }}>
                                 <DownloadIcon sx={{ color: 'white' }} />
                             </IconButton>
@@ -90,33 +94,94 @@ export default function Home({ themeChange, mode }) {
             </Drawer>
             <Box
                 component='main'
-                sx={{ flexGrow: 1, bgcolor: 'background.default', p: 0 }}
+                sx={{
+                    flexGrow: 1,
+                    bgcolor: 'background.default',
+                    p: 0,
+                    width: '100%',
+                    height: '100vh',
+                    overflow: 'hidden',
+                }}
             >
-                <Toolbar
+                <Box
                     sx={{
                         height: '75px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        pl: 2,
                         backgroundColor: 'info.main',
                     }}
-                />
-                <Box sx={{ p: 3 }}>
-                    <Typography paragraph>Testing some changes</Typography>
-                    <Typography paragraph>
-                        Consequat mauris nunc congue nisi vitae suscipit.
-                        Fringilla est ullamcorper eget nulla facilisi etiam
-                        dignissim diam. Pulvinar elementum integer enim neque
-                        volutpat ac tincidunt. Ornare suspendisse sed nisi lacus
-                        sed viverra tellus. Purus sit amet volutpat consequat
-                        mauris. Elementum eu facilisis sed odio morbi. Euismod
-                        lacinia at quis risus sed vulputate odio. Morbi
-                        tincidunt ornare massa eget egestas purus viverra
-                        accumsan in. In hendrerit gravida rutrum quisque non
-                        tellus orci ac. Pellentesque nec nam aliquam sem et
-                        tortor. Habitant morbi tristique senectus et. Adipiscing
-                        elit duis tristique sollicitudin nibh sit. Ornare aenean
-                        euismod elementum nisi quis eleifend. Commodo viverra
-                        maecenas accumsan lacus vel facilisis. Nulla posuere
-                        sollicitudin aliquam ultrices sagittis orci a.
+                >
+                    <Avatar sx={{ width: 50, height: 50, mr: 2 }}>i</Avatar>
+                    <Typography sx={{ color: 'white' }} variant='h6'>
+                        thebrahmnicboy
                     </Typography>
+                    <Grid pr='20px' container justifyContent='flex-end'>
+                        <Tooltip title='Video Call'>
+                            <IconButton>
+                                <VideoCallIcon
+                                    fontSize='large'
+                                    sx={{ color: 'white' }}
+                                />
+                            </IconButton>
+                        </Tooltip>
+                    </Grid>
+                </Box>
+                <Box
+                    sx={{
+                        pt: 3,
+                        px: '20px',
+                        height: 'calc(100vh - 131px)',
+                        overflow: 'scroll',
+                        display: 'flex',
+                        flexDirection: 'column',
+                    }}
+                >
+                    <TextBody />
+                    <TextBody owner='owner' />
+                    <TextBody />
+                    <TextBody />
+                    <TextBody owner='owner' />
+                    <TextBody owner='owner' />
+                    <TextBody />
+                    <TextBody />
+                    <TextBody owner='owner' />
+                </Box>
+                <Box
+                    sx={{
+                        bottom: '0',
+                        width: '100%',
+                    }}
+                >
+                    <Divider />
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                        }}
+                    >
+                        <TextField
+                            sx={{
+                                width: '100%',
+                                m: 1,
+                                ml: '20px',
+                                '& .MuiOutlinedInput-root': {
+                                    borderRadius: '20px',
+                                },
+                            }}
+                            size='small'
+                            multiline
+                            maxRows={1}
+                        />
+                        <IconButton sx={{ mr: '20px' }}>
+                            <SendIcon
+                                sx={{
+                                    fontSize: '33px',
+                                    color: 'info.main',
+                                }}
+                            />
+                        </IconButton>
+                    </Box>
                 </Box>
             </Box>
         </Box>

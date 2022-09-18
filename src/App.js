@@ -1,11 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import jwtDecode from 'jwt-decode';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-import './App.css';
 import Home from './components/Home';
+import LandingPage from './LandingPage';
+import { signInAction } from './actions/actions';
 
 const App = () => {
+    const dispatch = useDispatch();
+
     const localTheme = window.localStorage.getItem('devcallTheme');
 
     const [mode, setMode] = useState(localTheme ? localTheme : 'light');
@@ -22,10 +27,32 @@ const App = () => {
         setMode(updatedTheme);
     };
 
+    const isSignedIn = useSelector((state) => state.auth.isSignedIn);
+
+    useEffect(() => {
+        const auth = window.localStorage.getItem('dev');
+        if (auth) {
+            const { dnd } = JSON.parse(auth);
+            const {
+                sub: id,
+                email,
+                name,
+                picture: photoURL,
+                iat: signInTime,
+            } = jwtDecode(dnd);
+
+            dispatch(signInAction(id, email, name, photoURL, dnd, signInTime));
+        }
+    }, []);
+
     return (
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
-            <Home themeChange={themeChange} mode={mode} />
+            {isSignedIn ? (
+                <Home themeChange={themeChange} mode={mode} />
+            ) : (
+                <LandingPage />
+            )}
         </ThemeProvider>
     );
 };

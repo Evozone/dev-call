@@ -5,6 +5,7 @@ export default function TextBody({ owner }) {
     return (
         <Box
             sx={{
+                // edit the below @bhargav
                 backgroundColor: 'info.main',
                 borderRadius: '5px',
                 maxWidth: '30rem',

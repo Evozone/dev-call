@@ -15,13 +15,17 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import VideoCallIcon from '@mui/icons-material/VideoCall';
 import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
+import { useDispatch } from 'react-redux';
 
 import TabsNav from './TabsNav';
 import TextBody from './TextBody';
+import { signOutAction } from '../actions/actions';
 
 const drawerWidth = 470;
 
 export default function Home({ themeChange, mode }) {
+    const dispatch = useDispatch();
+
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -72,7 +76,9 @@ export default function Home({ themeChange, mode }) {
                             </IconButton>
                         </Tooltip>
                         <Tooltip title='Logout'>
-                            <IconButton>
+                            <IconButton
+                                onClick={() => dispatch(signOutAction())}
+                            >
                                 <LogoutIcon color='error' />
                             </IconButton>
                         </Tooltip>

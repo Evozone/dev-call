@@ -1,4 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
+import {
+    collection,
+    getDocs,
+    query,
+    where,
+    getDoc,
+    doc,
+    setDoc,
+    updateDoc,
+    serverTimestamp,
+} from 'firebase/firestore';
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -13,7 +24,10 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
+import { useSelector } from 'react-redux';
 // import CloseIcon from '@mui/icons-material/Close';
+
+import { db } from '../firebaseConfig';
 
 const data = [
     {
@@ -35,7 +49,8 @@ const data = [
 ];
 
 function TabPanel(props) {
-    const { item, value, index, ...other } = props;
+    const { item, value, index, empty, loading, handleSelect, ...other } =
+        props;
 
     return (
         <div
@@ -45,18 +60,54 @@ function TabPanel(props) {
             aria-labelledby={`full-width-tab-${index}`}
             {...other}
         >
-            {value === index && (
+            {value === index && !empty && !loading && (
                 <Box sx={{ p: 0 }}>
-                    <ListItem sx={{ p: 0 }}>
+                    <ListItem onClick={handleSelect} sx={{ p: 0 }}>
                         <ListItemButton sx={{ px: 2, height: '70px' }}>
-                            <Avatar sx={{ width: 50, height: 50, mr: 2 }}>
-                                {item.username.charAt(0)}
-                            </Avatar>
+                            <Avatar
+                                alt={item.username.charAt(0).toUpperCase()}
+                                src={item.photoURL}
+                                sx={{ width: 50, height: 50, mr: 2 }}
+                            />
                             <Typography sx={{ mb: 3, fontSize: '18px' }}>
                                 {item.username}
                             </Typography>
                         </ListItemButton>
                     </ListItem>
+                    <Divider />
+                </Box>
+            )}
+            {value === index && empty && !loading && (
+                <Box
+                    sx={{
+                        p: 0,
+                        height: '400px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Typography sx={{ mb: 3, fontSize: '18px' }}>
+                        No user found 🙁
+                    </Typography>
+                </Box>
+            )}
+            {value === index && loading && (
+                <Box
+                    sx={{
+                        p: 0,
+                        height: '400px',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                    }}
+                >
+                    <Typography sx={{ mb: 3, fontSize: '18px' }}>
+                        Type username & <br /> press Enter or click on 🔍 to
+                        search
+                    </Typography>
+
                     <Divider />
                 </Box>
             )}
@@ -72,10 +123,99 @@ function a11yProps(index) {
 }
 
 export default function TabsNav({ mode }) {
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = useState(0);
+    const [searchResults, setSearchResults] = useState(null);
+    const [foundUser, setFoundUser] = useState(true);
+    const [searchText, setSearchText] = useState('');
+    const [loading, setLoading] = useState(false);
+
+    const currentUser = useSelector((state) => state.auth);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+    };
+
+    const handleSearch = async () => {
+        if (!searchText) {
+            alert('Please enter a valid username');
+            return;
+        }
+        const q = query(
+            collection(db, 'users'),
+            where('username', '==', searchText.toLowerCase())
+        );
+        try {
+            const querySnapshot = await getDocs(q);
+            if (querySnapshot.empty) {
+                setFoundUser(false);
+                setSearchResults(null);
+            } else {
+                querySnapshot.forEach((doc) => {
+                    setSearchResults(doc.data());
+                    setFoundUser(true);
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        setLoading(false);
+    };
+
+    const handleKey = (e) => {
+        e.code === 'Enter' && handleSearch();
+    };
+
+    const handleSearchText = (e) => {
+        setSearchResults(null);
+        setLoading(true);
+        setFoundUser(true);
+        setSearchText(e.target.value);
+    };
+
+    const handleSelect = async () => {
+        //check whether the group(chats in firestore) exists, if not create
+        const combinedId =
+            currentUser.uid > searchResults.uid
+                ? currentUser.uid + searchResults.uid
+                : searchResults.uid + currentUser.uid;
+        try {
+            const res = await getDoc(doc(db, 'chats', combinedId));
+
+            if (!res.exists()) {
+                //create a chat in chats collection
+                await setDoc(doc(db, 'chats', combinedId), { messages: [] });
+
+                //create user chats
+                await updateDoc(doc(db, 'userChats', currentUser.uid), {
+                    [combinedId + '.userInfo']: {
+                        uid: searchResults.uid,
+                        name: searchResults.name,
+                        photoURL: searchResults.photoURL,
+                        username: searchResults.email.split('@')[0],
+                        email: searchResults.email,
+                    },
+                    [combinedId + '.date']: serverTimestamp(),
+                });
+
+                await updateDoc(doc(db, 'userChats', searchResults.uid), {
+                    [combinedId + '.userInfo']: {
+                        uid: currentUser.uid,
+                        name: currentUser.name,
+                        photoURL: currentUser.photoURL,
+                        username: currentUser.username,
+                        email: currentUser.email,
+                    },
+                    [combinedId + '.date']: serverTimestamp(),
+                });
+            }
+        } catch (err) {
+            console.log(err);
+        }
+        setSearchResults(null);
+        setLoading(true);
+        setFoundUser(true);
+        setSearchText('');
+        setValue(0);
     };
 
     return (
@@ -156,26 +296,31 @@ export default function TabsNav({ mode }) {
                         InputProps={{
                             endAdornment: (
                                 <InputAdornment position='end'>
-                                    <IconButton>
+                                    <IconButton onClick={handleSearch}>
                                         <SearchIcon />
                                     </IconButton>
                                 </InputAdornment>
                             ),
                         }}
                         size='small'
+                        value={searchText}
+                        onChange={(e) => handleSearchText(e)}
+                        onKeyDown={handleKey}
                     />
                 )}
                 <Divider />
-                {data.map((item) => {
-                    return (
-                        <TabPanel
-                            item={item}
-                            value={value}
-                            index={1}
-                            key={item.id}
-                        />
-                    );
-                })}
+                {searchResults && (
+                    <TabPanel
+                        handleSelect={handleSelect}
+                        item={searchResults}
+                        value={value}
+                        index={1}
+                    />
+                )}
+                {!foundUser && searchText != '' && (
+                    <TabPanel empty={true} value={value} index={1} />
+                )}
+                {loading && <TabPanel loading={true} value={value} index={1} />}
             </List>
         </Box>
     );

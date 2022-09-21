@@ -7,6 +7,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Home from './components/Home';
 import LandingPage from './LandingPage';
 import { signInAction } from './actions/actions';
+import Loading from './components/Loading';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -34,20 +35,21 @@ const App = () => {
         if (auth) {
             const { dnd } = JSON.parse(auth);
             const {
-                sub: id,
+                sub: uid,
                 email,
                 name,
                 picture: photoURL,
                 iat: signInTime,
             } = jwtDecode(dnd);
 
-            dispatch(signInAction(id, email, name, photoURL, dnd, signInTime));
+            dispatch(signInAction(uid, email, name, photoURL, dnd, signInTime));
         }
     }, []);
 
     return (
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
+            <Loading />
             {isSignedIn ? (
                 <Home themeChange={themeChange} mode={mode} />
             ) : (

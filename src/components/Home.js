@@ -15,16 +15,29 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import VideoCallIcon from '@mui/icons-material/VideoCall';
 import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { signOut } from 'firebase/auth';
 
 import TabsNav from './TabsNav';
 import TextBody from './TextBody';
 import { signOutAction } from '../actions/actions';
+import { auth } from '../firebaseConfig';
 
 const drawerWidth = 470;
 
 export default function Home({ themeChange, mode }) {
     const dispatch = useDispatch();
+    const currentUser = useSelector((state) => state.auth);
+
+    const logOut = () => {
+        signOut(auth)
+            .then(() => {
+                dispatch(signOutAction());
+            })
+            .catch((error) => {
+                alert(error);
+            });
+    };
 
     return (
         <Box sx={{ display: 'flex' }}>
@@ -53,9 +66,17 @@ export default function Home({ themeChange, mode }) {
                         borderRight: '5px solid red',
                     }}
                 >
-                    <Avatar sx={{ width: 50, height: 50, mr: 2 }}>i</Avatar>
+                    <Avatar
+                        sx={{
+                            width: 50,
+                            height: 50,
+                            mr: 2,
+                        }}
+                        alt={currentUser.username.charAt(0).toUpperCase()}
+                        src={currentUser.photoURL}
+                    />
                     <Typography sx={{ color: 'white' }} variant='h5'>
-                        itsvishal2417
+                        {currentUser.username}
                     </Typography>
                     <Grid pr='10px' container justifyContent='flex-end'>
                         <Tooltip title='Toggle Theme'>
@@ -76,9 +97,7 @@ export default function Home({ themeChange, mode }) {
                             </IconButton>
                         </Tooltip>
                         <Tooltip title='Logout'>
-                            <IconButton
-                                onClick={() => dispatch(signOutAction())}
-                            >
+                            <IconButton onClick={logOut}>
                                 <LogoutIcon color='error' />
                             </IconButton>
                         </Tooltip>
@@ -139,6 +158,7 @@ export default function Home({ themeChange, mode }) {
                         px: '20px',
                         height: 'calc(100vh - 131px)',
                         overflow: 'scroll',
+                        overflowX: 'hidden',
                         display: 'flex',
                         flexDirection: 'column',
                     }}

@@ -8,6 +8,7 @@ const INITIAL_STATE = {
     photoURL: null,
     token: null,
     signInTime: null,
+    username: null,
 };
 
 const authReducer = (state = INITIAL_STATE, action) => {

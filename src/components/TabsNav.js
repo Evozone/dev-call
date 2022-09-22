@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     collection,
     getDocs,
@@ -9,6 +9,7 @@ import {
     setDoc,
     updateDoc,
     serverTimestamp,
+    onSnapshot,
 } from 'firebase/firestore';
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
@@ -29,28 +30,18 @@ import { useSelector } from 'react-redux';
 
 import { db } from '../firebaseConfig';
 
-const data = [
-    {
-        username: 'thebrahmnicboy',
-        id: '1',
-    },
-    {
-        username: 'thebrahmnicboy',
-        id: '2',
-    },
-    {
-        username: 'thebrahmnicboy',
-        id: '3',
-    },
-    {
-        username: 'thebrahmnicboy',
-        id: '4',
-    },
-];
-
 function TabPanel(props) {
-    const { item, value, index, empty, loading, handleSelect, ...other } =
-        props;
+    const {
+        item,
+        value,
+        index,
+        empty,
+        loading,
+        handleSelect,
+        search,
+        setChat,
+        ...other
+    } = props;
 
     return (
         <div
@@ -60,7 +51,25 @@ function TabPanel(props) {
             aria-labelledby={`full-width-tab-${index}`}
             {...other}
         >
-            {value === index && !empty && !loading && (
+            {value === index && !empty && !loading && !search && (
+                <Box sx={{ p: 0 }}>
+                    <ListItem onClick={() => setChat(item)} sx={{ p: 0 }}>
+                        <ListItemButton sx={{ px: 2, height: '70px' }}>
+                            <Avatar
+                                alt={item[1].userInfo.username
+                                    .charAt(0)
+                                    .toUpperCase()}
+                                src={item[1].userInfo.photoURL}
+                                sx={{ width: 50, height: 50, mr: 2 }}
+                            />
+                            <Typography sx={{ mb: 3, fontSize: '18px' }}>
+                                {item[1].userInfo.username}
+                            </Typography>
+                        </ListItemButton>
+                    </ListItem>
+                </Box>
+            )}
+            {value === index && !empty && !loading && search && (
                 <Box sx={{ p: 0 }}>
                     <ListItem onClick={handleSelect} sx={{ p: 0 }}>
                         <ListItemButton sx={{ px: 2, height: '70px' }}>
@@ -74,7 +83,6 @@ function TabPanel(props) {
                             </Typography>
                         </ListItemButton>
                     </ListItem>
-                    <Divider />
                 </Box>
             )}
             {value === index && empty && !loading && (
@@ -122,14 +130,32 @@ function a11yProps(index) {
     };
 }
 
-export default function TabsNav({ mode }) {
+export default function TabsNav({ mode, setChat }) {
     const [value, setValue] = useState(0);
     const [searchResults, setSearchResults] = useState(null);
     const [foundUser, setFoundUser] = useState(true);
     const [searchText, setSearchText] = useState('');
     const [loading, setLoading] = useState(false);
+    const [userChats, setUserChats] = useState([]);
 
     const currentUser = useSelector((state) => state.auth);
+
+    useEffect(() => {
+        const getUserChats = () => {
+            const unsub = onSnapshot(
+                doc(db, 'userChats', currentUser.uid),
+                (doc) => {
+                    setUserChats(doc.data());
+                }
+            );
+
+            return () => {
+                unsub();
+            };
+        };
+
+        currentUser.uid && getUserChats();
+    }, [currentUser.uid]);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -173,7 +199,6 @@ export default function TabsNav({ mode }) {
     };
 
     const handleSelect = async () => {
-        //check whether the group(chats in firestore) exists, if not create
         const combinedId =
             currentUser.uid > searchResults.uid
                 ? currentUser.uid + searchResults.uid
@@ -182,10 +207,8 @@ export default function TabsNav({ mode }) {
             const res = await getDoc(doc(db, 'chats', combinedId));
 
             if (!res.exists()) {
-                //create a chat in chats collection
                 await setDoc(doc(db, 'chats', combinedId), { messages: [] });
 
-                //create user chats
                 await updateDoc(doc(db, 'userChats', currentUser.uid), {
                     [combinedId + '.userInfo']: {
                         uid: searchResults.uid,
@@ -211,6 +234,16 @@ export default function TabsNav({ mode }) {
         } catch (err) {
             console.log(err);
         }
+        setChat([
+            combinedId,
+            {
+                userInfo: {
+                    username: searchResults.email.split('@')[0],
+                    photoURL: searchResults.photoURL,
+                    uid: searchResults.uid,
+                },
+            },
+        ]);
         setSearchResults(null);
         setLoading(true);
         setFoundUser(true);
@@ -270,16 +303,20 @@ export default function TabsNav({ mode }) {
                 </Tabs>
             </AppBar>
             <List sx={{ p: 0 }}>
-                {data.map((item) => {
-                    return (
-                        <TabPanel
-                            item={item}
-                            value={value}
-                            index={0}
-                            key={item.id}
-                        />
-                    );
-                })}
+                {userChats &&
+                    Object.entries(userChats)
+                        ?.sort((a, b) => b[1].date - a[1].date)
+                        .map((item) => {
+                            return (
+                                <TabPanel
+                                    item={item}
+                                    value={value}
+                                    index={0}
+                                    key={item[0]}
+                                    setChat={setChat}
+                                />
+                            );
+                        })}
             </List>
             <List sx={{ p: 0 }}>
                 {value === 1 && (
@@ -315,6 +352,7 @@ export default function TabsNav({ mode }) {
                         item={searchResults}
                         value={value}
                         index={1}
+                        search={true}
                     />
                 )}
                 {!foundUser && searchText != '' && (

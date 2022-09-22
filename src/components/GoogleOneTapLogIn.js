@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Button } from '@mui/material';
 import { Google } from '@mui/icons-material';
 import { signInWithCredential, GoogleAuthProvider } from 'firebase/auth';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, getDoc } from 'firebase/firestore';
 
 import { useDispatch } from 'react-redux';
 import { signInAction } from '../actions/actions';
@@ -33,7 +33,12 @@ const GoogleOneTapLogin = () => {
                     lastSignInTime: response.user.metadata.lastLoginAt,
                     username: response.user.email.split('@')[0],
                 });
-                await setDoc(doc(db, 'userChats', response.user.uid), {});
+                const res = await getDoc(
+                    doc(db, 'userChats', response.user.uid)
+                );
+                if (!res.exists()) {
+                    await setDoc(doc(db, 'userChats', response.user.uid), {});
+                }
                 dispatch(
                     signInAction(
                         response.user.uid,

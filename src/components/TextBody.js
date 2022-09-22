@@ -1,7 +1,10 @@
+import { useSelector } from 'react-redux';
 import { Box, Typography } from '@mui/material';
 import React from 'react';
 
-export default function TextBody({ owner }) {
+export default function TextBody({ message }) {
+    const currentUser = useSelector((state) => state.auth);
+
     return (
         <Box
             sx={{
@@ -9,21 +12,17 @@ export default function TextBody({ owner }) {
                 backgroundColor: 'info.main',
                 borderRadius: '5px',
                 maxWidth: '30rem',
+                width: 'fit-content',
                 p: 1,
                 color: 'white',
                 mb: 1,
 
-                ...(owner && {
+                ...(currentUser.uid === message.senderid && {
                     alignSelf: 'flex-end',
                 }),
             }}
         >
-            <Typography>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magni
-                neque voluptate odit enim fugiat pariatur earum cupiditate
-                laborum ipsum soluta? Ducimus facilis labore sit. Nesciunt ea
-                accusantium qui. Recusandae, inventore.
-            </Typography>
+            <Typography>{message.text}</Typography>
         </Box>
     );
 }

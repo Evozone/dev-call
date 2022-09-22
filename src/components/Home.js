@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Divider from '@mui/material/Divider';
@@ -17,17 +17,44 @@ import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
 import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from 'firebase/auth';
+import {
+    onSnapshot,
+    doc,
+    updateDoc,
+    arrayUnion,
+    Timestamp,
+    serverTimestamp,
+} from 'firebase/firestore';
+import { v4 as uuid } from 'uuid';
 
 import TabsNav from './TabsNav';
 import TextBody from './TextBody';
 import { signOutAction } from '../actions/actions';
-import { auth } from '../firebaseConfig';
+import { auth, db } from '../firebaseConfig';
 
 const drawerWidth = 470;
 
 export default function Home({ themeChange, mode }) {
     const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.auth);
+    const [chat, setChat] = useState([]);
+    const [messages, setMessages] = useState([]);
+    const [text, setText] = useState('');
+
+    useEffect(() => {
+        const getUserMesaages = () => {
+            const unsub = onSnapshot(doc(db, 'chats', chat[0]), (doc) => {
+                doc.exists() && setMessages(doc.data().messages);
+                console.log('Current data: ', doc.data().messages);
+            });
+
+            return () => {
+                unsub();
+            };
+        };
+
+        chat.length > 0 && getUserMesaages();
+    }, [chat]);
 
     const logOut = () => {
         signOut(auth)
@@ -37,6 +64,39 @@ export default function Home({ themeChange, mode }) {
             .catch((error) => {
                 alert(error);
             });
+    };
+
+    const handleSend = async () => {
+        if (text.length > 0) {
+            await updateDoc(doc(db, 'chats', chat[0]), {
+                messages: arrayUnion({
+                    id: uuid(),
+                    text,
+                    senderid: currentUser.uid,
+                    date: Timestamp.now(),
+                }),
+            });
+        } else {
+            alert('Please enter some text');
+        }
+        const lastText = text;
+        setText('');
+        await updateDoc(doc(db, 'userChats', currentUser.uid), {
+            [chat[0] + '.lastMessage']: {
+                text: lastText,
+            },
+            [chat[0] + '.date']: serverTimestamp(),
+        });
+        await updateDoc(doc(db, 'userChats', chat[1].userInfo.uid), {
+            [chat[0] + '.lastMessage']: {
+                text: lastText,
+            },
+            [chat[0] + '.date']: serverTimestamp(),
+        });
+    };
+
+    const handleKey = (e) => {
+        e.code === 'Enter' && handleSend();
     };
 
     return (
@@ -114,7 +174,7 @@ export default function Home({ themeChange, mode }) {
                             : { borderRight: '1px solid rgba(0, 0, 0, 0.12)' }),
                     }}
                 >
-                    <TabsNav mode={mode} />
+                    <TabsNav mode={mode} setChat={setChat} />
                 </Box>
             </Drawer>
             <Box
@@ -137,9 +197,22 @@ export default function Home({ themeChange, mode }) {
                         backgroundColor: 'info.main',
                     }}
                 >
-                    <Avatar sx={{ width: 50, height: 50, mr: 2 }}>i</Avatar>
-                    <Typography sx={{ color: 'white' }} variant='h6'>
-                        thebrahmnicboy
+                    {chat.length > 0 ? (
+                        <Avatar
+                            alt={chat[1].userInfo.username
+                                .charAt(0)
+                                .toUpperCase()}
+                            src={chat[1].userInfo.photoURL}
+                            sx={{ width: 50, height: 50, mr: 2 }}
+                        />
+                    ) : (
+                        <Avatar sx={{ width: 50, height: 50, mr: 2 }}>i</Avatar>
+                    )}
+                    <Typography
+                        sx={{ color: 'white', fontWeight: '400' }}
+                        variant='h6'
+                    >
+                        {chat.length > 0 ? chat[1].userInfo.username : 'Chat'}
                     </Typography>
                     <Grid pr='20px' container justifyContent='flex-end'>
                         <Tooltip title='Video Call'>
@@ -163,15 +236,9 @@ export default function Home({ themeChange, mode }) {
                         flexDirection: 'column',
                     }}
                 >
-                    <TextBody />
-                    <TextBody owner='owner' />
-                    <TextBody />
-                    <TextBody />
-                    <TextBody owner='owner' />
-                    <TextBody owner='owner' />
-                    <TextBody />
-                    <TextBody />
-                    <TextBody owner='owner' />
+                    {messages.map((message) => {
+                        return <TextBody message={message} key={message.id} />;
+                    })}
                 </Box>
                 <Box
                     sx={{
@@ -198,8 +265,13 @@ export default function Home({ themeChange, mode }) {
                             size='small'
                             multiline
                             maxRows={1}
+                            placeholder='Message'
+                            autoFocus
+                            onChange={(e) => setText(e.target.value)}
+                            value={text}
+                            onKeyDown={handleKey}
                         />
-                        <IconButton sx={{ mr: '20px' }}>
+                        <IconButton onClick={handleSend} sx={{ mr: '20px' }}>
                             <SendIcon
                                 sx={{
                                     fontSize: '33px',

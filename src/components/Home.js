@@ -45,14 +45,11 @@ export default function Home({ themeChange, mode }) {
         const getUserMesaages = () => {
             const unsub = onSnapshot(doc(db, 'chats', chat[0]), (doc) => {
                 doc.exists() && setMessages(doc.data().messages);
-                console.log('Current data: ', doc.data().messages);
             });
-
             return () => {
                 unsub();
             };
         };
-
         chat.length > 0 && getUserMesaages();
     }, [chat]);
 
@@ -120,24 +117,26 @@ export default function Home({ themeChange, mode }) {
                         height: '75px',
                         display: 'flex',
                         alignItems: 'center',
-                        pl: 2,
+                        pl: 1,
                         backgroundColor: 'info.main',
-                        // edit the below @bhargav
+                        // @bhargav pls take care of below border color
                         borderRight: '5px solid red',
                     }}
                 >
-                    <Avatar
-                        sx={{
-                            width: 50,
-                            height: 50,
-                            mr: 2,
-                        }}
-                        alt={currentUser.username.charAt(0).toUpperCase()}
-                        src={currentUser.photoURL}
-                    />
-                    <Typography sx={{ color: 'white' }} variant='h5'>
-                        {currentUser.username}
-                    </Typography>
+                    <IconButton sx={{ borderRadius: '0' }}>
+                        <Avatar
+                            sx={{
+                                width: 50,
+                                height: 50,
+                                mr: 2,
+                            }}
+                            alt={currentUser.username.charAt(0).toUpperCase()}
+                            src={currentUser.photoURL}
+                        />
+                        <Typography sx={{ color: 'white' }} variant='h5'>
+                            {currentUser.username}
+                        </Typography>
+                    </IconButton>
                     <Grid pr='10px' container justifyContent='flex-end'>
                         <Tooltip title='Toggle Theme'>
                             <IconButton

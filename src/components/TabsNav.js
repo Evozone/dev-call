@@ -62,9 +62,30 @@ function TabPanel(props) {
                                 src={item[1].userInfo.photoURL}
                                 sx={{ width: 50, height: 50, mr: 2 }}
                             />
-                            <Typography sx={{ mb: 3, fontSize: '18px' }}>
-                                {item[1].userInfo.username}
-                            </Typography>
+                            <Box
+                                sx={{
+                                    display: 'block',
+                                }}
+                            >
+                                <Typography sx={{ fontSize: '18px' }}>
+                                    {item[1].userInfo.username}
+                                </Typography>
+                                <Typography
+                                    sx={{
+                                        fontSize: '14px',
+                                        //@bhargav pls take care of below color
+                                        color: 'whitesmoke',
+                                    }}
+                                >
+                                    {item[1].lastMessage.text.length > 30
+                                        ? item[1].lastMessage.text.substring(
+                                              0,
+                                              30
+                                          ) + '.......'
+                                        : item[1].lastMessage.text}
+                                </Typography>
+                            </Box>
+                            {/* <Typography>{item[1].date.seconds}</Typography> */}
                         </ListItemButton>
                     </ListItem>
                 </Box>
@@ -135,7 +156,7 @@ export default function TabsNav({ mode, setChat }) {
     const [searchResults, setSearchResults] = useState(null);
     const [foundUser, setFoundUser] = useState(true);
     const [searchText, setSearchText] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [userChats, setUserChats] = useState([]);
 
     const currentUser = useSelector((state) => state.auth);
@@ -148,12 +169,10 @@ export default function TabsNav({ mode, setChat }) {
                     setUserChats(doc.data());
                 }
             );
-
             return () => {
                 unsub();
             };
         };
-
         currentUser.uid && getUserChats();
     }, [currentUser.uid]);
 

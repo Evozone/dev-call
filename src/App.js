@@ -1,16 +1,20 @@
 import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
+import { signInAction } from './actions/actions';
 import Home from './components/Home';
 import LandingPage from './LandingPage';
-import { signInAction } from './actions/actions';
 import Loading from './components/Loading';
+import ProtectedRoute from './components/ProtectedRoute';
+import VideoCall from './components/VideoCall';
 
 const App = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const localTheme = window.localStorage.getItem('devcallTheme');
 
@@ -28,8 +32,6 @@ const App = () => {
         setMode(updatedTheme);
     };
 
-    const isSignedIn = useSelector((state) => state.auth.isSignedIn);
-
     useEffect(() => {
         const auth = window.localStorage.getItem('dev');
         if (auth) {
@@ -41,8 +43,10 @@ const App = () => {
                 picture: photoURL,
                 iat: signInTime,
             } = jwtDecode(dnd);
-
             dispatch(signInAction(uid, email, name, photoURL, dnd, signInTime));
+            if (window.location.pathname == '/') {
+                navigate('/chat');
+            }
         }
     }, []);
 
@@ -50,11 +54,18 @@ const App = () => {
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
             <Loading />
-            {isSignedIn ? (
-                <Home themeChange={themeChange} mode={mode} />
-            ) : (
-                <LandingPage />
-            )}
+            <Routes>
+                <Route path='/' element={<LandingPage />} />
+                <Route
+                    path='/chat'
+                    element={
+                        <ProtectedRoute>
+                            <Home themeChange={themeChange} mode={mode} />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route path='/meet/:roomId' element={<VideoCall />} />
+            </Routes>
         </ThemeProvider>
     );
 };

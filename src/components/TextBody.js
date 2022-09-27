@@ -1,12 +1,13 @@
 //@bhargav we can add a URL regex for text content
 // so if its a URL we can make it a link
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Box, Typography } from '@mui/material';
+import { Box, Link, Typography } from '@mui/material';
 
 export default function TextBody({ message }) {
     const currentUser = useSelector((state) => state.auth);
-    const [timeAgo, setTimeAgo] = React.useState('');
+    const [timeAgo, setTimeAgo] = useState('');
+    const [isLink, setIsLink] = useState(false);
     const ref = useRef();
 
     useEffect(() => {
@@ -16,7 +17,13 @@ export default function TextBody({ message }) {
             .substring(11, 16);
         setTimeAgo(result);
         ref.current?.scrollIntoView({ behavior: 'smooth' });
+        setIsLink(funcIsLink(message.text));
     }, [message]);
+
+    const funcIsLink = (message) => {
+        const urlRegex = /(https?:\/\/[^\s]+)/g;
+        return message.match(urlRegex);
+    };
 
     return (
         <Box
@@ -41,7 +48,21 @@ export default function TextBody({ message }) {
                 }),
             }}
         >
-            <Typography>{message.text}</Typography>
+            {isLink ? (
+                <Link
+                    href={message.text}
+                    target='_blank'
+                    rel='noopener'
+                    sx={{
+                        textDecoration: 'underline',
+                        color: 'white',
+                    }}
+                >
+                    {message.text}
+                </Link>
+            ) : (
+                <Typography> {message.text} </Typography>
+            )}
             <Typography
                 sx={{
                     textAlign: 'right',

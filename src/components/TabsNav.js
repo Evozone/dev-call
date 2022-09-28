@@ -77,13 +77,13 @@ function TabPanel(props) {
                                         color: 'lightsteelblue',
                                     }}
                                 >
-                                    {/* @vishal this text is not defined, breaks when no message was sent */}
-                                    {item[1].lastMessage.text.length > 30
-                                        ? item[1].lastMessage.text.substring(
-                                            0,
-                                            30
-                                        ) + '.......'
-                                        : item[1].lastMessage.text}
+                                    {item[1].lastMessage &&
+                                        (item[1].lastMessage.text.length > 30
+                                            ? item[1].lastMessage.text.substring(
+                                                0,
+                                                30
+                                            ) + '.......'
+                                            : item[1].lastMessage.text)}
                                 </Typography>
                             </Box>
                             {/* <Typography>{item[1].date.seconds}</Typography> */}

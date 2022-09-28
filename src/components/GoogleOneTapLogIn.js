@@ -3,6 +3,7 @@ import { Button } from '@mui/material';
 import { Google } from '@mui/icons-material';
 import { signInWithCredential, GoogleAuthProvider } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 import { signInAction } from '../actions/actions';
@@ -10,6 +11,7 @@ import { auth, db } from '../firebaseConfig';
 import { startLoadingAction, stopLoadingAction } from '../actions/actions';
 
 const GoogleOneTapLogin = () => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const googleButton = useRef(null);
@@ -50,6 +52,7 @@ const GoogleOneTapLogin = () => {
                         response.user.email.split('@')[0]
                     )
                 );
+                navigate('/chat');
             })
             .catch((error) => {
                 alert(error);

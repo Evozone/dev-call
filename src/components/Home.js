@@ -96,6 +96,10 @@ export default function Home({ themeChange, mode }) {
         e.code === 'Enter' && handleSend();
     };
 
+    const startVideoCall = () => {
+        window.open('/meet/123-3431-23', '_blank');
+    };
+
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -171,7 +175,9 @@ export default function Home({ themeChange, mode }) {
                                 borderRight:
                                     '1px solid rgba(255, 255, 255, 0.12)',
                             }
-                            : { borderRight: '1px solid rgba(0, 0, 0, 0.12)' }),
+                            : {
+                                borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+                            }),
                     }}
                 >
                     <TabsNav mode={mode} setChat={setChat} />
@@ -216,7 +222,7 @@ export default function Home({ themeChange, mode }) {
                     </Typography>
                     <Grid pr='20px' container justifyContent='flex-end'>
                         <Tooltip title='Video Call'>
-                            <IconButton>
+                            <IconButton onClick={startVideoCall}>
                                 <VideoCallIcon
                                     fontSize='large'
                                     sx={{ color: 'white' }}

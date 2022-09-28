@@ -119,8 +119,8 @@ export default function Home({ themeChange, mode }) {
                         alignItems: 'center',
                         pl: 1,
                         backgroundColor: 'info.main',
-                        // @bhargav pls take care of below border color
-                        borderRight: '5px solid red',
+                        borderRight: '1px solid',
+                        borderColor: 'info.dark',
                     }}
                 >
                     <IconButton sx={{ borderRadius: '0' }}>
@@ -157,7 +157,8 @@ export default function Home({ themeChange, mode }) {
                         </Tooltip>
                         <Tooltip title='Logout'>
                             <IconButton onClick={logOut}>
-                                <LogoutIcon color='error' />
+                                {/* Change LogoutIconColor based on mode */}
+                                <LogoutIcon sx={{ color: 'info.dark' }} />
                             </IconButton>
                         </Tooltip>
                     </Grid>
@@ -167,9 +168,9 @@ export default function Home({ themeChange, mode }) {
                         height: 'calc(100% - 75px)',
                         ...(mode === 'dark'
                             ? {
-                                  borderRight:
-                                      '1px solid rgba(255, 255, 255, 0.12)',
-                              }
+                                borderRight:
+                                    '1px solid rgba(255, 255, 255, 0.12)',
+                            }
                             : { borderRight: '1px solid rgba(0, 0, 0, 0.12)' }),
                     }}
                 >
@@ -180,7 +181,7 @@ export default function Home({ themeChange, mode }) {
                 component='main'
                 sx={{
                     flexGrow: 1,
-                    bgcolor: 'background.default',
+                    bgcolor: '#f5f5f5',
                     p: 0,
                     width: '100%',
                     height: '100vh',

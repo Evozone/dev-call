@@ -13,6 +13,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import VideoCallIcon from '@mui/icons-material/VideoCall';
+import GlobalStyles from '@mui/material/GlobalStyles';
 import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
 import { useDispatch, useSelector } from 'react-redux';
@@ -100,8 +101,43 @@ export default function Home({ themeChange, mode }) {
         window.open('/meet/123-3431-23', '_blank');
     };
 
+    // This section is for changing default CSS styles for HTML elements
+    // @vishal see https://mui.com/customization/how-to-customize/#global-css-override
+    const inputGlobalStyles = <GlobalStyles styles={{
+
+        '*::-webkit-scrollbar': {
+            width: '0.6rem',
+        },
+        '*::-webkit-scrollbar-track': {
+            color: 'transparent',
+            border: 'none',
+        },
+        '*::-webkit-scrollbar-thumb': {
+            backgroundColor: '#888',
+            borderRadius: '0.3rem',
+        },
+        '*::-webkit-scrollbar-thumb:hover': {
+            backgroundColor: '#555',
+        },
+        ...(mode === 'dark'
+            ? {
+                '::-webkit-scrollbar-thumb': {
+                    border: '2px solid #1a1a1a',
+                }
+            }
+            : {
+                '::-webkit-scrollbar-thumb': {
+                    border: '2px solid #f5f5f5',
+                },
+            }),
+    }} />;
+
     return (
         <Box sx={{ display: 'flex' }}>
+
+            {/* Changes default CSS styles for scrollbars, search keyword*/}
+            {inputGlobalStyles}
+
             <CssBaseline />
             <Drawer
                 sx={{
@@ -123,7 +159,7 @@ export default function Home({ themeChange, mode }) {
                         alignItems: 'center',
                         pl: 1,
                         backgroundColor: 'info.main',
-                        borderRight: '1px solid',
+                        borderRight: '2px solid',
                         borderColor: 'info.dark',
                     }}
                 >
@@ -187,11 +223,22 @@ export default function Home({ themeChange, mode }) {
                 component='main'
                 sx={{
                     flexGrow: 1,
-                    bgcolor: '#f5f5f5',
                     p: 0,
                     width: '100%',
                     height: '100vh',
                     overflow: 'hidden',
+                    ...(mode === 'dark'
+                        ? {
+                            backgroundColor: '#1a1a1a',
+                            color: 'white',
+                        }
+                        : {
+                            backgroundColor: '#f5f5f5',
+                            color: 'black',
+                        }),
+                    // @vishal : All web browsers except firefox are shit. 
+                    // They don't support scrollbar styling without webkit,
+                    // And React doesn't support webkit.
                 }}
             >
                 <Box
@@ -201,6 +248,7 @@ export default function Home({ themeChange, mode }) {
                         alignItems: 'center',
                         pl: 2,
                         backgroundColor: 'info.main',
+                        boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2)',
                     }}
                 >
                     {chat.length > 0 ? (
@@ -288,6 +336,6 @@ export default function Home({ themeChange, mode }) {
                     </Box>
                 </Box>
             </Box>
-        </Box>
+        </Box >
     );
 }

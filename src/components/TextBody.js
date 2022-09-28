@@ -1,5 +1,3 @@
-//@bhargav we can add a URL regex for text content
-// so if its a URL we can make it a link
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Box, Link, Typography } from '@mui/material';
@@ -29,8 +27,7 @@ export default function TextBody({ message }) {
         <Box
             ref={ref}
             sx={{
-                // @bhargav pls take care of below backgroundColor
-                backgroundColor: 'info.main',
+                backgroundColor: 'info.dark',
                 borderRadius: '20px',
                 borderBottomLeftRadius: '2px',
                 maxWidth: '30rem',
@@ -45,17 +42,21 @@ export default function TextBody({ message }) {
                     alignSelf: 'flex-end',
                     borderBottomLeftRadius: '20px',
                     borderBottomRightRadius: '1px',
+                    backgroundColor: '#307DA1',
                 }),
             }}
         >
             {isLink ? (
                 <Link
-                    href={message.text}
+                    // Truncate everything before http
+                    // @vishal this is a hack, we can do better [at least opens the correct link]
+                    href={message.text.substring(message.text.indexOf('http'))}
                     target='_blank'
                     rel='noopener'
+                    // Underline only that which
                     sx={{
                         textDecoration: 'underline',
-                        color: 'white',
+                        color: 'lightsteelblue',
                     }}
                 >
                     {message.text}
@@ -69,8 +70,7 @@ export default function TextBody({ message }) {
                     fontSize: '11px',
                     marginBottom: '-5px',
                     marginLeft: '8px',
-                    //@bhargav pls take care of below color
-                    color: 'whitesmoke',
+                    color: 'rgba(255,255,255,0.6)',
                 }}
             >
                 {timeAgo}

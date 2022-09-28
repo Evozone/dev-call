@@ -73,7 +73,6 @@ function TabPanel(props) {
                                 <Typography
                                     sx={{
                                         fontSize: '14px',
-                                        //@bhargav pls take care of below color
                                         color: 'lightsteelblue',
                                     }}
                                 >

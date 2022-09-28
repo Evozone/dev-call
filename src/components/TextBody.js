@@ -1,5 +1,5 @@
-//@bhargav we can add a URL regex for text content
-// so if its a URL we can make it a link
+//https://www.cluemediator.com/find-urls-in-string-and-make-a-link-using-javascript
+//need to finds URL in a string and pass it to a <Link> component
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Box, Link, Typography } from '@mui/material';
@@ -49,17 +49,19 @@ export default function TextBody({ message }) {
             }}
         >
             {isLink ? (
-                <Link
-                    href={message.text}
-                    target='_blank'
-                    rel='noopener'
-                    sx={{
-                        textDecoration: 'underline',
-                        color: 'white',
-                    }}
-                >
-                    {message.text}
-                </Link>
+                <Box sx={{ wordBreak: 'break-word' }}>
+                    <Link
+                        href={message.text}
+                        target='_blank'
+                        rel='noopener'
+                        sx={{
+                            textDecoration: 'underline',
+                            color: 'white',
+                        }}
+                    >
+                        {message.text}
+                    </Link>
+                </Box>
             ) : (
                 <Typography> {message.text} </Typography>
             )}

@@ -3,11 +3,10 @@ import { useSelector } from 'react-redux';
 import { JitsiMeeting } from '@jitsi/react-sdk';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import { ContentCutOutlined } from '@mui/icons-material';
 
 export default function VideoCall() {
     const navigate = useNavigate();
-    const roomName = '123-3431-23';
-
     const currentUser = useSelector((state) => state.auth);
 
     const [jitsiApi, setJitsiApi] = useState(null);
@@ -16,29 +15,15 @@ export default function VideoCall() {
         if (!window.localStorage.getItem('dev')) {
             navigate('/');
         }
-    }, [currentUser]);
+        console.log(window.innerHeight);
+    }, [currentUser, window.innerHeight]);
 
-    const FRAME_HEIGHT = (window.innerHeight - 18).toString() + 'px';
+    const FRAME_HEIGHT = (window.innerHeight - 28).toString() + 'px';
 
     return (
-        <Box sx={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
-            <button
-                onClick={() => {
-                    const choice = window.confirm(
-                        'Please click on OK to leave the meeting'
-                    );
-                    if (choice) {
-                        jitsiApi.executeCommand('hangup');
-                        navigate('/chat');
-                    }
-                }}
-            >
-                end Vc
-            </button>
-            <button>Whiteboard</button>
-            <button>Code</button>
+        <Box sx={{ width: '100vw', height: '100vh', overflowX: 'hidden' }}>
             <JitsiMeeting
-                roomName={roomName}
+                roomName='Dev Call'
                 displayName={currentUser.name}
                 interfaceConfigOverwrite={{
                     DEFAULT_BACKGROUND: '#000000',
@@ -72,6 +57,7 @@ export default function VideoCall() {
                 }}
                 getIFrameRef={(iframeRef) => {
                     iframeRef.style.height = FRAME_HEIGHT;
+                    // iframeRef.style.height = frameHeight;
                 }}
                 onApiReady={(externalApi) => {
                     setJitsiApi(externalApi);
@@ -80,6 +66,27 @@ export default function VideoCall() {
                     displayName: currentUser.name,
                 }}
             />
+            <button
+                onClick={() => {
+                    const choice = window.confirm(
+                        'Please click on OK to leave the meeting'
+                    );
+                    if (choice) {
+                        jitsiApi.executeCommand('hangup');
+                        navigate('/chat');
+                    }
+                }}
+            >
+                end Vc
+            </button>
+            <button
+                onClick={() => {
+                    jitsiApi.executeCommand('sendChatMessage', 'hi', '', true);
+                }}
+            >
+                Whiteboard
+            </button>
+            <button>Code</button>
         </Box>
     );
 }

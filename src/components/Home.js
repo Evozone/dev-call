@@ -53,17 +53,22 @@ export default function Home({ themeChange, mode }) {
         chat.length > 0 && getUserMesaages();
     }, [chat]);
 
+    const INVITE_TEMPLATE = `Hey, I'm using Dev Call for Video Calling and much more. Join me on this room: ${process.env.REACT_APP_BASE_URL}/meet/${chat[0]}`;
+
     const logOut = () => {
-        signOut(auth)
-            .then(() => {
-                dispatch(signOutAction());
-            })
-            .catch((error) => {
-                alert(error);
-            });
+        const choice = window.confirm('Please click on OK to Log Out.');
+        if (choice) {
+            signOut(auth)
+                .then(() => {
+                    dispatch(signOutAction());
+                })
+                .catch((error) => {
+                    alert(error);
+                });
+        }
     };
 
-    const handleSend = async () => {
+    const handleSend = async (text) => {
         if (text.length > 0) {
             await updateDoc(doc(db, 'chats', chat[0]), {
                 messages: arrayUnion({
@@ -93,11 +98,12 @@ export default function Home({ themeChange, mode }) {
     };
 
     const handleKey = (e) => {
-        e.code === 'Enter' && handleSend();
+        e.code === 'Enter' && handleSend(text);
     };
 
     const startVideoCall = () => {
-        window.open('/meet/123-3431-23', '_blank');
+        handleSend(INVITE_TEMPLATE);
+        window.open(`/meet/${chat[0]}`, '_blank');
     };
 
     return (
@@ -268,7 +274,6 @@ export default function Home({ themeChange, mode }) {
                                 },
                             }}
                             size='small'
-                            multiline
                             maxRows={1}
                             placeholder='Message'
                             autoFocus
@@ -276,7 +281,12 @@ export default function Home({ themeChange, mode }) {
                             value={text}
                             onKeyDown={handleKey}
                         />
-                        <IconButton onClick={handleSend} sx={{ mr: '20px' }}>
+                        <IconButton
+                            onClick={() => {
+                                handleSend(text);
+                            }}
+                            sx={{ mr: '20px' }}
+                        >
                             <SendIcon
                                 sx={{
                                     fontSize: '33px',

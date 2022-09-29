@@ -117,6 +117,7 @@ export default function Home({ themeChange, mode }) {
                         width: drawerWidth,
                         boxSizing: 'border-box',
                         borderRight: 'none',
+                        overflow: 'hidden',
                     },
                 }}
                 variant='permanent'

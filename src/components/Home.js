@@ -249,7 +249,6 @@ export default function Home({ themeChange, mode }) {
                         display: 'flex',
                         alignItems: 'center',
                         pl: 2,
-                        position: 'inherit',
                         backgroundColor: 'info.main',
                         position: 'sticky',
                         top: 0,

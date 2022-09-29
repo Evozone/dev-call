@@ -11,6 +11,7 @@ import LandingPage from './LandingPage';
 import Loading from './components/Loading';
 import ProtectedRoute from './components/ProtectedRoute';
 import VideoCall from './components/VideoCall';
+import CodePlayGround from './components/CodePlayGround';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -65,6 +66,7 @@ const App = () => {
                     }
                 />
                 <Route path='/meet/:roomId' element={<VideoCall />} />
+                <Route path='/code/:groundId' element={<CodePlayGround />} />
             </Routes>
         </ThemeProvider>
     );

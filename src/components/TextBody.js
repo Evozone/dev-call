@@ -1,3 +1,5 @@
+//https://www.cluemediator.com/find-urls-in-string-and-make-a-link-using-javascript
+//need to finds URL in a string and pass it to a <Link> component
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Box, Link, Typography } from '@mui/material';
@@ -47,20 +49,19 @@ export default function TextBody({ message }) {
             }}
         >
             {isLink ? (
-                <Link
-                    // Truncate everything before http
-                    // @vishal this is a hack, we can do better [at least opens the correct link]
-                    href={message.text.substring(message.text.indexOf('http'))}
-                    target='_blank'
-                    rel='noopener'
-                    // Underline only that which
-                    sx={{
-                        textDecoration: 'underline',
-                        color: 'whitesmoke',
-                    }}
-                >
-                    {message.text}
-                </Link>
+                <Box sx={{ wordBreak: 'break-word' }}>
+                    <Link
+                        href={message.text}
+                        target='_blank'
+                        rel='noopener'
+                        sx={{
+                            textDecoration: 'underline',
+                            color: 'white',
+                        }}
+                    >
+                        {message.text}
+                    </Link>
+                </Box>
             ) : (
                 <Typography> {message.text} </Typography>
             )}

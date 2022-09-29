@@ -3,42 +3,29 @@ import { useSelector } from 'react-redux';
 import { JitsiMeeting } from '@jitsi/react-sdk';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import { v4 as uuid } from 'uuid';
 
 export default function VideoCall() {
     const navigate = useNavigate();
-    const roomName = '123-3431-23';
-
     const currentUser = useSelector((state) => state.auth);
 
     const [jitsiApi, setJitsiApi] = useState(null);
+    const [codeGroundId, setCodeGroundId] = useState(null);
 
     useEffect(() => {
         if (!window.localStorage.getItem('dev')) {
             navigate('/');
         }
+        document.title = 'Dev Chat+ Call';
+        setCodeGroundId(uuid());
     }, [currentUser]);
 
-    const FRAME_HEIGHT = (window.innerHeight - 18).toString() + 'px';
+    const FRAME_HEIGHT = (window.innerHeight - 28).toString() + 'px';
 
     return (
-        <Box sx={{ width: '100vw', height: '100vh', overflow: 'hidden' }}>
-            <button
-                onClick={() => {
-                    const choice = window.confirm(
-                        'Please click on OK to leave the meeting'
-                    );
-                    if (choice) {
-                        jitsiApi.executeCommand('hangup');
-                        navigate('/chat');
-                    }
-                }}
-            >
-                end Vc
-            </button>
-            <button>Whiteboard</button>
-            <button>Code</button>
+        <Box sx={{ width: '100vw', height: '100vh', overflowX: 'hidden' }}>
             <JitsiMeeting
-                roomName={roomName}
+                roomName='Dev Call'
                 displayName={currentUser.name}
                 interfaceConfigOverwrite={{
                     DEFAULT_BACKGROUND: '#000000',
@@ -80,6 +67,33 @@ export default function VideoCall() {
                     displayName: currentUser.name,
                 }}
             />
+            <button
+                onClick={() => {
+                    const choice = window.confirm(
+                        'Please click on OK to leave the meeting'
+                    );
+                    if (choice) {
+                        jitsiApi.executeCommand('hangup');
+                        navigate('/chat');
+                    }
+                }}
+            >
+                end Vc
+            </button>
+            <button
+                onClick={() => {
+                    jitsiApi.executeCommand(
+                        'sendChatMessage',
+                        `http://localhost:3000/code/${codeGroundId}`,
+                        '',
+                        true
+                    );
+                    window.open(`/code/${codeGroundId}`, '_blank');
+                }}
+            >
+                Code
+            </button>
+            <button>Whiteboard</button>
         </Box>
     );
 }

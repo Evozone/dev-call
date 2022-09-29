@@ -159,7 +159,7 @@ export default function Home({ themeChange, mode }) {
                         alignItems: 'center',
                         pl: 1,
                         backgroundColor: 'info.main',
-                        borderRight: '2px solid',
+                        borderRight: '1px solid',
                         borderColor: 'info.dark',
                     }}
                 >
@@ -197,8 +197,7 @@ export default function Home({ themeChange, mode }) {
                         </Tooltip>
                         <Tooltip title='Logout'>
                             <IconButton onClick={logOut}>
-                                {/* Change LogoutIconColor based on mode */}
-                                <LogoutIcon sx={{ color: 'info.dark' }} />
+                                <LogoutIcon sx={{ color: 'lightsteelblue' }} />
                             </IconButton>
                         </Tooltip>
                     </Grid>
@@ -236,9 +235,6 @@ export default function Home({ themeChange, mode }) {
                             backgroundColor: '#f5f5f5',
                             color: 'black',
                         }),
-                    // @vishal : All web browsers except firefox are shit. 
-                    // They don't support scrollbar styling without webkit,
-                    // And React doesn't support webkit.
                 }}
             >
                 <Box
@@ -247,8 +243,9 @@ export default function Home({ themeChange, mode }) {
                         display: 'flex',
                         alignItems: 'center',
                         pl: 2,
+                        position: 'inherit',
                         backgroundColor: 'info.main',
-                        boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2)',
+                        // boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.4)',
                     }}
                 >
                     {chat.length > 0 ? (

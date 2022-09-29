@@ -27,7 +27,7 @@ export default function TextBody({ message }) {
         <Box
             ref={ref}
             sx={{
-                backgroundColor: 'info.dark',
+                backgroundColor: '#34B7F1',
                 borderRadius: '20px',
                 borderBottomLeftRadius: '2px',
                 maxWidth: '30rem',
@@ -42,7 +42,7 @@ export default function TextBody({ message }) {
                     alignSelf: 'flex-end',
                     borderBottomLeftRadius: '20px',
                     borderBottomRightRadius: '1px',
-                    backgroundColor: '#307DA1',
+                    backgroundColor: '#25D366',
                 }),
             }}
         >
@@ -56,7 +56,7 @@ export default function TextBody({ message }) {
                     // Underline only that which
                     sx={{
                         textDecoration: 'underline',
-                        color: 'lightsteelblue',
+                        color: 'whitesmoke',
                     }}
                 >
                     {message.text}

@@ -29,8 +29,7 @@ export default function TextBody({ message }) {
         <Box
             ref={ref}
             sx={{
-                // @bhargav pls take care of below backgroundColor
-                backgroundColor: 'info.main',
+                backgroundColor: '#34B7F1',
                 borderRadius: '20px',
                 borderBottomLeftRadius: '2px',
                 maxWidth: '30rem',
@@ -45,6 +44,7 @@ export default function TextBody({ message }) {
                     alignSelf: 'flex-end',
                     borderBottomLeftRadius: '20px',
                     borderBottomRightRadius: '1px',
+                    backgroundColor: '#25D366',
                 }),
             }}
         >
@@ -71,8 +71,7 @@ export default function TextBody({ message }) {
                     fontSize: '11px',
                     marginBottom: '-5px',
                     marginLeft: '8px',
-                    //@bhargav pls take care of below color
-                    color: 'whitesmoke',
+                    color: 'rgba(255,255,255,0.6)',
                 }}
             >
                 {timeAgo}

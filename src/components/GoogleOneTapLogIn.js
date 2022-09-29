@@ -97,7 +97,7 @@ const GoogleOneTapLogin = () => {
             <Button
                 variant='outlined'
                 startIcon={<Google />}
-                sx={{ display: displayType, width: 'fit-content', mb: 3 }}
+                sx={{ display: displayType, width: 'fit-content', m: 3 }}
                 onClick={handleGoogleLogIn}
             >
                 LogIn

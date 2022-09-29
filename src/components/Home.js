@@ -31,6 +31,7 @@ import TabsNav from './TabsNav';
 import TextBody from './TextBody';
 import { signOutAction } from '../actions/actions';
 import { auth, db } from '../firebaseConfig';
+import { customGlobalScrollBars } from './CustomGlobalCSS';
 
 const drawerWidth = 470;
 
@@ -106,8 +107,12 @@ export default function Home({ themeChange, mode }) {
         window.open(`/meet/${chat[0]}`, '_blank');
     };
 
+    // This section is for changing default CSS styles for HTML elements
+    // @vishal see https://mui.com/customization/how-to-customize/#global-css-override
+
     return (
         <Box sx={{ display: 'flex' }}>
+            {customGlobalScrollBars(mode)}
             <CssBaseline />
             <Drawer
                 sx={{
@@ -130,8 +135,8 @@ export default function Home({ themeChange, mode }) {
                         alignItems: 'center',
                         pl: 1,
                         backgroundColor: 'info.main',
-                        // @bhargav pls take care of below border color
-                        borderRight: '5px solid red',
+                        borderRight: '1px solid',
+                        borderColor: 'info.dark',
                     }}
                 >
                     <IconButton sx={{ borderRadius: '0' }}>
@@ -168,7 +173,7 @@ export default function Home({ themeChange, mode }) {
                         </Tooltip>
                         <Tooltip title='Logout'>
                             <IconButton onClick={logOut}>
-                                <LogoutIcon color='error' />
+                                <LogoutIcon sx={{ color: 'lightsteelblue' }} />
                             </IconButton>
                         </Tooltip>
                     </Grid>
@@ -178,12 +183,12 @@ export default function Home({ themeChange, mode }) {
                         height: 'calc(100% - 75px)',
                         ...(mode === 'dark'
                             ? {
-                                  borderRight:
-                                      '1px solid rgba(255, 255, 255, 0.12)',
-                              }
+                                borderRight:
+                                    '1px solid rgba(255, 255, 255, 0.12)',
+                            }
                             : {
-                                  borderRight: '1px solid rgba(0, 0, 0, 0.12)',
-                              }),
+                                borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+                            }),
                     }}
                 >
                     <TabsNav mode={mode} setChat={setChat} />
@@ -193,11 +198,19 @@ export default function Home({ themeChange, mode }) {
                 component='main'
                 sx={{
                     flexGrow: 1,
-                    bgcolor: 'background.default',
                     p: 0,
                     width: '100%',
                     height: '100vh',
                     overflow: 'hidden',
+                    ...(mode === 'dark'
+                        ? {
+                            backgroundColor: '#1a1a1a',
+                            color: 'white',
+                        }
+                        : {
+                            backgroundColor: '#f5f5f5',
+                            color: 'black',
+                        }),
                 }}
             >
                 <Box
@@ -300,6 +313,6 @@ export default function Home({ themeChange, mode }) {
                     </Box>
                 </Box>
             </Box>
-        </Box>
+        </Box >
     );
 }

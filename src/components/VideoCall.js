@@ -3,20 +3,22 @@ import { useSelector } from 'react-redux';
 import { JitsiMeeting } from '@jitsi/react-sdk';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import { ContentCutOutlined } from '@mui/icons-material';
+import { v4 as uuid } from 'uuid';
 
 export default function VideoCall() {
     const navigate = useNavigate();
     const currentUser = useSelector((state) => state.auth);
 
     const [jitsiApi, setJitsiApi] = useState(null);
+    const [codeGroundId, setCodeGroundId] = useState(null);
 
     useEffect(() => {
         if (!window.localStorage.getItem('dev')) {
             navigate('/');
         }
-        console.log(window.innerHeight);
-    }, [currentUser, window.innerHeight]);
+        document.title = 'Dev Chat+ Call';
+        setCodeGroundId(uuid());
+    }, [currentUser]);
 
     const FRAME_HEIGHT = (window.innerHeight - 28).toString() + 'px';
 
@@ -57,7 +59,6 @@ export default function VideoCall() {
                 }}
                 getIFrameRef={(iframeRef) => {
                     iframeRef.style.height = FRAME_HEIGHT;
-                    // iframeRef.style.height = frameHeight;
                 }}
                 onApiReady={(externalApi) => {
                     setJitsiApi(externalApi);
@@ -81,12 +82,18 @@ export default function VideoCall() {
             </button>
             <button
                 onClick={() => {
-                    jitsiApi.executeCommand('sendChatMessage', 'hi', '', true);
+                    jitsiApi.executeCommand(
+                        'sendChatMessage',
+                        `http://localhost:3000/code/${codeGroundId}`,
+                        '',
+                        true
+                    );
+                    window.open(`/code/${codeGroundId}`, '_blank');
                 }}
             >
-                Whiteboard
+                Code
             </button>
-            <button>Code</button>
+            <button>Whiteboard</button>
         </Box>
     );
 }

@@ -102,7 +102,7 @@ export default function Home({ themeChange, mode }) {
     };
 
     const startVideoCall = () => {
-        handleSend(INVITE_TEMPLATE);
+        // handleSend(INVITE_TEMPLATE);
         window.open(`/meet/${chat[0]}`, '_blank');
     };
 
@@ -206,6 +206,8 @@ export default function Home({ themeChange, mode }) {
                         alignItems: 'center',
                         pl: 2,
                         backgroundColor: 'info.main',
+                        position: 'sticky',
+                        top: 0,
                     }}
                 >
                     {chat.length > 0 ? (

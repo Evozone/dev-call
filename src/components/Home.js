@@ -13,7 +13,6 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import VideoCallIcon from '@mui/icons-material/VideoCall';
-import GlobalStyles from '@mui/material/GlobalStyles';
 import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
 import { useDispatch, useSelector } from 'react-redux';
@@ -32,6 +31,7 @@ import TabsNav from './TabsNav';
 import TextBody from './TextBody';
 import { signOutAction } from '../actions/actions';
 import { auth, db } from '../firebaseConfig';
+import { customGlobalScrollBars } from './CustomGlobalCSS';
 
 const drawerWidth = 470;
 
@@ -109,41 +109,10 @@ export default function Home({ themeChange, mode }) {
 
     // This section is for changing default CSS styles for HTML elements
     // @vishal see https://mui.com/customization/how-to-customize/#global-css-override
-    const inputGlobalStyles = <GlobalStyles styles={{
-
-        '*::-webkit-scrollbar': {
-            width: '0.6rem',
-        },
-        '*::-webkit-scrollbar-track': {
-            color: 'transparent',
-            border: 'none',
-        },
-        '*::-webkit-scrollbar-thumb': {
-            backgroundColor: '#888',
-            borderRadius: '0.3rem',
-        },
-        '*::-webkit-scrollbar-thumb:hover': {
-            backgroundColor: '#555',
-        },
-        ...(mode === 'dark'
-            ? {
-                '::-webkit-scrollbar-thumb': {
-                    border: '2px solid #1a1a1a',
-                }
-            }
-            : {
-                '::-webkit-scrollbar-thumb': {
-                    border: '2px solid #f5f5f5',
-                },
-            }),
-    }} />;
 
     return (
         <Box sx={{ display: 'flex' }}>
-
-            {/* Changes default CSS styles for scrollbars, search keyword*/}
-            {inputGlobalStyles}
-
+            {customGlobalScrollBars(mode)}
             <CssBaseline />
             <Drawer
                 sx={{

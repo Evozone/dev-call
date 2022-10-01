@@ -1,5 +1,3 @@
-//https://www.cluemediator.com/find-urls-in-string-and-make-a-link-using-javascript
-//need to finds URL in a string and pass it to a <Link> component
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Box, Link, Typography } from '@mui/material';
@@ -9,6 +7,7 @@ export default function TextBody({ message }) {
     const [timeAgo, setTimeAgo] = useState('');
     const [isLink, setIsLink] = useState(false);
     const ref = useRef();
+    const urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
 
     useEffect(() => {
         var offset = new Date().getTimezoneOffset() * 60;
@@ -20,9 +19,20 @@ export default function TextBody({ message }) {
         setIsLink(funcIsLink(message.text));
     }, [message]);
 
+    // If the message contains a URL, return true
     const funcIsLink = (message) => {
-        const urlRegex = /(https?:\/\/[^\s]+)/g;
-        return message.match(urlRegex);
+        return urlRegex.test(message);
+    };
+
+    // Separate the message into an array of strings and URLs
+    const funcSplitMessage = (message) => {
+        var splitMessage = message.split(urlRegex);
+        // Remove all instances of empty strings, undefined, and 'https'
+        splitMessage = splitMessage.filter((item) => {
+            return item !== '' && item !== undefined && item !== 'https';
+        });
+
+        return splitMessage;
     };
 
     return (
@@ -50,21 +60,36 @@ export default function TextBody({ message }) {
         >
             {isLink ? (
                 <Box sx={{ wordBreak: 'break-word' }}>
-                    <Link
-                        href={message.text}
-                        target='_blank'
-                        rel='noopener'
-                        sx={{
-                            textDecoration: 'underline',
-                            color: 'white',
-                        }}
-                    >
-                        {message.text}
-                    </Link>
+                    {/* @vishal I've kept it here because I want the components <Link> and <Typography>
+                    to stay within the <Box>, in one place */}
+                    {funcSplitMessage(message.text).map((item, index) => {
+                        if (urlRegex.test(item)) {
+                            return (
+                                <Link
+                                    key={index}
+                                    href={item}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    sx={{
+                                        color: 'white',
+                                        textDecoration: 'underline',
+                                        '&:hover': {
+                                            color: 'lightblue',
+                                        },
+                                    }}
+                                >
+                                    {item}
+                                </Link>
+                            );
+                        } else {
+                            return <Typography key={index}>{item}</Typography>;
+                        }
+                    })}
                 </Box>
             ) : (
                 <Typography> {message.text} </Typography>
             )}
+            {/* Timestamp */}
             <Typography
                 sx={{
                     textAlign: 'right',

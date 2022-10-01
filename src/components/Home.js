@@ -220,6 +220,8 @@ export default function Home({ themeChange, mode }) {
                         alignItems: 'center',
                         pl: 2,
                         backgroundColor: 'info.main',
+                        borderBottom: '1px solid',
+                        borderColor: 'info.dark',
                         position: 'sticky',
                         top: 0,
                     }}

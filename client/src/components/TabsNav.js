@@ -79,15 +79,16 @@ function TabPanel(props) {
                                     {item[1].lastMessage &&
                                         (item[1].lastMessage.text.length > 30
                                             ? item[1].lastMessage.text.substring(
-                                                0,
-                                                30
-                                            ) + '.......'
+                                                  0,
+                                                  30
+                                              ) + '.......'
                                             : item[1].lastMessage.text)}
                                 </Typography>
                             </Box>
                             {/* <Typography>{item[1].date.seconds}</Typography> */}
                         </ListItemButton>
                     </ListItem>
+                    <Divider />
                 </Box>
             )}
             {value === index && !empty && !loading && search && (
@@ -287,17 +288,17 @@ export default function TabsNav({ mode, setChat }) {
                             fontSize: '1.1rem',
                             ...(mode === 'dark'
                                 ? {
-                                    borderRight:
-                                        '1px solid rgba(255, 255, 255, 0.12)',
-                                    borderBottom:
-                                        '1px solid rgba(255, 255, 255, 0.12)',
-                                }
+                                      borderRight:
+                                          '1px solid rgba(255, 255, 255, 0.12)',
+                                      borderBottom:
+                                          '1px solid rgba(255, 255, 255, 0.12)',
+                                  }
                                 : {
-                                    borderRight:
-                                        '1px solid rgba(0, 0, 0, 0.12)',
-                                    borderBottom:
-                                        '1px solid rgba(0, 0, 0, 0.12)',
-                                }),
+                                      borderRight:
+                                          '1px solid rgba(0, 0, 0, 0.12)',
+                                      borderBottom:
+                                          '1px solid rgba(0, 0, 0, 0.12)',
+                                  }),
                         }}
                         label='CHATS'
                         {...a11yProps(0)}
@@ -308,13 +309,13 @@ export default function TabsNav({ mode, setChat }) {
                             fontSize: '1.1rem',
                             ...(mode === 'dark'
                                 ? {
-                                    borderBottom:
-                                        '1px solid rgba(255, 255, 255, 0.12)',
-                                }
+                                      borderBottom:
+                                          '1px solid rgba(255, 255, 255, 0.12)',
+                                  }
                                 : {
-                                    borderBottom:
-                                        '1px solid rgba(0, 0, 0, 0.12)',
-                                }),
+                                      borderBottom:
+                                          '1px solid rgba(0, 0, 0, 0.12)',
+                                  }),
                         }}
                         label='SEARCH'
                         {...a11yProps(1)}
@@ -339,32 +340,35 @@ export default function TabsNav({ mode, setChat }) {
             </List>
             <List sx={{ p: 0 }}>
                 {value === 1 && (
-                    <TextField
-                        label='username'
-                        sx={{
-                            m: 2,
-                            width: '93%',
-                            '& .MuiOutlinedInput-root': {
-                                paddingRight: '6px',
-                                borderRadius: '20px',
-                            },
-                        }}
-                        InputProps={{
-                            endAdornment: (
-                                <InputAdornment position='end'>
-                                    <IconButton onClick={handleSearch}>
-                                        <SearchIcon />
-                                    </IconButton>
-                                </InputAdornment>
-                            ),
-                        }}
-                        size='small'
-                        value={searchText}
-                        onChange={(e) => handleSearchText(e)}
-                        onKeyDown={handleKey}
-                    />
+                    <React.Fragment>
+                        <TextField
+                            label='username'
+                            sx={{
+                                m: 2,
+                                width: '93%',
+                                '& .MuiOutlinedInput-root': {
+                                    paddingRight: '6px',
+                                    borderRadius: '20px',
+                                },
+                            }}
+                            InputProps={{
+                                endAdornment: (
+                                    <InputAdornment position='end'>
+                                        <IconButton onClick={handleSearch}>
+                                            <SearchIcon />
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            size='small'
+                            value={searchText}
+                            onChange={(e) => handleSearchText(e)}
+                            onKeyDown={handleKey}
+                        />
+                        <Divider />
+                    </React.Fragment>
                 )}
-                <Divider />
+
                 {searchResults && (
                     <TabPanel
                         handleSelect={handleSelect}

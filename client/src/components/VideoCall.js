@@ -56,6 +56,7 @@ export default function VideoCall() {
                     prejoinPageEnabled: false,
                     disableDeepLinking: true,
                     startAudioOnly: true,
+                    startWithAudioMuted: true,
                 }}
                 getIFrameRef={(iframeRef) => {
                     iframeRef.style.height = FRAME_HEIGHT;
@@ -74,6 +75,7 @@ export default function VideoCall() {
                     );
                     if (choice) {
                         jitsiApi.executeCommand('hangup');
+                        document.title = 'Dev Chat+';
                         navigate('/chat');
                     }
                 }}
@@ -84,7 +86,7 @@ export default function VideoCall() {
                 onClick={() => {
                     jitsiApi.executeCommand(
                         'sendChatMessage',
-                        `http://localhost:3000/code/${codeGroundId}`,
+                        `${process.env.REACT_APP_BASE_URL}/code/${codeGroundId}`,
                         '',
                         true
                     );

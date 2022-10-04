@@ -70,20 +70,20 @@ export default function Home({ themeChange, mode }) {
     };
 
     const handleSend = async (text) => {
+        const lastText = text;
+        setText('');
         if (text.length > 0) {
             await updateDoc(doc(db, 'chats', chat[0]), {
                 messages: arrayUnion({
                     id: uuid(),
-                    text,
+                    text: lastText,
                     senderid: currentUser.uid,
                     date: Timestamp.now(),
                 }),
             });
         } else {
-            alert('Please enter some text');
+            return alert('Please enter some text');
         }
-        const lastText = text;
-        setText('');
         await updateDoc(doc(db, 'userChats', currentUser.uid), {
             [chat[0] + '.lastMessage']: {
                 text: lastText,
@@ -183,12 +183,12 @@ export default function Home({ themeChange, mode }) {
                         height: 'calc(100% - 75px)',
                         ...(mode === 'dark'
                             ? {
-                                borderRight:
-                                    '1px solid rgba(255, 255, 255, 0.12)',
-                            }
+                                  borderRight:
+                                      '1px solid rgba(255, 255, 255, 0.12)',
+                              }
                             : {
-                                borderRight: '1px solid rgba(0, 0, 0, 0.12)',
-                            }),
+                                  borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+                              }),
                     }}
                 >
                     <TabsNav mode={mode} setChat={setChat} />
@@ -204,13 +204,13 @@ export default function Home({ themeChange, mode }) {
                     overflow: 'hidden',
                     ...(mode === 'dark'
                         ? {
-                            backgroundColor: '#1a1a1a',
-                            color: 'white',
-                        }
+                              backgroundColor: '#1a1a1a',
+                              color: 'white',
+                          }
                         : {
-                            backgroundColor: '#f5f5f5',
-                            color: 'black',
-                        }),
+                              backgroundColor: '#f5f5f5',
+                              color: 'black',
+                          }),
                 }}
             >
                 <Box
@@ -315,6 +315,6 @@ export default function Home({ themeChange, mode }) {
                     </Box>
                 </Box>
             </Box>
-        </Box >
+        </Box>
     );
 }

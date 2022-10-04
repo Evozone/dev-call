@@ -12,6 +12,7 @@ import Loading from './components/Loading';
 import ProtectedRoute from './components/ProtectedRoute';
 import VideoCall from './components/VideoCall';
 import CodePlayGround from './components/CodePlayGround';
+import './App.css';
 
 const App = () => {
     const dispatch = useDispatch();

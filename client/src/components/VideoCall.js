@@ -63,6 +63,7 @@ export default function VideoCall() {
                     prejoinPageEnabled: false,
                     disableDeepLinking: true,
                     startAudioOnly: true,
+                    startWithAudioMuted: true,
                 }}
                 getIFrameRef={(iframeRef) => {
                     iframeRef.style.height = FRAME_HEIGHT;

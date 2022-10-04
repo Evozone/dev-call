@@ -3,7 +3,14 @@ import { useSelector } from 'react-redux';
 import { JitsiMeeting } from '@jitsi/react-sdk';
 import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import CallIcon from '@mui/icons-material/Call';
+import TerminalIcon from '@mui/icons-material/Terminal';
+import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import Draggable from 'react-draggable';
 import { v4 as uuid } from 'uuid';
+import { Tooltip } from '@mui/material';
 
 export default function VideoCall() {
     const navigate = useNavigate();
@@ -67,33 +74,84 @@ export default function VideoCall() {
                     displayName: currentUser.name,
                 }}
             />
-            <button
-                onClick={() => {
-                    const choice = window.confirm(
-                        'Please click on OK to leave the meeting'
-                    );
-                    if (choice) {
-                        jitsiApi.executeCommand('hangup');
-                        navigate('/chat');
-                    }
-                }}
-            >
-                end Vc
-            </button>
-            <button
-                onClick={() => {
-                    jitsiApi.executeCommand(
-                        'sendChatMessage',
-                        `http://localhost:3000/code/${codeGroundId}`,
-                        '',
-                        true
-                    );
-                    window.open(`/code/${codeGroundId}`, '_blank');
-                }}
-            >
-                Code
-            </button>
-            <button>Whiteboard</button>
+
+            <Draggable>
+                <Box sx={{
+                    position: 'absolute',
+                    bottom: 0,
+                    right: 0,
+                    backgroundColor: 'rgba(41, 41, 41, 0.7)',
+                    boxShadow: '0px 0px 10px 0px #000000',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    borderRadius: '10px',
+                    margin: '10px',
+                    zIndex: '1000',
+                }}>
+                    <Tooltip title='End Call'>
+                        <IconButton onClick={
+                            () => {
+                                const choice = window.confirm(
+                                    'Please click on OK to leave the meeting'
+                                );
+                                if (choice) {
+                                    jitsiApi.executeCommand('hangup');
+                                    navigate('/chat');
+                                }
+                            }
+                        }>
+                            <CallIcon
+                                sx={{
+                                    color: '#EE4B2B',
+                                }} />
+                        </IconButton>
+                    </Tooltip>
+
+                    <Tooltip title='Code Ground'>
+                        <IconButton onClick={
+                            () => {
+                                jitsiApi.executeCommand(
+                                    'sendChatMessage',
+                                    `http://localhost:3000/code/${codeGroundId}`,
+                                    '',
+                                    true
+                                );
+                                window.open(`/code/${codeGroundId}`, '_blank');
+                            }
+                        }>
+                            <TerminalIcon />
+                        </IconButton>
+                    </Tooltip>
+
+                    <Tooltip title='Whiteboard'>
+                        <IconButton onClick={
+                            () => {
+                                // TODO: Add whiteboard
+                            }
+                        }>
+                            <DriveFileRenameOutlineIcon />
+                        </IconButton>
+                    </Tooltip>
+
+                    {/* Create a component used to drag the box around */}
+                    <Tooltip title='Drag to move'>
+                        <Box sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            width: '40px',
+                            height: '40px',
+                            backgroundColor: 'rgba(41, 41, 41, 0.7)',
+                            borderRadius: '10px',
+                            '&:hover': {
+                                cursor: 'move',
+                            },
+                        }}>
+                            <DragIndicatorIcon />
+                        </Box>
+                    </Tooltip>
+                </Box>
+            </Draggable>
         </Box>
     );
 }

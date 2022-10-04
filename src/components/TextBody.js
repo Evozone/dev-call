@@ -29,7 +29,7 @@ export default function TextBody({ message }) {
         var splitMessage = message.split(urlRegex);
         // Remove all instances of empty strings, undefined, and 'https'
         splitMessage = splitMessage.filter((item) => {
-            return item !== '' && item !== undefined && item !== 'https';
+            return item !== '' && item !== undefined && item !== 'https' && item !== 'http';
         });
 
         return splitMessage;

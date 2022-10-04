@@ -30,7 +30,7 @@ export default function VideoCall() {
     const FRAME_HEIGHT = (window.innerHeight - 28).toString() + 'px';
 
     return (
-        <Box sx={{ width: '100vw', height: '100vh', overflowX: 'hidden' }}>
+        <Box sx={{ width: '100vw', height: '100vh', overflowX: 'hidden', backgroundColor: '#1e1e1e' }}>
             <JitsiMeeting
                 roomName='Dev Call'
                 displayName={currentUser.name}
@@ -119,7 +119,10 @@ export default function VideoCall() {
                                 window.open(`/code/${codeGroundId}`, '_blank');
                             }
                         }>
-                            <TerminalIcon />
+                            <TerminalIcon
+                                sx={{
+                                    color: '#888786',
+                                }} />
                         </IconButton>
                     </Tooltip>
 
@@ -129,7 +132,11 @@ export default function VideoCall() {
                                 // TODO: Add whiteboard
                             }
                         }>
-                            <DriveFileRenameOutlineIcon />
+                            <DriveFileRenameOutlineIcon
+                                sx={{
+                                    color: '#888786',
+                                }}
+                            />
                         </IconButton>
                     </Tooltip>
 
@@ -147,7 +154,11 @@ export default function VideoCall() {
                                 cursor: 'move',
                             },
                         }}>
-                            <DragIndicatorIcon />
+                            <DragIndicatorIcon
+                                sx={{
+                                    color: '#888786',
+                                }}
+                            />
                         </Box>
                     </Tooltip>
                 </Box>

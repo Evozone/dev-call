@@ -6,11 +6,12 @@ import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import CallIcon from '@mui/icons-material/Call';
 import TerminalIcon from '@mui/icons-material/Terminal';
+import Tooltip from '@mui/material/Tooltip';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import Draggable from 'react-draggable';
 import { v4 as uuid } from 'uuid';
-import { Tooltip } from '@mui/material';
+
 
 export default function VideoCall() {
     const navigate = useNavigate();

@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { Google } from '@mui/icons-material';
 import { signInWithCredential, GoogleAuthProvider } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
@@ -97,13 +97,19 @@ const GoogleOneTapLogin = () => {
             <Button
                 variant='outlined'
                 startIcon={<Google />}
-                sx={{ display: displayType, width: 'fit-content', m: 3 }}
+                sx={{
+                    display: displayType,
+                    width: 'fit-content',
+                    mt: 3,
+                    backgroundColor: '#fff',
+                    boxShadow: '0 0 5px 0 rgba(0,0,0,0.2)',
+                }}
                 onClick={handleGoogleLogIn}
             >
-                LogIn
+                Login with Google
             </Button>
             <div style={{ display: gBtnDisplay }} ref={googleButton}></div>
-        </React.Fragment>
+        </React.Fragment >
     );
 };
 

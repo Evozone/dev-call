@@ -219,56 +219,6 @@ const LandingPage = () => {
                 </Typography>
             </Box>
 
-            {/* Section : Pricing */}
-            <Box
-                id="pricing"
-                sx={{
-                    width: '100%',
-                    height: '100vh',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    color: 'white',
-                    background: 'linear-gradient(116.82deg, rgba(96, 220, 161, 0.99) 0%, rgba(25, 196, 196, 0.99) 100%)',
-                }}
-            >
-                <Typography
-                    variant="h2"
-                    component="div"
-                    sx={{
-                        fontFamily: 'Work Sans', fontWeight: '400',
-                    }}
-                >
-                    Pricing
-                </Typography>
-            </Box>
-
-            {/* Section : Reviews */}
-            <Box
-                id="reviews"
-                sx={{
-                    width: '100%',
-                    height: '100vh',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    color: 'rgb(0, 94, 124)',
-                    backgroundColor: '#C4EBE8',
-                }}
-            >
-                <Typography
-                    variant="h2"
-                    component="div"
-                    sx={{
-                        fontFamily: 'Work Sans', fontWeight: '400',
-                    }}
-                >
-                    Reviews
-                </Typography>
-            </Box>
-
             {/* Section : Contact and Footer */}
             <Box
                 id="contact"

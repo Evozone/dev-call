@@ -10,6 +10,7 @@ import Coder from './Coder';
 import CodeEditor from './CodeEditor';
 import { Typography } from '@mui/material';
 import { initSocket } from '../socket';
+import CodeCompiler from './CodeCompiler';
 
 export default function CodePlayGround() {
     let params = useParams();
@@ -95,7 +96,7 @@ export default function CodePlayGround() {
         <Box
             sx={{
                 display: 'grid',
-                gridTemplateColumns: '250px 1fr',
+                gridTemplateColumns: '250px 2.5fr 1fr',
                 height: '100vh',
                 overflowX: 'hidden',
             }}
@@ -171,6 +172,7 @@ export default function CodePlayGround() {
                     codeRef.current = code;
                 }}
             />
+            <CodeCompiler />
         </Box>
     );
 }

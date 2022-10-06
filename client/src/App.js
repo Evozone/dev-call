@@ -12,6 +12,7 @@ import Loading from './components/Loading';
 import ProtectedRoute from './components/ProtectedRoute';
 import VideoCall from './components/VideoCall';
 import CodePlayGround from './components/CodePlayGround';
+import { customGlobalScrollBars } from './components/CustomGlobalCSS';
 import './App.css';
 
 const App = () => {
@@ -54,6 +55,7 @@ const App = () => {
 
     return (
         <ThemeProvider theme={darkTheme}>
+            {customGlobalScrollBars(mode)}
             <CssBaseline />
             <Loading />
             <Routes>

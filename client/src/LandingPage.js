@@ -30,6 +30,7 @@ const LandingPage = () => {
             {/* Navigation Bar */}
             <AppBar
                 position="static"
+                useScrollTrigger={true}
                 sx={{
                     position: 'fixed',
                     background: 'transparent',
@@ -54,7 +55,7 @@ const LandingPage = () => {
                         <Link href="#hero" underline="none" color="inherit"
                             sx={{
                                 margin: '1rem',
-                                color: '#005e7c',
+                                color: '#03256C',
                                 '&:hover': {
                                     fontWeight: 'bold',
                                     transition: 'all 0.2s ease-in-out',
@@ -76,7 +77,7 @@ const LandingPage = () => {
                                     margin: '1rem',
                                     color: 'whitesmoke',
                                     '&:hover': {
-                                        color: '#005e7c',
+                                        color: '#03256C',
                                         transition: 'all 0.2s ease-in-out',
                                     }
                                 }}>
@@ -93,7 +94,7 @@ const LandingPage = () => {
                 sx={{
                     width: '100%',
                     height: '100vh',
-                    background: 'linear-gradient(116.82deg, rgba(96, 220, 161, 0.99) 0%, rgba(25, 196, 196, 0.99) 100%)',
+                    background: 'linear-gradient(116.82deg, #29b6f6 0%, #0288d1 100%)',
                     display: 'flex',
                     flexDirection: 'row',
                     justifyContent: 'center',
@@ -125,8 +126,8 @@ const LandingPage = () => {
                         DevChat +
                         <hr align="left"
                             style={{
-                                backgroundColor: '#C4EBE8',
-                                height: 10,
+                                backgroundColor: '#0288D1',
+                                height: 7,
                                 width: '80%',
                                 border: 'none',
                                 margin: '1rem 0 0 0',
@@ -137,7 +138,7 @@ const LandingPage = () => {
                         variant="h6"
                         component="div"
                         sx={{
-                            fontFamily: 'Work Sans, sans-serif', fontWeight: '400', padding: '0', fontSize: '1.2rem',
+                            fontFamily: 'Work Sans, sans-serif', fontWeight: '400', padding: '0', fontSize: '1.2rem', color: '#EFF6EE'
                         }}
                     >
                         Optimize your workflow.
@@ -178,7 +179,7 @@ const LandingPage = () => {
                         variant="h5"
                         component="div"
                         sx={{
-                            fontFamily: 'Trebuchet MS', fontWeight: '400', color: '#186355', fontSize: '1.3rem',
+                            fontFamily: 'Trebuchet MS', fontWeight: '400', color: '#03256C', fontSize: '1.3rem',
                         }}
                     >
                         DevChat+ is an awesome
@@ -204,8 +205,8 @@ const LandingPage = () => {
                     flexDirection: 'column',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    color: 'rgb(0, 94, 124)',
-                    backgroundColor: '#C4EBE8',
+                    color: '#0288d1',
+                    background: 'whitesmoke',
                 }}
             >
                 <Typography
@@ -230,6 +231,8 @@ const LandingPage = () => {
                     justifyContent: 'center',
                     alignItems: 'center',
                     padding: '2rem 0',
+                    background: '#0288d1',
+                    color: 'whitesmoke',
                 }}
             >
                 <Typography

@@ -28,13 +28,13 @@ export const customGlobalScrollBars = (mode) => {
                 ...(mode === 'teal'
                     ? {
                         '*::-webkit-scrollbar-track': {
-                            backgroundColor: 'rgba(25, 196, 196, 0.99)',
+                            backgroundColor: '#0288d1',
                             border: 'none',
                         },
                         '*::-webkit-scrollbar-thumb': {
-                            backgroundColor: '#005E7C',
+                            backgroundColor: '#03256C',
                             borderRadius: '0.3rem',
-                            border: '2px solid rgba(25, 196, 196, 0.99)',
+                            border: '2px solid #0288d1',
                         },
                         '*::-webkit-scrollbar-thumb:hover': {
                             backgroundColor: '#001242',

@@ -18,6 +18,7 @@ export default function VideoCall() {
 
     const [jitsiApi, setJitsiApi] = useState(null);
     const [codeGroundId, setCodeGroundId] = useState(null);
+    const nodeRef = React.useRef(null);
 
     useEffect(() => {
         if (!window.localStorage.getItem('dev')) {
@@ -76,19 +77,31 @@ export default function VideoCall() {
                 }}
             />
 
-            <Draggable>
-                <Box sx={{
-                    position: 'absolute',
-                    bottom: 0,
-                    right: 0,
-                    backgroundColor: 'rgba(41, 41, 41, 0.7)',
-                    boxShadow: '0px 0px 10px 0px #000000',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    borderRadius: '10px',
-                    margin: '10px',
-                    zIndex: '1000',
-                }}>
+            <Draggable
+                axis="both"
+                handle=".handle"
+                grid={[25, 25]}
+                scale={1}
+                bounds='parent'
+                nodeRef={nodeRef}
+                onMouseDown={() => {
+
+                }}
+            >
+                <Box
+                    ref={nodeRef}
+                    sx={{
+                        position: 'absolute',
+                        bottom: 0,
+                        right: 0,
+                        backgroundColor: 'rgba(41, 41, 41, 0.7)',
+                        boxShadow: '0px 0px 10px 0px #000000',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        borderRadius: '10px',
+                        margin: '10px',
+                        zIndex: '1000',
+                    }}>
                     <Tooltip title='End Call'>
                         <IconButton onClick={
                             () => {
@@ -141,9 +154,9 @@ export default function VideoCall() {
                         </IconButton>
                     </Tooltip>
 
-                    {/* Create a component used to drag the box around */}
-                    <Tooltip title='Drag to move'>
-                        <Box sx={{
+                    <Box
+                        className="handle"
+                        sx={{
                             display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
@@ -152,18 +165,20 @@ export default function VideoCall() {
                             backgroundColor: 'rgba(41, 41, 41, 0.7)',
                             borderRadius: '10px',
                             '&:hover': {
-                                cursor: 'move',
+                                cursor: 'grab',
+                            },
+                            '&:active': {
+                                cursor: 'grabbing',
                             },
                         }}>
-                            <DragIndicatorIcon
-                                sx={{
-                                    color: '#888786',
-                                }}
-                            />
-                        </Box>
-                    </Tooltip>
+                        <DragIndicatorIcon
+                            sx={{
+                                color: '#888786',
+                            }}
+                        />
+                    </Box>
                 </Box>
             </Draggable>
-        </Box>
+        </Box >
     );
 }

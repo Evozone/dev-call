@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -9,28 +9,87 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Coder from './Coder';
 import CodeEditor from './CodeEditor';
 import { Typography } from '@mui/material';
+import { initSocket } from '../socket';
 
 export default function CodePlayGround() {
+    let params = useParams();
     const navigate = useNavigate();
     const currentUser = useSelector((state) => state.auth);
+    const socketRef = useRef(null);
+    const codeRef = useRef(null);
 
-    const [coders, setCoders] = useState([
-        { socketId: 8, username: 'Shantanu' },
-        { socketId: 1, username: 'Bhargav' },
-        { socketId: 2, username: 'Vishal' },
-        { socketId: 4, username: 'Anushka' },
-        { socketId: 6, username: 'Shruti' },
-        { socketId: 9, username: 'Aakoo' },
-        { socketId: 3, username: 'Shreyashka' },
-        { socketId: 9, username: 'Aakoo' },
-    ]);
+    const [coders, setCoders] = useState([]);
 
     useEffect(() => {
         if (!window.localStorage.getItem('dev')) {
             navigate('/');
         }
         document.title = 'Dev Chat+ Code';
+
+        const init = async () => {
+            socketRef.current = await initSocket();
+
+            socketRef.current.on('connect_error', (error) =>
+                handleErrors(error)
+            );
+            socketRef.current.on('connect_failed', (error) =>
+                handleErrors(error)
+            );
+            function handleErrors(error) {
+                // eslint-disable-next-line no-console
+                console.log('socket error', error);
+                alert('Socket connection failed, try again later.');
+                navigate('/');
+            }
+
+            socketRef.current.emit('join', {
+                roomId: params.groundId,
+                username: currentUser.username,
+            });
+
+            socketRef.current.on(
+                'joined',
+                ({ clients, username, socketId }) => {
+                    if (username !== currentUser.username) {
+                        alert(`${username} joined the room.`);
+                    }
+                    setCoders(clients);
+                    socketRef.current.emit('syncCode', {
+                        code: codeRef.current,
+                        socketId,
+                    });
+                }
+            );
+
+            socketRef.current.on('disconnected', ({ socketId, username }) => {
+                alert(`${username} left the room.`);
+                setCoders((prev) => {
+                    return prev.filter(
+                        (client) => client.socketId !== socketId
+                    );
+                });
+            });
+        };
+
+        if (currentUser.username) {
+            init();
+        }
+
+        return () => {
+            socketRef.current?.disconnect();
+            socketRef.current?.off('joined');
+            socketRef.current?.off('disconnected');
+        };
     }, [currentUser]);
+
+    const leaveCodePlayGround = () => {
+        window.close();
+    };
+
+    const copyRoomURL = () => {
+        navigator.clipboard.writeText(window.location.href);
+        alert('Room URL copied to clipboard.');
+    };
 
     return (
         <Box
@@ -90,6 +149,7 @@ export default function CodePlayGround() {
                     color='success'
                     disableElevation
                     endIcon={<ContentCopyIcon />}
+                    onClick={copyRoomURL}
                 >
                     Copy Room URL
                 </Button>
@@ -99,12 +159,18 @@ export default function CodePlayGround() {
                     color='success'
                     disableElevation
                     endIcon={<LogoutIcon />}
+                    onClick={leaveCodePlayGround}
                 >
                     Leave Editor
                 </Button>
             </Box>
-
-            <CodeEditor />
+            <CodeEditor
+                socketRef={socketRef}
+                params={params}
+                onCodeChange={(code) => {
+                    codeRef.current = code;
+                }}
+            />
         </Box>
     );
 }

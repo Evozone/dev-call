@@ -31,7 +31,6 @@ import TabsNav from './TabsNav';
 import TextBody from './TextBody';
 import { signOutAction } from '../actions/actions';
 import { auth, db } from '../firebaseConfig';
-import { customGlobalScrollBars } from './CustomGlobalCSS';
 
 const drawerWidth = 470;
 
@@ -54,7 +53,7 @@ export default function Home({ themeChange, mode }) {
         chat.length > 0 && getUserMesaages();
     }, [chat]);
 
-    const INVITE_TEMPLATE = `Hey, I'm using Dev Call for Video Calling and much more. Join me on this room: ${process.env.REACT_APP_BASE_URL}/meet/${chat[0]}`;
+    const INVITE_TEMPLATE = `Hey, I'm using Dev Chat+ for Video Calling and much more. Join me on this room: ${process.env.REACT_APP_BASE_URL}/meet/${chat[0]}`;
 
     const logOut = () => {
         const choice = window.confirm('Please click on OK to Log Out.');
@@ -107,12 +106,8 @@ export default function Home({ themeChange, mode }) {
         window.open(`/meet/${chat[0]}`, '_blank');
     };
 
-    // This section is for changing default CSS styles for HTML elements
-    // @vishal see https://mui.com/customization/how-to-customize/#global-css-override
-
     return (
         <Box sx={{ display: 'flex' }}>
-            {customGlobalScrollBars(mode)}
             <CssBaseline />
             <Drawer
                 sx={{

@@ -5,12 +5,17 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 import Coder from './Coder';
 import CodeEditor from './CodeEditor';
 import { Typography } from '@mui/material';
 import { initSocket } from '../socket';
-import CodeCompiler from './CodeCompiler';
+import EditorDropdown from './EditorDropdown';
+import { defineTheme } from '../utils/defineTheme';
+import OutputBox from './OutputBox';
+import CodeInput from './CodeInput';
+import OutputDetails from './OutputDetails';
 
 export default function CodePlayGround() {
     let params = useParams();
@@ -20,6 +25,9 @@ export default function CodePlayGround() {
     const codeRef = useRef(null);
 
     const [coders, setCoders] = useState([]);
+    const [lang, setLang] = useState('javascript');
+    const [theme, setTheme] = useState('vs-dark');
+    const [codeInput, setCodeInput] = useState('1,2,3,4,5');
 
     useEffect(() => {
         if (!window.localStorage.getItem('dev')) {
@@ -52,18 +60,20 @@ export default function CodePlayGround() {
                 'joined',
                 ({ clients, username, socketId }) => {
                     if (username !== currentUser.username) {
-                        alert(`${username} joined the room.`);
+                        console.log(`${username} joined the room.`);
                     }
                     setCoders(clients);
-                    socketRef.current.emit('syncCode', {
-                        code: codeRef.current,
-                        socketId,
-                    });
+                    setTimeout(() => {
+                        socketRef.current.emit('syncCode', {
+                            code: codeRef.current,
+                            socketId,
+                        });
+                    }, 1000);
                 }
             );
 
             socketRef.current.on('disconnected', ({ socketId, username }) => {
-                alert(`${username} left the room.`);
+                console.log(`${username} left the room.`);
                 setCoders((prev) => {
                     return prev.filter(
                         (client) => client.socketId !== socketId
@@ -90,6 +100,30 @@ export default function CodePlayGround() {
     const copyRoomURL = () => {
         navigator.clipboard.writeText(window.location.href);
         alert('Room URL copied to clipboard.');
+    };
+
+    const handleLangChange = (event) => {
+        setLang(event.target.value);
+        console.log(event.target.value);
+    };
+
+    const handleThemeChange = (event) => {
+        console.log(event.target.value);
+        const th = event.target.value;
+
+        if (['light', 'vs-dark'].includes(th)) {
+            setTheme(th);
+        } else {
+            defineTheme(th).then((_) => setTheme(th));
+        }
+    };
+
+    const handleCodeInputChange = (event) => {
+        setCodeInput(event.target.value);
+    };
+
+    const handleCodeSubmission = () => {
+        console.log('code -', codeRef.current);
     };
 
     return (
@@ -171,8 +205,39 @@ export default function CodePlayGround() {
                 onCodeChange={(code) => {
                     codeRef.current = code;
                 }}
+                language={lang}
+                theme={theme}
             />
-            <CodeCompiler />
+            <Box sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                <EditorDropdown
+                    lang={lang}
+                    theme={theme}
+                    handleLangChange={handleLangChange}
+                    handleThemeChange={handleThemeChange}
+                />
+                <OutputBox />
+                <CodeInput
+                    codeInput={codeInput}
+                    handleCodeInputChange={handleCodeInputChange}
+                />
+                <Button
+                    variant='contained'
+                    sx={{
+                        bgcolor: '#25D366',
+                        color: 'white',
+                        width: 'fit-content',
+                        alignSelf: 'end',
+                        mt: 2,
+                    }}
+                    color='success'
+                    startIcon={<SettingsIcon />}
+                    disableElevation
+                    onClick={handleCodeSubmission}
+                >
+                    Compile & Execute
+                </Button>
+                <OutputDetails />
+            </Box>
         </Box>
     );
 }

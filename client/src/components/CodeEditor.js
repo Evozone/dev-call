@@ -1,55 +1,63 @@
 import React, { useEffect, useRef } from 'react';
-import Codemirror from 'codemirror';
-import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/dracula.css';
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/addon/edit/closetag';
-import 'codemirror/addon/edit/closebrackets';
+import Editor from '@monaco-editor/react';
 
-export default function CodeEditor({ socketRef, params, onCodeChange }) {
+export default function CodeEditor({
+    socketRef,
+    params,
+    onCodeChange,
+    language,
+    theme,
+}) {
     const editorRef = useRef(null);
-    useEffect(() => {
-        async function init() {
-            editorRef.current = Codemirror.fromTextArea(
-                document.getElementById('realtimePlayground'),
-                {
-                    mode: { name: 'javascript', json: true },
-                    theme: 'dracula',
-                    autoCloseTags: true,
-                    autoCloseBrackets: true,
-                    lineNumbers: true,
-                    lineWrapping: true,
-                }
-            );
 
-            editorRef.current.on('change', (instance, changes) => {
-                const { origin } = changes;
-                const code = instance.getValue();
-                onCodeChange(code);
-                if (origin !== 'setValue') {
-                    socketRef.current.emit('codeChange', {
-                        code,
-                        roomId: params.groundId,
-                    });
-                }
+    const handleEditorDidMount = (editor, monaco) => {
+        // console.log('monaco -', monaco);
+        editorRef.current = editor;
+    };
+
+    const handleEditorChange = (value, event) => {
+        onCodeChange(value);
+        // console.log('event', event.isFlush);
+        if (!event.isFlush) {
+            socketRef.current.emit('codeChange', {
+                code: value,
+                roomId: params.groundId,
             });
         }
-        init();
-    }, []);
+    };
 
     useEffect(() => {
         if (socketRef.current) {
             socketRef.current.on('codeChange', ({ code }) => {
-                if (code !== null) {
-                    editorRef.current.setValue(code);
-                }
+                // console.log('set value', code);
+                editorRef.current.setValue(code);
             });
         }
+        console.log(language, theme);
 
         return () => {
             socketRef?.current.off('codeChange');
         };
     }, [socketRef.current]);
 
-    return <textarea id='realtimePlayground'></textarea>;
+    return (
+        <Editor
+            height='100vh'
+            width={`100%`}
+            language={language || 'javascript'}
+            onMount={handleEditorDidMount}
+            theme={theme}
+            // defaultValue='// some comment'
+            onChange={handleEditorChange}
+            options={{
+                selectOnLineNumbers: true,
+                wordWrap: 'on',
+                wordWrapColumn: 40,
+                wrappingIndent: 'indent',
+                minimap: {
+                    enabled: false,
+                },
+            }}
+        />
+    );
 }

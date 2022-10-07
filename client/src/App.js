@@ -13,7 +13,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 import VideoCall from './components/VideoCall';
 import CodePlayGround from './components/CodePlayGround';
 import { customGlobalScrollBars } from './components/CustomGlobalCSS';
-import './App.css';
 
 const App = () => {
     const dispatch = useDispatch();

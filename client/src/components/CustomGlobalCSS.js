@@ -25,11 +25,30 @@ export const customGlobalScrollBars = (mode) => {
                 }
             }
             : {
-                '::-webkit-scrollbar-thumb': {
-                    border: '2px solid #f5f5f5',
-                },
+                ...(mode === 'teal'
+                    ? {
+                        '*::-webkit-scrollbar-track': {
+                            backgroundColor: '#0288d1',
+                            border: 'none',
+                        },
+                        '*::-webkit-scrollbar-thumb': {
+                            backgroundColor: '#03256C',
+                            borderRadius: '0.3rem',
+                            border: '2px solid #0288d1',
+                        },
+                        '*::-webkit-scrollbar-thumb:hover': {
+                            backgroundColor: '#001242',
+                        },
+                    }
+                    : {
+                        '::-webkit-scrollbar-thumb': {
+                            border: '2px solid #f5f5f5',
+                        }
+                    }
+                )
             }),
-    }} />
+
+    }} />;
 
     return component;
 }

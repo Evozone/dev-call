@@ -144,7 +144,7 @@ export default function Home({ themeChange, mode }) {
                             alt={currentUser.username.charAt(0).toUpperCase()}
                             src={currentUser.photoURL}
                         />
-                        <Typography sx={{ color: 'white' }} variant='h5'>
+                        <Typography sx={{ color: 'whitesmoke' }} variant='h5'>
                             {currentUser.username}
                         </Typography>
                     </IconButton>
@@ -157,13 +157,13 @@ export default function Home({ themeChange, mode }) {
                                 {mode === 'dark' ? (
                                     <LightModeIcon />
                                 ) : (
-                                    <DarkModeIcon sx={{ color: 'white' }} />
+                                    <DarkModeIcon sx={{ color: 'whitesmoke' }} />
                                 )}
                             </IconButton>
                         </Tooltip>
                         <Tooltip title='Install App '>
                             <IconButton sx={{ mr: '10px' }}>
-                                <DownloadIcon sx={{ color: 'white' }} />
+                                <DownloadIcon sx={{ color: 'whitesmoke' }} />
                             </IconButton>
                         </Tooltip>
                         <Tooltip title='Logout'>
@@ -178,12 +178,12 @@ export default function Home({ themeChange, mode }) {
                         height: 'calc(100% - 75px)',
                         ...(mode === 'dark'
                             ? {
-                                  borderRight:
-                                      '1px solid rgba(255, 255, 255, 0.12)',
-                              }
+                                borderRight:
+                                    '1px solid rgba(255, 255, 255, 0.12)',
+                            }
                             : {
-                                  borderRight: '1px solid rgba(0, 0, 0, 0.12)',
-                              }),
+                                borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+                            }),
                     }}
                 >
                     <TabsNav mode={mode} setChat={setChat} />
@@ -199,13 +199,13 @@ export default function Home({ themeChange, mode }) {
                     overflow: 'hidden',
                     ...(mode === 'dark'
                         ? {
-                              backgroundColor: '#1a1a1a',
-                              color: 'white',
-                          }
+                            backgroundColor: '#1a1a1a',
+                            color: 'whitesmoke',
+                        }
                         : {
-                              backgroundColor: '#f5f5f5',
-                              color: 'black',
-                          }),
+                            backgroundColor: '#f5f5f5',
+                            color: 'black',
+                        }),
                 }}
             >
                 <Box
@@ -231,7 +231,7 @@ export default function Home({ themeChange, mode }) {
                         <Avatar sx={{ width: 50, height: 50, mr: 2 }}>i</Avatar>
                     )}
                     <Typography
-                        sx={{ color: 'white', fontWeight: '400' }}
+                        sx={{ color: 'whitesmoke', fontWeight: '400' }}
                         variant='h6'
                     >
                         {chat.length > 0 ? chat[1].userInfo.username : 'Chat'}
@@ -241,7 +241,7 @@ export default function Home({ themeChange, mode }) {
                             <IconButton onClick={startVideoCall}>
                                 <VideoCallIcon
                                     fontSize='large'
-                                    sx={{ color: 'white' }}
+                                    sx={{ color: 'whitesmoke' }}
                                 />
                             </IconButton>
                         </Tooltip>

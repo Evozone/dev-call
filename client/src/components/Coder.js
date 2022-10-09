@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 export default function Coder({ username }) {
     return (
         <Box
-            className='coder'
             sx={{
                 display: 'flex',
                 flexDirection: 'column',

@@ -1,7 +1,7 @@
 import { TextareaAutosize, Typography } from '@mui/material';
 import React from 'react';
 
-function CodeInput({ handleCodeInputChange, codeInput }) {
+export default function CodeInput({ handleCodeInputChange, codeInput }) {
     return (
         <React.Fragment>
             <Typography size='small' variant='body1'>
@@ -23,5 +23,3 @@ function CodeInput({ handleCodeInputChange, codeInput }) {
         </React.Fragment>
     );
 }
-
-export default CodeInput;

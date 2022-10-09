@@ -23,6 +23,7 @@ export default function EditorDropdown({
                     label='Language'
                     value={lang.value}
                     onChange={handleLangChange}
+                    sx={{ width: 'min-content' }}
                 >
                     {languageOptions.map((language) => (
                         <MenuItem key={language.id} value={language.value}>
@@ -42,6 +43,7 @@ export default function EditorDropdown({
                     value={theme}
                     label='Theme'
                     onChange={handleThemeChange}
+                    sx={{ width: 'min-content' }}
                 >
                     <MenuItem value='vs-dark'>Vs-dark</MenuItem>
                     <MenuItem value='light'>Vs-light</MenuItem>

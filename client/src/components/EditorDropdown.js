@@ -21,7 +21,7 @@ export default function EditorDropdown({
                     labelId='lang-input-id'
                     id='lang-input-id'
                     label='Language'
-                    value={lang}
+                    value={lang.value}
                     onChange={handleLangChange}
                 >
                     {languageOptions.map((language) => (

@@ -10,14 +10,12 @@ export default function CodeEditor({
 }) {
     const editorRef = useRef(null);
 
-    const handleEditorDidMount = (editor, monaco) => {
-        // console.log('monaco -', monaco);
+    const handleEditorDidMount = (editor) => {
         editorRef.current = editor;
     };
 
     const handleEditorChange = (value, event) => {
         onCodeChange(value);
-        // console.log('event', event.isFlush);
         if (!event.isFlush) {
             socketRef.current.emit('codeChange', {
                 code: value,
@@ -29,11 +27,9 @@ export default function CodeEditor({
     useEffect(() => {
         if (socketRef.current) {
             socketRef.current.on('codeChange', ({ code }) => {
-                // console.log('set value', code);
                 editorRef.current.setValue(code);
             });
         }
-        console.log(language, theme);
 
         return () => {
             socketRef?.current.off('codeChange');
@@ -42,9 +38,9 @@ export default function CodeEditor({
 
     return (
         <Editor
-            height='100vh'
+            height='100%'
             width={`100%`}
-            language={language || 'javascript'}
+            language={language?.value || 'javascript'}
             onMount={handleEditorDidMount}
             theme={theme}
             // defaultValue='// some comment'

@@ -18,6 +18,13 @@ const sections = [
     { title: 'Contact', url: '#contact' },
 ];
 
+const services = [
+    'Call',
+    'Draw',
+    'Code',
+]
+
+
 const LandingPage = () => {
     const theme = createTheme();
 
@@ -32,7 +39,7 @@ const LandingPage = () => {
                 <CssBaseline />
 
                 {/* Navigation Bar */}
-                <ScrollToColor>
+                {/* <ScrollToColor>
                     <AppBar
                         position="static"
                         sx={{
@@ -50,7 +57,6 @@ const LandingPage = () => {
                                 fontSize: '2rem',
                             }}
                         >
-                            {/* Login now, Features, Pricing, Reviews, Contact */}
                             <Typography
                                 variant="h6"
                                 component="div"
@@ -92,7 +98,7 @@ const LandingPage = () => {
                             ))}
                         </Toolbar>
                     </AppBar>
-                </ScrollToColor>
+                </ScrollToColor> */}
 
                 {/* Section : Hero */}
                 <Box
@@ -100,7 +106,7 @@ const LandingPage = () => {
                     sx={{
                         width: '100%',
                         height: '100vh',
-                        background: 'linear-gradient(116.82deg, #29b6f6 20%, #0288d1 100%)',
+                        background: 'linear-gradient(116.82deg, #0288d1 0%, #1976d2 100%)',
                         display: 'flex',
                         flexFlow: 'row wrap',
                         justifyContent: 'center',
@@ -121,7 +127,11 @@ const LandingPage = () => {
                             alignItems: 'left',
                             padding: '0 0 0 5rem',
                         }}>
-                        <img src="https://media.discordapp.net/attachments/562999795078266893/1027533965243985930/temp-logo.png" alt="Logo" width="60%" height="60%" />
+
+                        <Box>
+                            <img src="/assets/landing-logo.svg" alt="Logomark" />
+                        </Box>
+
 
                         <Typography
                             variant="h4"
@@ -130,10 +140,11 @@ const LandingPage = () => {
                                 fontFamily: 'Work Sans, sans-serif', fontWeight: '600', padding: '1rem 0', fontSize: '3rem',
                             }}
                         >
-                            DevChat +
+                            DevChat+
+
                             <hr align="left"
                                 style={{
-                                    backgroundColor: '#0288D1',
+                                    backgroundColor: '#03256C',
                                     height: 7,
                                     width: '80%',
                                     border: 'none',
@@ -168,16 +179,17 @@ const LandingPage = () => {
                             variant="h2"
                             component="div"
                             sx={{
-                                fontFamily: 'Trebuchet MS, sans-serif', fontWeight: '400',
+                                fontFamily: 'Trebuchet MS, sans-serif', fontWeight: '400', fontSize: '3rem',
                             }}
                         >
-                            Chat with your team
+                            Interact with your team
                         </Typography>
                         <Typography
                             variant="h4"
                             component="div"
                             sx={{
-                                fontFamily: 'Work Sans', fontWeight: '400',
+                                fontFamily: 'Work Sans', fontWeight: '400', padding: '0 0 1rem 0',
+                                color: 'rgba(255, 255, 255, 0.7)',
                             }}
                         >
                             and get work done
@@ -204,7 +216,7 @@ const LandingPage = () => {
                 </Box>
 
                 {/* Section : Features */}
-                <Box
+                {/* <Box
                     id="features"
                     sx={{
                         width: '100%',
@@ -226,10 +238,10 @@ const LandingPage = () => {
                     >
                         Features
                     </Typography>
-                </Box>
+                </Box> */}
 
                 {/* Section : Contact and Footer */}
-                <Box
+                {/* <Box
                     id="contact"
                     sx={{
                         width: '100%',
@@ -252,10 +264,10 @@ const LandingPage = () => {
                     >
                         Contact
                     </Typography>
-                </Box>
+                </Box> */}
 
             </Box>
-        </ThemeProvider>
+        </ThemeProvider >
     );
 }
 

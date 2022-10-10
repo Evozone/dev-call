@@ -131,11 +131,11 @@ export default function Home({ themeChange, mode }) {
                         pl: 1,
                         ...(mode === 'dark'
                             ? {
-                                  backgroundColor: 'info.dark',
-                              }
+                                backgroundColor: 'info.dark',
+                            }
                             : {
-                                  backgroundColor: 'primary.main',
-                              }),
+                                backgroundColor: 'primary.main',
+                            }),
                         borderRight: '1px solid',
                         borderColor: 'primary.dark',
                     }}
@@ -186,12 +186,12 @@ export default function Home({ themeChange, mode }) {
                         height: 'calc(100% - 75px)',
                         ...(mode === 'dark'
                             ? {
-                                  borderRight:
-                                      '1px solid rgba(255, 255, 255, 0.12)',
-                              }
+                                borderRight:
+                                    '1px solid rgba(255, 255, 255, 0.12)',
+                            }
                             : {
-                                  borderRight: '1px solid rgba(0, 0, 0, 0.12)',
-                              }),
+                                borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+                            }),
                     }}
                 >
                     <TabsNav mode={mode} setChat={setChat} />
@@ -205,17 +205,10 @@ export default function Home({ themeChange, mode }) {
                     width: '100%',
                     height: '100vh',
                     overflow: 'hidden',
-                    ...(mode === 'dark'
-                        ? {
-                              backgroundColor: '#1a1a1a',
-                              color: 'whitesmoke',
-                          }
-                        : {
-                              backgroundColor: '#f5f5f5',
-                              color: 'black',
-                          }),
+                    background: mode === 'dark' ? '#1a1a1a' : '#f5f5f5',
                 }}
             >
+
                 <Box
                     sx={{
                         height: '75px',
@@ -224,11 +217,11 @@ export default function Home({ themeChange, mode }) {
                         pl: 2,
                         ...(mode === 'dark'
                             ? {
-                                  backgroundColor: 'info.dark',
-                              }
+                                backgroundColor: 'info.dark',
+                            }
                             : {
-                                  backgroundColor: 'primary.main',
-                              }),
+                                backgroundColor: 'primary.main',
+                            }),
                         position: 'sticky',
                         top: 0,
                     }}

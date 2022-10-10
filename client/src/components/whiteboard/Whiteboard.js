@@ -1,7 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import DeleteIcon from '@mui/icons-material/Delete';
+import PermMediaIcon from '@mui/icons-material/PermMedia';
 
+import Coder from '../Coder';
 import { initSocket } from '../../socket';
 import './Whiteboard.css';
 
@@ -14,7 +20,16 @@ export default function Whiteboard() {
 
     const canvasRef = useRef(null);
     const colorsRef = useRef(null);
+    const logoRef = useRef(null);
+    const usersRef = useRef(null);
     const socketRef = useRef();
+
+    // Dummy list of users  
+    const users = [
+        { name: 'John Doe', id: '1' },
+        { name: 'Jane Doe', id: '2' },
+        { name: 'John Smith', id: '3' },
+    ]
 
     useEffect(() => {
         if (!window.localStorage.getItem('dev')) {
@@ -249,17 +264,89 @@ export default function Whiteboard() {
     return (
         <div>
             <canvas ref={canvasRef} className='whiteboard' />
+            <div ref={logoRef}
+                className='logo'
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    mb: 2,
+                }}
+            >
+                <img
+                    style={{ height: '40px' }}
+                    src='/assets/landing-logo.svg'
+                    alt='logo'
+                />
+                <h6
+                    style={{
+                        color: '#fff',
+                        fontSize: '1.2rem',
+                        fontWeight: 'bold',
+                        margin: '0 0 0 10px',
+                    }}
+                >
+                    Dev Chat+ Draw
+                </h6>
+            </div>
             <div ref={colorsRef} className='colors'>
                 <div className='color black' />
                 <div className='color red' />
                 <div className='color green' />
                 <div className='color blue' />
                 <div className='color yellow' />
-                <div className='color white' />
-                <button onClick={clearCanvas}>clear</button>
-                <button onClick={downloadCanvas}>Save as image</button>
-                <button onClick={leaveBoard}>Leave </button>
+
+                {/* Create a Tooltip with Erase */}
+                <Tooltip title='Erase'>
+                    <div className='color white' />
+                </Tooltip>
+
+                {/* Create a vertical line */}
+                <div className='vertical-line' />
+
+                {/* Create a ToolTip with IconButton to Clear */}
+                <Tooltip title='Clear'>
+                    <IconButton
+                        onClick={clearCanvas}
+                        className='clear'
+                        aria-label='clear'
+                        sx={{ color: '#03256C' }}
+                    >
+                        <DeleteIcon />
+                    </IconButton>
+                </Tooltip>
+
+                {/* Create a ToolTip with IconButton to Download */}
+                <Tooltip title='Save as PNG'>
+                    <IconButton
+                        onClick={downloadCanvas}
+                        className='download'
+                        aria-label='download'
+                        sx={{ color: '#03256C' }}
+                    >
+                        <PermMediaIcon />
+                    </IconButton>
+                </Tooltip>
+
+                {/* Create a ToolTip with IconButton to Leave */}
+                <Tooltip title='Leave'>
+                    <IconButton
+                        onClick={leaveBoard}
+                        className='leave'
+                        aria-label='leave'
+                        sx={{ color: '#EE4B2B' }}
+                    >
+                        <ExitToAppIcon />
+                    </IconButton>
+                </Tooltip>
             </div>
-        </div>
+            <div ref={usersRef} className='users'>
+                {/* Iterate through users */}
+                {users.map((user) => (
+                    <Coder
+                        key={user.id} username={user.name}
+                    />
+                ))}
+            </div>
+        </div >
     );
 }

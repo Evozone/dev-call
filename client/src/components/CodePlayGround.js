@@ -205,7 +205,7 @@ export default function CodePlayGround() {
         >
             <Box
                 sx={{
-                    background: 'linear-gradient(60deg, #0288d1 20%, #1976d2 100%)',
+                    background: 'linear-gradient(30deg, #1976d2 0%, #2196f3 50%, #1976d2 100%)',
                     p: 2,
                     color: 'white',
                     display: 'flex',
@@ -214,12 +214,24 @@ export default function CodePlayGround() {
                 }}
             >
                 <Box sx={{ flex: 1 }}>
-                    <Box>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            mb: 2,
+                        }}
+                    >
                         <img
                             style={{ height: '50px' }}
-                            src='/logo192.png'
+                            src='/assets/landing-logo.svg'
                             alt='logo'
                         />
+                        <Typography
+                            variant='h6'
+                            sx={{ fontWeight: 'bold', ml: 2 }}
+                        >
+                            Dev Chat+ Code
+                        </Typography>
                     </Box>
                     <Typography sx={{ mb: 2, mt: 3 }} variant='h6'>
                         Dev&apos;s Connected

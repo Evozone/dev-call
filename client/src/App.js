@@ -14,6 +14,7 @@ import VideoCall from './components/VideoCall';
 import CodePlayGround from './components/CodePlayGround';
 import Whiteboard from './components/whiteboard/Whiteboard';
 import { customGlobalScrollBars } from './components/CustomGlobalCSS';
+import Notify from './components/Notify';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -58,6 +59,7 @@ const App = () => {
             {customGlobalScrollBars(mode)}
             <CssBaseline />
             <Loading />
+            <Notify />
             <Routes>
                 <Route path='/' element={<LandingPage />} />
                 <Route

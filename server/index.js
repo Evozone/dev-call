@@ -21,12 +21,12 @@ function getAllConnectedClients(roomId) {
 }
 
 io.on('connection', (socket) => {
-    console.log('a user connected', socket.id);
+    // console.log('a user connected', socket.id);
 
     socket.on('join', ({ roomId, username }) => {
         users[socket.id] = username;
         socket.join(roomId);
-        console.log('joined', roomId);
+        // console.log('joined', roomId);
         const clients = getAllConnectedClients(roomId);
         clients.forEach(({ socketId }) => {
             io.to(socketId).emit('joined', {
@@ -63,7 +63,7 @@ io.on('connection', (socket) => {
         });
         delete users[socket.id];
         socket.leave();
-        console.log('User left', socket.id);
+        // console.log('User left', socket.id);
     });
 });
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
@@ -10,26 +10,22 @@ import PermMediaIcon from '@mui/icons-material/PermMedia';
 import Coder from '../Coder';
 import { initSocket } from '../../socket';
 import './Whiteboard.css';
+import { notifyAction } from '../../actions/actions';
 
 export default function Whiteboard() {
+    const dispatch = useDispatch();
     const params = useParams();
     const navigate = useNavigate();
     const currentUser = useSelector((state) => state.auth);
 
     const [canvasCurrent, setCanvasCurrent] = useState(null);
+    const [coders, setCoders] = useState(null);
 
     const canvasRef = useRef(null);
     const colorsRef = useRef(null);
     const logoRef = useRef(null);
     const usersRef = useRef(null);
     const socketRef = useRef();
-
-    // Dummy list of users  
-    const users = [
-        { name: 'John Doe', id: '1' },
-        { name: 'Jane Doe', id: '2' },
-        { name: 'John Smith', id: '3' },
-    ]
 
     useEffect(() => {
         if (!window.localStorage.getItem('dev')) {
@@ -56,24 +52,36 @@ export default function Whiteboard() {
             function handleErrors(error) {
                 // eslint-disable-next-line no-console
                 console.log('socket error', error);
-                alert('Socket connection failed, try again later.');
+                alert(
+                    'Socket connection failed, Please close the tab & try again later.'
+                );
                 // navigate('/');
             }
             socketRef.current.emit('join', {
                 roomId: params.boardId,
                 username: currentUser.username,
             });
-            socketRef.current.on('joined', ({ username, socketId }) => {
-                if (username !== currentUser.username) {
-                    console.log(`${username} joined the room.`);
+            socketRef.current.on(
+                'joined',
+                ({ clients, username, socketId }) => {
+                    if (username !== currentUser.username) {
+                        dispatch(
+                            notifyAction(
+                                true,
+                                'success',
+                                `${username} joined the Canvas.`
+                            )
+                        );
+                    }
+                    setCoders(clients);
+                    setTimeout(() => {
+                        socketRef.current.emit('syncCanvas', {
+                            drawingData: canvas.toDataURL(),
+                            socketId,
+                        });
+                    }, 1000);
                 }
-                setTimeout(() => {
-                    socketRef.current.emit('syncCanvas', {
-                        drawingData: canvas.toDataURL(),
-                        socketId,
-                    });
-                }, 1000);
-            });
+            );
             socketRef.current.on(
                 'drawingChange',
                 ({ drawingData, socketId }) => {
@@ -94,8 +102,18 @@ export default function Whiteboard() {
                     }
                 }
             );
+            socketRef.current.on('disconnected', ({ socketId, username }) => {
+                dispatch(notifyAction(true, 'info', `${username} left.`));
+                setCoders((prev) => {
+                    return prev.filter(
+                        (client) => client.socketId !== socketId
+                    );
+                });
+            });
         };
-        init();
+        if (currentUser.username) {
+            init();
+        }
 
         const onColorUpdate = (e) => {
             current.color = e.target.className.split(' ')[1];
@@ -218,14 +236,17 @@ export default function Whiteboard() {
         };
 
         return () => {
-            socketRef.current?.disconnect();
-            socketRef.current?.off('joined');
-            socketRef?.current.off('drawingChange');
-            socketRef.current?.off('connect_error');
-            socketRef.current?.off('connect_failed');
-            socketRef?.current.off('syncDrawing');
+            if (socketRef.current) {
+                socketRef.current?.disconnect();
+                socketRef.current?.off('joined');
+                socketRef?.current.off('drawingChange');
+                socketRef.current?.off('connect_error');
+                socketRef.current?.off('connect_failed');
+                socketRef?.current.off('syncDrawing');
+                socketRef.current?.off('disconnected');
+            }
         };
-    }, []);
+    }, [currentUser.username]);
 
     const clearCanvas = () => {
         const canvas = canvasRef.current;
@@ -264,7 +285,8 @@ export default function Whiteboard() {
     return (
         <div>
             <canvas ref={canvasRef} className='whiteboard' />
-            <div ref={logoRef}
+            <div
+                ref={logoRef}
                 className='logo'
                 sx={{
                     display: 'flex',
@@ -340,13 +362,11 @@ export default function Whiteboard() {
                 </Tooltip>
             </div>
             <div ref={usersRef} className='users'>
-                {/* Iterate through users */}
-                {users.map((user) => (
-                    <Coder
-                        key={user.id} username={user.name}
-                    />
-                ))}
+                {coders &&
+                    coders.map((coder) => (
+                        <Coder key={coder.socketId} username={coder.username} />
+                    ))}
             </div>
-        </div >
+        </div>
     );
 }

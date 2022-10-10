@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import React from 'react';
 
-function OutputDetails() {
+export default function OutputDetails({ outputDetails }) {
     return (
         <Box sx={{ mt: 2 }}>
             <Typography sx={{ mb: 2 }}>
@@ -16,7 +16,7 @@ function OutputDetails() {
                         borderRadius: '3px',
                     }}
                 >
-                    Accepted
+                    {outputDetails ? outputDetails.status.description : '-'}
                 </span>
             </Typography>
             <Typography sx={{ mb: 2 }}>
@@ -30,7 +30,7 @@ function OutputDetails() {
                         borderRadius: '3px',
                     }}
                 >
-                    2.3kb
+                    {outputDetails ? outputDetails.memory + 'kb' : '-'}
                 </span>
             </Typography>
             <Typography>
@@ -44,11 +44,9 @@ function OutputDetails() {
                         borderRadius: '3px',
                     }}
                 >
-                    0.7s
+                    {outputDetails ? outputDetails.time + 's' : '-'}
                 </span>
             </Typography>
         </Box>
     );
 }
-
-export default OutputDetails;

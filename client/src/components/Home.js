@@ -129,9 +129,15 @@ export default function Home({ themeChange, mode }) {
                         display: 'flex',
                         alignItems: 'center',
                         pl: 1,
-                        backgroundColor: 'info.main',
+                        ...(mode === 'dark'
+                            ? {
+                                  backgroundColor: 'info.dark',
+                              }
+                            : {
+                                  backgroundColor: 'primary.main',
+                              }),
                         borderRight: '1px solid',
-                        borderColor: 'info.dark',
+                        borderColor: 'primary.dark',
                     }}
                 >
                     <IconButton sx={{ borderRadius: '0' }}>
@@ -157,7 +163,9 @@ export default function Home({ themeChange, mode }) {
                                 {mode === 'dark' ? (
                                     <LightModeIcon />
                                 ) : (
-                                    <DarkModeIcon sx={{ color: 'whitesmoke' }} />
+                                    <DarkModeIcon
+                                        sx={{ color: 'whitesmoke' }}
+                                    />
                                 )}
                             </IconButton>
                         </Tooltip>
@@ -178,12 +186,12 @@ export default function Home({ themeChange, mode }) {
                         height: 'calc(100% - 75px)',
                         ...(mode === 'dark'
                             ? {
-                                borderRight:
-                                    '1px solid rgba(255, 255, 255, 0.12)',
-                            }
+                                  borderRight:
+                                      '1px solid rgba(255, 255, 255, 0.12)',
+                              }
                             : {
-                                borderRight: '1px solid rgba(0, 0, 0, 0.12)',
-                            }),
+                                  borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+                              }),
                     }}
                 >
                     <TabsNav mode={mode} setChat={setChat} />
@@ -199,13 +207,13 @@ export default function Home({ themeChange, mode }) {
                     overflow: 'hidden',
                     ...(mode === 'dark'
                         ? {
-                            backgroundColor: '#1a1a1a',
-                            color: 'whitesmoke',
-                        }
+                              backgroundColor: '#1a1a1a',
+                              color: 'whitesmoke',
+                          }
                         : {
-                            backgroundColor: '#f5f5f5',
-                            color: 'black',
-                        }),
+                              backgroundColor: '#f5f5f5',
+                              color: 'black',
+                          }),
                 }}
             >
                 <Box
@@ -214,7 +222,13 @@ export default function Home({ themeChange, mode }) {
                         display: 'flex',
                         alignItems: 'center',
                         pl: 2,
-                        backgroundColor: 'info.main',
+                        ...(mode === 'dark'
+                            ? {
+                                  backgroundColor: 'info.dark',
+                              }
+                            : {
+                                  backgroundColor: 'primary.main',
+                              }),
                         position: 'sticky',
                         top: 0,
                     }}

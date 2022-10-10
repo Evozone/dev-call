@@ -16,6 +16,7 @@ import { defineTheme } from '../utils/defineTheme';
 import OutputBox from './OutputBox';
 import CodeInput from './CodeInput';
 import OutputDetails from './OutputDetails';
+import { languageOptions } from '../constants/languageOptions';
 
 export default function CodePlayGround() {
     let params = useParams();
@@ -25,9 +26,11 @@ export default function CodePlayGround() {
     const codeRef = useRef(null);
 
     const [coders, setCoders] = useState([]);
-    const [lang, setLang] = useState('javascript');
+    const [lang, setLang] = useState(languageOptions[0]);
     const [theme, setTheme] = useState('vs-dark');
-    const [codeInput, setCodeInput] = useState('1,2,3,4,5');
+    const [codeInput, setCodeInput] = useState('');
+    const [outputDetails, setOutputDetails] = useState(null);
+    const [processingCode, setProcessingCode] = useState(false);
 
     useEffect(() => {
         if (!window.localStorage.getItem('dev')) {
@@ -103,18 +106,17 @@ export default function CodePlayGround() {
     };
 
     const handleLangChange = (event) => {
-        setLang(event.target.value);
-        console.log(event.target.value);
+        const value = event.target.value;
+        setLang(languageOptions.find((option) => option.value === value));
     };
 
     const handleThemeChange = (event) => {
-        console.log(event.target.value);
         const th = event.target.value;
 
         if (['light', 'vs-dark'].includes(th)) {
             setTheme(th);
         } else {
-            defineTheme(th).then((_) => setTheme(th));
+            defineTheme(th).then(() => setTheme(th));
         }
     };
 
@@ -122,19 +124,85 @@ export default function CodePlayGround() {
         setCodeInput(event.target.value);
     };
 
-    const handleCodeSubmission = () => {
-        console.log('code -', codeRef.current);
+    const checkStatus = async (token) => {
+        try {
+            let res = await fetch(
+                `${process.env.REACT_APP_RAPID_API_URL}/${token}?base64_encoded=true`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'x-rapidapi-host': process.env.REACT_APP_RAPID_API_HOST,
+                        'x-rapidapi-key': process.env.REACT_APP_RAPID_API_KEY,
+                    },
+                }
+            );
+            let response = await res.json();
+            let statusId = response.status?.id;
+            if (statusId === 1 || statusId === 2) {
+                setTimeout(() => {
+                    checkStatus(token);
+                }, 3500);
+                return;
+            } else {
+                setOutputDetails(response);
+                setProcessingCode(false);
+                console.log('response', response);
+                return;
+            }
+        } catch (err) {
+            setProcessingCode(false);
+            console.log('err', err);
+        }
+    };
+
+    const handleCodeSubmission = async () => {
+        const sourceCode = codeRef.current;
+        const languageId = lang.id;
+        console.log(codeInput);
+        console.log(sourceCode);
+        setProcessingCode(true);
+
+        await fetch(
+            `${process.env.REACT_APP_RAPID_API_URL}?base64_encoded=true`,
+            {
+                method: 'POST',
+                headers: {
+                    'x-rapidapi-host': process.env.REACT_APP_RAPID_API_HOST,
+                    'x-rapidapi-key': process.env.REACT_APP_RAPID_API_KEY,
+                    'content-type': 'application/json',
+                    accept: 'application/json',
+                },
+                body: JSON.stringify({
+                    language_id: languageId,
+                    source_code: btoa(sourceCode),
+                    stdin: btoa(codeInput),
+                }),
+            }
+        )
+            .then(async (response) => {
+                const data = await response.json();
+                console.log(data);
+                checkStatus(data.token);
+            })
+            .catch((err) => {
+                setProcessingCode(false);
+                const error = err.response ? err.response.data : err;
+                console.error('errpr - ', error);
+                // const status = err.response.status;
+                // if (status === 429) {
+                //     console.log("too many requests", status);
+                //     alert('Quota of 12 requests exceeded for the Day! Please switch to a premium plan to increase your quota.');
+                // }
+            });
     };
 
     return (
         <Box
             sx={{
-                display: 'grid',
-                gridTemplateColumns: '250px 2.5fr 1fr',
-                height: '100vh',
-                overflowX: 'hidden',
+                display: 'flex',
+                minHeight: '100vh',
+                overflow: 'auto',
             }}
-            className='mainWrap'
         >
             <Box
                 sx={{
@@ -143,14 +211,13 @@ export default function CodePlayGround() {
                     color: 'white',
                     display: 'flex',
                     flexDirection: 'column',
+                    flex: 2,
                 }}
-                className='aside'
             >
-                <Box sx={{ flex: 1 }} className='asideInner'>
-                    <Box className='logo'>
+                <Box sx={{ flex: 1 }}>
+                    <Box>
                         <img
                             style={{ height: '50px' }}
-                            className='logoImg'
                             src='/logo192.png'
                             alt='logo'
                         />
@@ -168,7 +235,6 @@ export default function CodePlayGround() {
                             maxHeight: '400px',
                             overflowY: 'auto',
                         }}
-                        className='codersList'
                     >
                         {coders.map((coder) => (
                             <Coder
@@ -196,47 +262,52 @@ export default function CodePlayGround() {
                     endIcon={<LogoutIcon />}
                     onClick={leaveCodePlayGround}
                 >
-                    Leave Editor
+                    Leave
                 </Button>
             </Box>
-            <CodeEditor
-                socketRef={socketRef}
-                params={params}
-                onCodeChange={(code) => {
-                    codeRef.current = code;
-                }}
-                language={lang}
-                theme={theme}
-            />
-            <Box sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ flex: 7 }}>
+                <CodeEditor
+                    socketRef={socketRef}
+                    params={params}
+                    onCodeChange={(code) => {
+                        codeRef.current = code;
+                    }}
+                    language={lang}
+                    theme={theme}
+                />
+            </Box>
+            <Box
+                sx={{ p: 2, flex: 3, display: 'flex', flexDirection: 'column' }}
+            >
                 <EditorDropdown
                     lang={lang}
                     theme={theme}
                     handleLangChange={handleLangChange}
                     handleThemeChange={handleThemeChange}
                 />
-                <OutputBox />
+                <OutputBox outputDetails={outputDetails} />
                 <CodeInput
                     codeInput={codeInput}
                     handleCodeInputChange={handleCodeInputChange}
                 />
                 <Button
-                    variant='contained'
+                    variant={processingCode ? 'disabled' : 'contained'}
                     sx={{
                         bgcolor: '#25D366',
                         color: 'white',
                         width: 'fit-content',
                         alignSelf: 'end',
                         mt: 2,
+                        mb: 3,
                     }}
                     color='success'
                     startIcon={<SettingsIcon />}
                     disableElevation
                     onClick={handleCodeSubmission}
                 >
-                    Compile & Execute
+                    {processingCode ? 'Processing...' : 'Compile & Execute'}
                 </Button>
-                <OutputDetails />
+                <OutputDetails outputDetails={outputDetails} />
             </Box>
         </Box>
     );

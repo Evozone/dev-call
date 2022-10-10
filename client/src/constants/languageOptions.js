@@ -223,12 +223,12 @@ export const languageOptions = [
     //     label: 'Python (2.7.17)',
     //     value: 'python',
     // },
-    // {
-    //     id: 71,
-    //     name: 'Python (3.8.1)',
-    //     label: 'Python (3.8.1)',
-    //     value: 'python',
-    // },
+    {
+        id: 71,
+        name: 'Python (3.8.1)',
+        label: 'Python (3.8.1)',
+        value: 'python',
+    },
     // {
     //     id: 80,
     //     name: 'R (4.0.0)',

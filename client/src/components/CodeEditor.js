@@ -42,7 +42,7 @@ export default function CodeEditor({
 
     return (
         <Editor
-            height='100vh'
+            height='100%'
             width={`100%`}
             language={language || 'javascript'}
             onMount={handleEditorDidMount}

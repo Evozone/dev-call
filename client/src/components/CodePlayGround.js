@@ -47,8 +47,8 @@ export default function CodePlayGround() {
             function handleErrors(error) {
                 // eslint-disable-next-line no-console
                 console.log('socket error', error);
-                alert('Socket connection failed, try again later.');
-                navigate('/');
+                // alert('Socket connection failed, try again later.');
+                // navigate('/');
             }
 
             socketRef.current.emit('join', {

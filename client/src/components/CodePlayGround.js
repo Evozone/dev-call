@@ -18,6 +18,7 @@ import CodeInput from './CodeInput';
 import OutputDetails from './OutputDetails';
 import { languageOptions } from '../constants/languageOptions';
 
+// CodePlayGround component
 export default function CodePlayGround() {
     let params = useParams();
     const navigate = useNavigate();
@@ -206,7 +207,7 @@ export default function CodePlayGround() {
         >
             <Box
                 sx={{
-                    backgroundColor: '#0288d1',
+                    background: 'linear-gradient(60deg, #0288d1 20%, #1976d2 100%)',
                     p: 2,
                     color: 'white',
                     display: 'flex',
@@ -228,8 +229,9 @@ export default function CodePlayGround() {
                     <Box
                         sx={{
                             display: 'grid',
-                            gridTemplateColumns:
-                                'repeat(auto-fill, minmax(60px, 1fr))',
+                            gridTemplateColumns: 'repeat(2, 1fr)',
+                            // gridTemplateColumns:
+                            //     'repeat(auto-fill, minmax(60px, 1fr))',
                             gap: '16px 8px',
                             gridAutoFlow: 'dense',
                             maxHeight: '400px',
@@ -276,6 +278,8 @@ export default function CodePlayGround() {
                     theme={theme}
                 />
             </Box>
+
+            {/* Code Side Panel */}
             <Box
                 sx={{ p: 2, flex: 3, display: 'flex', flexDirection: 'column' }}
             >
@@ -309,6 +313,7 @@ export default function CodePlayGround() {
                 </Button>
                 <OutputDetails outputDetails={outputDetails} />
             </Box>
+
         </Box>
     );
 }

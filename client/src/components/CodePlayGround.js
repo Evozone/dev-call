@@ -51,7 +51,7 @@ export default function CodePlayGround() {
             function handleErrors(error) {
                 // eslint-disable-next-line no-console
                 console.log('socket error', error);
-                // alert('Socket connection failed, try again later.');
+                alert('Socket connection failed, try again later.');
                 // navigate('/');
             }
 
@@ -159,8 +159,6 @@ export default function CodePlayGround() {
     const handleCodeSubmission = async () => {
         const sourceCode = codeRef.current;
         const languageId = lang.id;
-        console.log(codeInput);
-        console.log(sourceCode);
         setProcessingCode(true);
 
         await fetch(

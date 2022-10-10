@@ -45,6 +45,14 @@ io.on('connection', (socket) => {
         io.to(socketId).emit('codeChange', { code });
     });
 
+    socket.on('drawingChange', ({ drawingData, roomId }) => {
+        socket.in(roomId).emit('drawingChange', { drawingData });
+    });
+
+    socket.on('syncCanvas', ({ drawingData, socketId }) => {
+        io.to(socketId).emit('drawingChange', { drawingData, socketId });
+    });
+
     socket.on('disconnecting', () => {
         const rooms = [...socket.rooms];
         rooms.forEach((roomId) => {

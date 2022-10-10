@@ -12,6 +12,7 @@ import Loading from './components/Loading';
 import ProtectedRoute from './components/ProtectedRoute';
 import VideoCall from './components/VideoCall';
 import CodePlayGround from './components/CodePlayGround';
+import Whiteboard from './components/whiteboard/Whiteboard';
 import { customGlobalScrollBars } from './components/CustomGlobalCSS';
 
 const App = () => {
@@ -69,6 +70,7 @@ const App = () => {
                 />
                 <Route path='/meet/:roomId' element={<VideoCall />} />
                 <Route path='/code/:groundId' element={<CodePlayGround />} />
+                <Route path='/whiteboard/:boardId' element={<Whiteboard />} />
             </Routes>
         </ThemeProvider>
     );

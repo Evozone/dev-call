@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -17,10 +17,12 @@ import OutputBox from './OutputBox';
 import CodeInput from './CodeInput';
 import OutputDetails from './OutputDetails';
 import { languageOptions } from '../constants/languageOptions';
+import { notifyAction } from '../actions/actions';
 
 // CodePlayGround component
 export default function CodePlayGround() {
-    let params = useParams();
+    const params = useParams();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const currentUser = useSelector((state) => state.auth);
     const socketRef = useRef(null);
@@ -51,7 +53,9 @@ export default function CodePlayGround() {
             function handleErrors(error) {
                 // eslint-disable-next-line no-console
                 console.log('socket error', error);
-                alert('Socket connection failed, try again later.');
+                alert(
+                    'Socket connection failed, PLease close the tab & try again later.'
+                );
                 // navigate('/');
             }
 
@@ -64,7 +68,9 @@ export default function CodePlayGround() {
                 'joined',
                 ({ clients, username, socketId }) => {
                     if (username !== currentUser.username) {
-                        console.log(`${username} joined the room.`);
+                        dispatch(
+                            notifyAction(true, 'success', `${username} joined`)
+                        );
                     }
                     setCoders(clients);
                     setTimeout(() => {
@@ -77,7 +83,7 @@ export default function CodePlayGround() {
             );
 
             socketRef.current.on('disconnected', ({ socketId, username }) => {
-                console.log(`${username} left the room.`);
+                dispatch(notifyAction(true, 'info', `${username} left.`));
                 setCoders((prev) => {
                     return prev.filter(
                         (client) => client.socketId !== socketId
@@ -147,12 +153,17 @@ export default function CodePlayGround() {
             } else {
                 setOutputDetails(response);
                 setProcessingCode(false);
-                console.log('response', response);
                 return;
             }
         } catch (err) {
             setProcessingCode(false);
-            console.log('err', err);
+            dispatch(
+                notifyAction(
+                    true,
+                    'error',
+                    `Server Error: ${err.message || err}`
+                )
+            );
         }
     };
 
@@ -180,13 +191,18 @@ export default function CodePlayGround() {
         )
             .then(async (response) => {
                 const data = await response.json();
-                console.log(data);
                 checkStatus(data.token);
             })
             .catch((err) => {
                 setProcessingCode(false);
                 const error = err.response ? err.response.data : err;
-                console.error('errpr - ', error);
+                dispatch(
+                    notifyAction(
+                        true,
+                        'error',
+                        `Server Error: ${error.message || error}`
+                    )
+                );
                 // const status = err.response.status;
                 // if (status === 429) {
                 //     console.log("too many requests", status);
@@ -205,7 +221,8 @@ export default function CodePlayGround() {
         >
             <Box
                 sx={{
-                    background: 'linear-gradient(30deg, #1976d2 0%, #2196f3 50%, #1976d2 100%)',
+                    background:
+                        'linear-gradient(30deg, #1976d2 0%, #2196f3 50%, #1976d2 100%)',
                     p: 2,
                     color: 'white',
                     display: 'flex',
@@ -248,12 +265,13 @@ export default function CodePlayGround() {
                             overflowY: 'auto',
                         }}
                     >
-                        {coders.map((coder) => (
-                            <Coder
-                                key={coder.socketId}
-                                username={coder.username}
-                            />
-                        ))}
+                        {coders &&
+                            coders.map((coder) => (
+                                <Coder
+                                    key={coder.socketId}
+                                    username={coder.username}
+                                />
+                            ))}
                     </Box>
                 </Box>
                 <Button
@@ -323,7 +341,6 @@ export default function CodePlayGround() {
                 </Button>
                 <OutputDetails outputDetails={outputDetails} />
             </Box>
-
         </Box>
     );
 }

@@ -25,10 +25,11 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // import CloseIcon from '@mui/icons-material/Close';
 
 import { db } from '../firebaseConfig';
+import { notifyAction } from '../actions/actions';
 
 function TabPanel(props) {
     const {
@@ -153,6 +154,7 @@ function a11yProps(index) {
 }
 
 export default function TabsNav({ mode, setChat }) {
+    const dispatch = useDispatch();
     const [value, setValue] = useState(0);
     const [searchResults, setSearchResults] = useState(null);
     const [foundUser, setFoundUser] = useState(true);
@@ -202,7 +204,13 @@ export default function TabsNav({ mode, setChat }) {
                 });
             }
         } catch (error) {
-            console.log(error);
+            dispatch(
+                notifyAction(
+                    true,
+                    'error',
+                    'Something went wrong, please try again'
+                )
+            );
         }
         setLoading(false);
     };
@@ -252,7 +260,13 @@ export default function TabsNav({ mode, setChat }) {
                 });
             }
         } catch (err) {
-            console.log(err);
+            dispatch(
+                notifyAction(
+                    true,
+                    'error',
+                    'Something went wrong, please try again'
+                )
+            );
         }
         setChat([
             combinedId,

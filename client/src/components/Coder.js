@@ -11,6 +11,9 @@ export default function Coder({ username }) {
                 alignItems: 'center',
                 textAlign: 'center',
                 wordBreak: 'break-word',
+                backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                padding: '0.5rem',
+                borderRadius: '10px',
             }}
         >
             <Avatar

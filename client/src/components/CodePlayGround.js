@@ -51,7 +51,7 @@ export default function CodePlayGround() {
                 // eslint-disable-next-line no-console
                 console.log('socket error', error);
                 alert('Socket connection failed, try again later.');
-                navigate('/');
+                // navigate('/');
             }
 
             socketRef.current.emit('join', {
@@ -158,8 +158,6 @@ export default function CodePlayGround() {
     const handleCodeSubmission = async () => {
         const sourceCode = codeRef.current;
         const languageId = lang.id;
-        console.log(codeInput);
-        console.log(sourceCode);
         setProcessingCode(true);
 
         await fetch(

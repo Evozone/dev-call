@@ -12,13 +12,13 @@ import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import Draggable from 'react-draggable';
 import { v4 as uuid } from 'uuid';
 
-
 export default function VideoCall() {
     const navigate = useNavigate();
     const currentUser = useSelector((state) => state.auth);
 
     const [jitsiApi, setJitsiApi] = useState(null);
     const [codeGroundId, setCodeGroundId] = useState(null);
+    const [whiteBoardId, setWhiteBoardId] = useState(null);
     const nodeRef = React.useRef(null);
 
     useEffect(() => {
@@ -27,12 +27,20 @@ export default function VideoCall() {
         }
         document.title = 'Dev Chat+ Call';
         setCodeGroundId(uuid());
+        setWhiteBoardId(uuid());
     }, [currentUser]);
 
     const FRAME_HEIGHT = (window.innerHeight - 28).toString() + 'px';
 
     return (
-        <Box sx={{ width: '100vw', height: '100vh', overflowX: 'hidden', backgroundColor: '#1e1e1e' }}>
+        <Box
+            sx={{
+                width: '100vw',
+                height: '100vh',
+                overflowX: 'hidden',
+                backgroundColor: '#1e1e1e',
+            }}
+        >
             <JitsiMeeting
                 roomName='Dev Call'
                 displayName={currentUser.name}
@@ -79,15 +87,13 @@ export default function VideoCall() {
             />
 
             <Draggable
-                axis="both"
-                handle=".handle"
+                axis='both'
+                handle='.handle'
                 grid={[25, 25]}
                 scale={1}
                 bounds='parent'
                 nodeRef={nodeRef}
-                onMouseDown={() => {
-
-                }}
+                onMouseDown={() => {}}
             >
                 <Box
                     ref={nodeRef}
@@ -102,10 +108,11 @@ export default function VideoCall() {
                         borderRadius: '10px',
                         margin: '10px',
                         zIndex: '1000',
-                    }}>
+                    }}
+                >
                     <Tooltip title='End Call'>
-                        <IconButton onClick={
-                            () => {
+                        <IconButton
+                            onClick={() => {
                                 const choice = window.confirm(
                                     'Please click on OK to leave the meeting'
                                 );
@@ -113,18 +120,19 @@ export default function VideoCall() {
                                     jitsiApi.executeCommand('hangup');
                                     navigate('/chat');
                                 }
-                            }
-                        }>
+                            }}
+                        >
                             <CallIcon
                                 sx={{
                                     color: '#EE4B2B',
-                                }} />
+                                }}
+                            />
                         </IconButton>
                     </Tooltip>
 
                     <Tooltip title='Code Ground'>
-                        <IconButton onClick={
-                            () => {
+                        <IconButton
+                            onClick={() => {
                                 jitsiApi.executeCommand(
                                     'sendChatMessage',
                                     `http://localhost:3000/code/${codeGroundId}`,
@@ -132,21 +140,31 @@ export default function VideoCall() {
                                     true
                                 );
                                 window.open(`/code/${codeGroundId}`, '_blank');
-                            }
-                        }>
+                            }}
+                        >
                             <TerminalIcon
                                 sx={{
                                     color: '#888786',
-                                }} />
+                                }}
+                            />
                         </IconButton>
                     </Tooltip>
 
                     <Tooltip title='Whiteboard'>
-                        <IconButton onClick={
-                            () => {
-                                // TODO: Add whiteboard
-                            }
-                        }>
+                        <IconButton
+                            onClick={() => {
+                                jitsiApi.executeCommand(
+                                    'sendChatMessage',
+                                    `http://localhost:3000/whiteboard/${whiteBoardId}`,
+                                    '',
+                                    true
+                                );
+                                window.open(
+                                    `/whiteboard/${whiteBoardId}`,
+                                    '_blank'
+                                );
+                            }}
+                        >
                             <DriveFileRenameOutlineIcon
                                 sx={{
                                     color: '#888786',
@@ -156,7 +174,7 @@ export default function VideoCall() {
                     </Tooltip>
 
                     <Box
-                        className="handle"
+                        className='handle'
                         sx={{
                             display: 'flex',
                             justifyContent: 'center',
@@ -171,7 +189,8 @@ export default function VideoCall() {
                             '&:active': {
                                 cursor: 'grabbing',
                             },
-                        }}>
+                        }}
+                    >
                         <DragIndicatorIcon
                             sx={{
                                 color: '#888786',
@@ -180,6 +199,6 @@ export default function VideoCall() {
                     </Box>
                 </Box>
             </Draggable>
-        </Box >
+        </Box>
     );
 }

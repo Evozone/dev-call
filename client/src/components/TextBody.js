@@ -42,6 +42,7 @@ export default function TextBody({ message }) {
                 backgroundColor: '#34B7F1',
                 borderRadius: '20px',
                 borderBottomLeftRadius: '2px',
+                boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.2)',
                 maxWidth: '30rem',
                 width: 'fit-content',
                 p: 1,

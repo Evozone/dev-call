@@ -98,7 +98,8 @@ export default function Home({ themeChange, mode }) {
     };
 
     const handleKey = (e) => {
-        e.code === 'Enter' && handleSend(text);
+        // If the user presses crtl + enter, send the message
+        e.code === 'Enter' && e.ctrlKey && handleSend(text);
     };
 
     const startVideoCall = () => {
@@ -205,7 +206,10 @@ export default function Home({ themeChange, mode }) {
                     width: '100%',
                     height: '100vh',
                     overflow: 'hidden',
-                    background: mode === 'dark' ? '#1a1a1a' : '#f5f5f5',
+                    backgroundImage: mode === 'dark' ? `url('/assets/chat-background-dark.svg')` : `url('/assets/chat-background.svg')`,
+                    backgroundSize: '75px',
+                    backgroundRepeat: 'repeat',
+                    backgroundColor: mode === 'dark' ? '#1a1a1a' : '#f5f5f5',
                 }}
             >
 
@@ -280,19 +284,23 @@ export default function Home({ themeChange, mode }) {
                         sx={{
                             display: 'flex',
                             alignItems: 'center',
+                            backgroundColor: mode === 'dark' ? '#1a1a1a' : '#f5f5f5',
+                            p: 1, // @vishal this needs to be the same all around for multiline box to work
                         }}
                     >
                         <TextField
                             sx={{
                                 width: '100%',
-                                m: 1,
-                                ml: '20px',
+                                ml: 1,
                                 '& .MuiOutlinedInput-root': {
                                     borderRadius: '20px',
+                                    backgroundColor: mode === 'dark' ? '#101010' : '#f0f0f0',
                                 },
+                                border: 'none',
                             }}
                             size='small'
-                            maxRows={1}
+                            multiline
+                            maxRows={4}
                             placeholder='Message'
                             autoFocus
                             onChange={(e) => setText(e.target.value)}
@@ -303,14 +311,16 @@ export default function Home({ themeChange, mode }) {
                             onClick={() => {
                                 handleSend(text);
                             }}
-                            sx={{ mr: '20px' }}
+                            sx={{ mx: '10px' }}
                         >
-                            <SendIcon
-                                sx={{
-                                    fontSize: '33px',
-                                    color: 'info.main',
-                                }}
-                            />
+                            <Tooltip title='Hit Ctrl + Enter to send'>
+                                <SendIcon
+                                    sx={{
+                                        fontSize: '33px',
+                                        color: 'info.main',
+                                    }}
+                                />
+                            </Tooltip>
                         </IconButton>
                     </Box>
                 </Box>

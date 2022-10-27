@@ -291,9 +291,8 @@ export default function Home({ themeChange, mode }) {
                         <TextField
                             sx={{
                                 width: '100%',
-                                ml: 1,
                                 '& .MuiOutlinedInput-root': {
-                                    borderRadius: '20px',
+                                    borderRadius: '15px',
                                     backgroundColor: mode === 'dark' ? '#101010' : '#f0f0f0',
                                 },
                                 border: 'none',

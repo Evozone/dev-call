@@ -15,14 +15,12 @@ export default function TextBody({ message }) {
             .toISOString()
             .substring(11, 16);
         setTimeAgo(result);
-        ref.current?.scrollIntoView({ behavior: 'smooth' });
-        setIsLink(funcIsLink(message.text));
-    }, [message]);
+        // Scroll to bottom of chat
+        ref.current.scrollIntoView({ behavior: 'smooth' });
 
-    // If the message contains a URL, return true
-    const funcIsLink = (message) => {
-        return urlRegex.test(message);
-    };
+        // Check if message is a link
+        setIsLink(urlRegex.test(message.text));
+    }, [message]);
 
     // Separate the message into an array of strings and URLs
     const funcSplitMessage = (message) => {
@@ -31,6 +29,7 @@ export default function TextBody({ message }) {
         splitMessage = splitMessage.filter((item) => {
             return item !== '' && item !== undefined && item !== 'https' && item !== 'http';
         });
+        console.log(splitMessage);
 
         return splitMessage;
     };
@@ -42,7 +41,6 @@ export default function TextBody({ message }) {
                 backgroundColor: '#34B7F1',
                 borderRadius: '20px',
                 borderBottomLeftRadius: '2px',
-                boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.2)',
                 maxWidth: '30rem',
                 width: 'fit-content',
                 p: 1,

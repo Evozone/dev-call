@@ -1,29 +1,22 @@
 import React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
+// import AppBar from '@mui/material/AppBar';
+// import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import createTheme from '@mui/material/styles/createTheme';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import GoogleOneTapLogin from './components/GoogleOneTapLogIn';
 
 import { customGlobalScrollBars } from './components/CustomGlobalCSS';
-import ScrollToColor from './components/ScrollToColor';
+// import ScrollToColor from './components/ScrollToColor';
 
-// Create a list of all the sections on the page
-const sections = [
-    { title: 'Features', url: '#features' },
-    { title: 'Contact', url: '#contact' },
-];
-
-const services = [
-    'Call',
-    'Draw',
-    'Code',
-]
-
+// // Create a list of all the sections on the page
+// const sections = [
+//     { title: 'Features', url: '#features' },
+//     { title: 'Contact', url: '#contact' },
+// ];
 
 const LandingPage = () => {
     const theme = createTheme();
@@ -137,11 +130,10 @@ const LandingPage = () => {
                             variant="h4"
                             component="div"
                             sx={{
-                                fontFamily: 'Work Sans, sans-serif', fontWeight: '600', padding: '1rem 0', fontSize: '3rem',
+                                fontFamily: 'Comfortaa, sans-serif', fontWeight: '700', padding: '1rem 0', fontSize: '3rem',
                             }}
                         >
-                            DevChat+
-
+                            dev chat +
                             <hr align="left"
                                 style={{
                                     backgroundColor: '#03256C',
@@ -156,7 +148,7 @@ const LandingPage = () => {
                             variant="h6"
                             component="div"
                             sx={{
-                                fontFamily: 'Work Sans, sans-serif', fontWeight: '400', padding: '0', fontSize: '1.2rem', color: '#EFF6EE'
+                                fontFamily: 'Work Sans, sans-serif', fontWeight: '400', padding: '0', fontSize: '1.4rem', color: '#EFF6EE'
                             }}
                         >
                             Optimize your workflow.
@@ -179,7 +171,7 @@ const LandingPage = () => {
                             variant="h2"
                             component="div"
                             sx={{
-                                fontFamily: 'Trebuchet MS, sans-serif', fontWeight: '400', fontSize: '3rem',
+                                fontFamily: 'Work Sans, sans-serif', fontWeight: '400', fontSize: '3rem',
                             }}
                         >
                             Interact with your team
@@ -189,7 +181,7 @@ const LandingPage = () => {
                             component="div"
                             sx={{
                                 fontFamily: 'Work Sans', fontWeight: '400', padding: '0 0 1rem 0',
-                                color: 'rgba(255, 255, 255, 0.7)',
+                                color: 'rgba(255, 255, 255, 0.6)',
                             }}
                         >
                             and get work done
@@ -199,7 +191,7 @@ const LandingPage = () => {
                             variant="h5"
                             component="div"
                             sx={{
-                                fontFamily: 'Trebuchet MS', fontWeight: '400', color: '#03256C', fontSize: '1.3rem',
+                                fontFamily: 'Work Sans', fontWeight: '500', color: '#03256C', fontSize: '1.5rem',
                             }}
                         >
                             DevChat+ is an awesome

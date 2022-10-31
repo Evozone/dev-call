@@ -30,6 +30,12 @@ const App = () => {
         },
     });
 
+    const alwaysDarkTheme = createTheme({
+        palette: {
+            mode: 'dark',
+        },
+    });
+
     const themeChange = () => {
         const updatedTheme = mode === 'light' ? 'dark' : 'light';
         window.localStorage.setItem('devcallTheme', updatedTheme);
@@ -71,7 +77,12 @@ const App = () => {
                     }
                 />
                 <Route path='/meet/:roomId' element={<VideoCall />} />
-                <Route path='/code/:groundId' element={<CodePlayGround />} />
+
+                <Route path='/code/:groundId' element={
+                    <ThemeProvider theme={alwaysDarkTheme}>
+                        <CodePlayGround />
+                    </ThemeProvider>} />
+
                 <Route path='/whiteboard/:boardId' element={<Whiteboard />} />
             </Routes>
         </ThemeProvider>

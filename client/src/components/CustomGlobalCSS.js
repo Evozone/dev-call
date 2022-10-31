@@ -22,7 +22,11 @@ export const customGlobalScrollBars = (mode) => {
             ? {
                 '::-webkit-scrollbar-thumb': {
                     border: '2px solid #1a1a1a',
-                }
+                },
+
+                '*::-webkit-scrollbar-track': {
+                    backgroundColor: '#1a1a1a',
+                },
             }
             : {
                 ...(mode === 'teal'

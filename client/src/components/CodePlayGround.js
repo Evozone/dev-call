@@ -7,6 +7,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import SettingsIcon from '@mui/icons-material/Settings';
 
+import { customGlobalScrollBars } from './CustomGlobalCSS';
+
 import Coder from './Coder';
 import CodeEditor from './CodeEditor';
 import { Typography } from '@mui/material';
@@ -18,6 +20,7 @@ import CodeInput from './CodeInput';
 import OutputDetails from './OutputDetails';
 import { languageOptions } from '../constants/languageOptions';
 import { notifyAction } from '../actions/actions';
+import { SetMealRounded } from '@mui/icons-material';
 
 // CodePlayGround component
 export default function CodePlayGround() {
@@ -212,13 +215,15 @@ export default function CodePlayGround() {
     };
 
     return (
-        <Box
+        < Box
             sx={{
                 display: 'flex',
                 minHeight: '100vh',
                 overflow: 'auto',
-            }}
+            }
+            }
         >
+            {customGlobalScrollBars('dark')}
             <Box
                 sx={{
                     background:
@@ -309,7 +314,14 @@ export default function CodePlayGround() {
 
             {/* Code Side Panel */}
             <Box
-                sx={{ p: 2, flex: 3, display: 'flex', flexDirection: 'column' }}
+                sx={{
+                    p: 2,
+                    flex: 3,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    background: 'black',
+                    color: '#EFF6EE'
+                }}
             >
                 <EditorDropdown
                     lang={lang}
@@ -341,6 +353,6 @@ export default function CodePlayGround() {
                 </Button>
                 <OutputDetails outputDetails={outputDetails} />
             </Box>
-        </Box>
+        </Box >
     );
 }

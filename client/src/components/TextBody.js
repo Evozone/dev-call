@@ -2,12 +2,18 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Box, Link, Typography } from '@mui/material';
 
-export default function TextBody({ message }) {
+export default function TextBody({ message, inputRef }) {
+    const endRef = useRef();
+
     const currentUser = useSelector((state) => state.auth);
     const [timeAgo, setTimeAgo] = useState('');
     const [isLink, setIsLink] = useState(false);
-    const ref = useRef();
-    const urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/ig;
+
+    const urlRegex =
+        /([a-zA-Z0-9]+:\/\/)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\.[A-Za-z]{2,4})(:[0-9]+)?(\/.*)?/;
+
+    const splitUrlRegex =
+        /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi;
 
     useEffect(() => {
         var offset = new Date().getTimezoneOffset() * 60;
@@ -15,30 +21,36 @@ export default function TextBody({ message }) {
             .toISOString()
             .substring(11, 16);
         setTimeAgo(result);
-        // Scroll to bottom of chat
-        ref.current.scrollIntoView({ behavior: 'smooth' });
-
-        // Check if message is a link
         setIsLink(urlRegex.test(message.text));
     }, [message]);
 
-    // Separate the message into an array of strings and URLs
-    const funcSplitMessage = (message) => {
-        var splitMessage = message.split(urlRegex);
-        // Remove all instances of empty strings, undefined, and 'https'
-        splitMessage = splitMessage.filter((item) => {
-            return item !== '' && item !== undefined && item !== 'https' && item !== 'http';
-        });
-        console.log(splitMessage);
+    useEffect(() => {
+        endRef.current.scrollIntoView({ behavior: 'smooth' });
+        inputRef.current.focus();
+    });
 
+    const funcSplitMessage = (message) => {
+        let splitMessage = message.split(splitUrlRegex);
+
+        if (splitMessage.length === 1) {
+            splitMessage = message.split(urlRegex);
+        }
+
+        splitMessage = splitMessage.filter((item) => {
+            return (
+                item !== '' &&
+                item !== undefined &&
+                item !== 'https' &&
+                item !== 'http'
+            );
+        });
         return splitMessage;
     };
 
     return (
         <Box
-            ref={ref}
+            ref={endRef}
             sx={{
-                backgroundColor: '#34B7F1',
                 borderRadius: '20px',
                 borderBottomLeftRadius: '2px',
                 maxWidth: '30rem',
@@ -49,26 +61,30 @@ export default function TextBody({ message }) {
                 mb: 1,
                 display: 'flex',
                 alignItems: 'end',
-                ...(currentUser.uid === message.senderid && {
-                    alignSelf: 'flex-end',
-                    borderBottomLeftRadius: '20px',
-                    borderBottomRightRadius: '1px',
-                    backgroundColor: '#25D366',
-                }),
+                ...(currentUser.uid === message.senderid
+                    ? {
+                          alignSelf: 'flex-end',
+                          borderBottomLeftRadius: '20px',
+                          borderBottomRightRadius: '1px',
+                          backgroundColor: '#25D366',
+                      }
+                    : { backgroundColor: '#34B7F1' }),
             }}
         >
             {isLink ? (
                 <Box sx={{ wordBreak: 'break-word' }}>
-                    {/* @vishal I've kept it here because I want the components <Link> and <Typography>
-                    to stay within the <Box>, in one place */}
                     {funcSplitMessage(message.text).map((item, index) => {
                         if (urlRegex.test(item)) {
+                            let src = item;
+                            if (!item.includes('https://')) {
+                                src = 'https://' + item;
+                            }
                             return (
                                 <Link
                                     key={index}
-                                    href={item}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                                    href={src}
+                                    target='_blank'
+                                    rel='noopener noreferrer'
                                     sx={{
                                         color: 'white',
                                         textDecoration: 'underline',
@@ -86,9 +102,10 @@ export default function TextBody({ message }) {
                     })}
                 </Box>
             ) : (
-                <Typography> {message.text} </Typography>
+                <Typography sx={{ wordBreak: 'break-word' }}>
+                    {message.text}
+                </Typography>
             )}
-            {/* Timestamp */}
             <Typography
                 sx={{
                     textAlign: 'right',

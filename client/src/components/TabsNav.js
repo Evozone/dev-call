@@ -29,7 +29,11 @@ import { useDispatch, useSelector } from 'react-redux';
 // import CloseIcon from '@mui/icons-material/Close';
 
 import { db } from '../firebaseConfig';
-import { notifyAction } from '../actions/actions';
+import {
+    notifyAction,
+    startLoadingAction,
+    stopLoadingAction,
+} from '../actions/actions';
 
 function TabPanel(props) {
     const {
@@ -80,9 +84,9 @@ function TabPanel(props) {
                                     {item[1].lastMessage &&
                                         (item[1].lastMessage.text.length > 30
                                             ? item[1].lastMessage.text.substring(
-                                                0,
-                                                30
-                                            ) + '.......'
+                                                  0,
+                                                  30
+                                              ) + '.......'
                                             : item[1].lastMessage.text)}
                                 </Typography>
                             </Box>
@@ -166,6 +170,7 @@ export default function TabsNav({ mode, setChat }) {
 
     useEffect(() => {
         const getUserChats = () => {
+            console.log('getUserChats req called');
             const unsub = onSnapshot(
                 doc(db, 'userChats', currentUser.uid),
                 (doc) => {
@@ -235,6 +240,8 @@ export default function TabsNav({ mode, setChat }) {
             const res = await getDoc(doc(db, 'chats', combinedId));
 
             if (!res.exists()) {
+                dispatch(startLoadingAction());
+
                 await setDoc(doc(db, 'chats', combinedId), { messages: [] });
 
                 await updateDoc(doc(db, 'userChats', currentUser.uid), {
@@ -258,6 +265,8 @@ export default function TabsNav({ mode, setChat }) {
                     },
                     [combinedId + '.date']: serverTimestamp(),
                 });
+
+                dispatch(stopLoadingAction());
             }
         } catch (err) {
             dispatch(
@@ -302,17 +311,17 @@ export default function TabsNav({ mode, setChat }) {
                             fontSize: '1.1rem',
                             ...(mode === 'dark'
                                 ? {
-                                    borderRight:
-                                        '1px solid rgba(255, 255, 255, 0.12)',
-                                    borderBottom:
-                                        '1px solid rgba(255, 255, 255, 0.12)',
-                                }
+                                      borderRight:
+                                          '1px solid rgba(255, 255, 255, 0.12)',
+                                      borderBottom:
+                                          '1px solid rgba(255, 255, 255, 0.12)',
+                                  }
                                 : {
-                                    borderRight:
-                                        '1px solid rgba(0, 0, 0, 0.12)',
-                                    borderBottom:
-                                        '1px solid rgba(0, 0, 0, 0.12)',
-                                }),
+                                      borderRight:
+                                          '1px solid rgba(0, 0, 0, 0.12)',
+                                      borderBottom:
+                                          '1px solid rgba(0, 0, 0, 0.12)',
+                                  }),
                         }}
                         label='CHATS'
                         {...a11yProps(0)}
@@ -323,13 +332,13 @@ export default function TabsNav({ mode, setChat }) {
                             fontSize: '1.1rem',
                             ...(mode === 'dark'
                                 ? {
-                                    borderBottom:
-                                        '1px solid rgba(255, 255, 255, 0.12)',
-                                }
+                                      borderBottom:
+                                          '1px solid rgba(255, 255, 255, 0.12)',
+                                  }
                                 : {
-                                    borderBottom:
-                                        '1px solid rgba(0, 0, 0, 0.12)',
-                                }),
+                                      borderBottom:
+                                          '1px solid rgba(0, 0, 0, 0.12)',
+                                  }),
                         }}
                         label='SEARCH'
                         {...a11yProps(1)}

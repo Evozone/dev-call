@@ -5,12 +5,12 @@ export const languageOptions = [
         label: 'JavaScript (Node.js 12.14.0)',
         value: 'javascript',
     },
-    {
-        id: 45,
-        name: 'Assembly (NASM 2.14.02)',
-        label: 'Assembly (NASM 2.14.02)',
-        value: 'assembly',
-    },
+    // {
+    //     id: 45,
+    //     name: 'Assembly (NASM 2.14.02)',
+    //     label: 'Assembly (NASM 2.14.02)',
+    //     value: 'assembly',
+    // },
     // {
     //     id: 46,
     //     name: 'Bash (5.0.0)',

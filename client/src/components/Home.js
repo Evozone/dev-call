@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import Divider from '@mui/material/Divider';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
@@ -12,25 +11,13 @@ import DownloadIcon from '@mui/icons-material/Download';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
-import VideoCallIcon from '@mui/icons-material/VideoCall';
-import TextField from '@mui/material/TextField';
-import SendIcon from '@mui/icons-material/Send';
 import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from 'firebase/auth';
-import {
-    onSnapshot,
-    doc,
-    updateDoc,
-    arrayUnion,
-    Timestamp,
-    serverTimestamp,
-} from 'firebase/firestore';
-import { v4 as uuid } from 'uuid';
 
 import TabsNav from './TabsNav';
-import TextBody from './TextBody';
 import { signOutAction } from '../actions/actions';
-import { auth, db } from '../firebaseConfig';
+import { auth } from '../firebaseConfig';
+import RightPart from './RightPart';
 
 const drawerWidth = 470;
 
@@ -38,22 +25,6 @@ export default function Home({ themeChange, mode }) {
     const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.auth);
     const [chat, setChat] = useState([]);
-    const [messages, setMessages] = useState([]);
-    const [text, setText] = useState('');
-
-    useEffect(() => {
-        const getUserMesaages = () => {
-            const unsub = onSnapshot(doc(db, 'chats', chat[0]), (doc) => {
-                doc.exists() && setMessages(doc.data().messages);
-            });
-            return () => {
-                unsub();
-            };
-        };
-        chat.length > 0 && getUserMesaages();
-    }, [chat]);
-
-    const INVITE_TEMPLATE = `Hey, I'm using Dev Chat+ for Video Calling and much more. Join me on this room: ${process.env.REACT_APP_BASE_URL}/meet/${chat[0]}`;
 
     const logOut = () => {
         const choice = window.confirm('Please click on OK to Log Out.');
@@ -66,45 +37,6 @@ export default function Home({ themeChange, mode }) {
                     alert(error);
                 });
         }
-    };
-
-    const handleSend = async (text) => {
-        const lastText = text;
-        setText('');
-        if (text.length > 0) {
-            await updateDoc(doc(db, 'chats', chat[0]), {
-                messages: arrayUnion({
-                    id: uuid(),
-                    text: lastText,
-                    senderid: currentUser.uid,
-                    date: Timestamp.now(),
-                }),
-            });
-        } else {
-            return alert('Please enter some text');
-        }
-        await updateDoc(doc(db, 'userChats', currentUser.uid), {
-            [chat[0] + '.lastMessage']: {
-                text: lastText,
-            },
-            [chat[0] + '.date']: serverTimestamp(),
-        });
-        await updateDoc(doc(db, 'userChats', chat[1].userInfo.uid), {
-            [chat[0] + '.lastMessage']: {
-                text: lastText,
-            },
-            [chat[0] + '.date']: serverTimestamp(),
-        });
-    };
-
-    const handleKey = (e) => {
-        // If the user presses crtl + enter, send the message
-        e.code === 'Enter' && e.ctrlKey && handleSend(text);
-    };
-
-    const startVideoCall = () => {
-        // handleSend(INVITE_TEMPLATE);
-        window.open(`/meet/${chat[0]}`, '_blank');
     };
 
     return (
@@ -132,11 +64,11 @@ export default function Home({ themeChange, mode }) {
                         pl: 1,
                         ...(mode === 'dark'
                             ? {
-                                backgroundColor: 'info.dark',
-                            }
+                                  backgroundColor: 'info.dark',
+                              }
                             : {
-                                backgroundColor: 'primary.main',
-                            }),
+                                  backgroundColor: 'primary.main',
+                              }),
                         borderRight: '1px solid',
                         borderColor: 'primary.dark',
                     }}
@@ -187,143 +119,22 @@ export default function Home({ themeChange, mode }) {
                         height: 'calc(100% - 75px)',
                         ...(mode === 'dark'
                             ? {
-                                borderRight:
-                                    '1px solid rgba(255, 255, 255, 0.12)',
-                            }
+                                  borderRight:
+                                      '1px solid rgba(255, 255, 255, 0.12)',
+                              }
                             : {
-                                borderRight: '1px solid rgba(0, 0, 0, 0.12)',
-                            }),
+                                  borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+                              }),
                     }}
                 >
                     <TabsNav mode={mode} setChat={setChat} />
                 </Box>
             </Drawer>
-            <Box
-                component='main'
-                sx={{
-                    flexGrow: 1,
-                    p: 0,
-                    width: '100%',
-                    height: '100vh',
-                    overflow: 'hidden',
-                    backgroundImage: mode === 'dark' ? `url('/assets/chat-background-dark.svg')` : `url('/assets/chat-background.svg')`,
-                    backgroundSize: '75px',
-                    backgroundRepeat: 'repeat',
-                    backgroundColor: mode === 'dark' ? '#1a1a1a' : '#f5f5f5',
-                }}
-            >
-
-                <Box
-                    sx={{
-                        height: '75px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        pl: 2,
-                        ...(mode === 'dark'
-                            ? {
-                                backgroundColor: 'info.dark',
-                            }
-                            : {
-                                backgroundColor: 'primary.main',
-                            }),
-                        position: 'sticky',
-                        top: 0,
-                    }}
-                >
-                    {chat.length > 0 ? (
-                        <Avatar
-                            alt={chat[1].userInfo.username
-                                .charAt(0)
-                                .toUpperCase()}
-                            src={chat[1].userInfo.photoURL}
-                            sx={{ width: 50, height: 50, mr: 2 }}
-                        />
-                    ) : (
-                        <Avatar sx={{ width: 50, height: 50, mr: 2 }}>i</Avatar>
-                    )}
-                    <Typography
-                        sx={{ color: 'whitesmoke', fontWeight: '400' }}
-                        variant='h6'
-                    >
-                        {chat.length > 0 ? chat[1].userInfo.username : 'Chat'}
-                    </Typography>
-                    <Grid pr='20px' container justifyContent='flex-end'>
-                        <Tooltip title='Video Call'>
-                            <IconButton onClick={startVideoCall}>
-                                <VideoCallIcon
-                                    fontSize='large'
-                                    sx={{ color: 'whitesmoke' }}
-                                />
-                            </IconButton>
-                        </Tooltip>
-                    </Grid>
-                </Box>
-                <Box
-                    sx={{
-                        pt: 3,
-                        px: '20px',
-                        height: 'calc(100vh - 131px)',
-                        overflow: 'scroll',
-                        overflowX: 'hidden',
-                        display: 'flex',
-                        flexDirection: 'column',
-                    }}
-                >
-                    {messages.map((message) => {
-                        return <TextBody message={message} key={message.id} />;
-                    })}
-                </Box>
-                <Box
-                    sx={{
-                        bottom: '0',
-                        width: '100%',
-                    }}
-                >
-                    <Divider />
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            backgroundColor: mode === 'dark' ? '#1a1a1a' : '#f5f5f5',
-                            p: 1, // @vishal this needs to be the same all around for multiline box to work
-                        }}
-                    >
-                        <TextField
-                            sx={{
-                                width: '100%',
-                                '& .MuiOutlinedInput-root': {
-                                    borderRadius: '15px',
-                                    backgroundColor: mode === 'dark' ? '#101010' : '#f0f0f0',
-                                },
-                                border: 'none',
-                            }}
-                            size='small'
-                            multiline
-                            maxRows={4}
-                            placeholder='Message'
-                            autoFocus
-                            onChange={(e) => setText(e.target.value)}
-                            value={text}
-                            onKeyDown={handleKey}
-                        />
-                        <IconButton
-                            onClick={() => {
-                                handleSend(text);
-                            }}
-                            sx={{ mx: '10px' }}
-                        >
-                            <Tooltip title='Hit Ctrl + Enter to send'>
-                                <SendIcon
-                                    sx={{
-                                        fontSize: '33px',
-                                        color: 'info.main',
-                                    }}
-                                />
-                            </Tooltip>
-                        </IconButton>
-                    </Box>
-                </Box>
-            </Box>
+            {chat.length === 0 ? (
+                <p>Loading </p>
+            ) : (
+                <RightPart mode={mode} chat={chat} />
+            )}
         </Box>
     );
 }

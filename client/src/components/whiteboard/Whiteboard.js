@@ -86,17 +86,15 @@ export default function Whiteboard() {
                 'drawingChange',
                 ({ drawingData, socketId }) => {
                     if (socketId) {
-                        if (socketId === socketRef.current.id) {
-                            const canvas = canvasRef.current;
-                            const context = canvas.getContext('2d');
-                            context.fillStyle = 'white';
-                            context.fillRect(0, 0, canvas.width, canvas.height);
-                            const image = new Image();
-                            image.onload = function () {
-                                context.drawImage(image, 0, 0);
-                            };
-                            image.src = drawingData;
-                        }
+                        const canvas = canvasRef.current;
+                        const context = canvas.getContext('2d');
+                        context.fillStyle = 'white';
+                        context.fillRect(0, 0, canvas.width, canvas.height);
+                        const image = new Image();
+                        image.onload = function () {
+                            context.drawImage(image, 0, 0);
+                        };
+                        image.src = drawingData;
                     } else {
                         onDrawingEvent(drawingData);
                     }
@@ -122,6 +120,7 @@ export default function Whiteboard() {
         for (let i = 0; i < colors.length; i++) {
             colors[i].addEventListener('click', onColorUpdate);
         }
+
         let drawing = false;
 
         const drawLine = (x0, y0, x1, y1, color, emit) => {
@@ -136,7 +135,6 @@ export default function Whiteboard() {
             }
             context.stroke();
             context.closePath();
-
             if (!emit) {
                 return;
             }
@@ -205,22 +203,22 @@ export default function Whiteboard() {
             };
         };
 
-        canvas.addEventListener('mousedown', onMouseDown, false);
-        canvas.addEventListener('mouseup', onMouseUp, false);
-        canvas.addEventListener('mouseout', onMouseUp, false);
-        canvas.addEventListener('mousemove', throttle(onMouseMove, 10), false);
+        canvas.addEventListener('mousedown', onMouseDown);
+        canvas.addEventListener('mouseup', onMouseUp);
+        canvas.addEventListener('mouseout', onMouseUp);
+        canvas.addEventListener('mousemove', throttle(onMouseMove, 10));
 
-        canvas.addEventListener('touchstart', onMouseDown, false);
-        canvas.addEventListener('touchend', onMouseUp, false);
-        canvas.addEventListener('touchcancel', onMouseUp, false);
-        canvas.addEventListener('touchmove', throttle(onMouseMove, 10), false);
+        canvas.addEventListener('touchstart', onMouseDown);
+        canvas.addEventListener('touchend', onMouseUp);
+        canvas.addEventListener('touchcancel', onMouseUp);
+        canvas.addEventListener('touchmove', throttle(onMouseMove, 10));
 
         const onResize = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         };
 
-        window.addEventListener('resize', onResize, false);
+        window.addEventListener('resize', onResize);
         onResize();
 
         const onDrawingEvent = (data) => {
@@ -239,10 +237,9 @@ export default function Whiteboard() {
             if (socketRef.current) {
                 socketRef.current?.disconnect();
                 socketRef.current?.off('joined');
-                socketRef?.current.off('drawingChange');
+                socketRef.current.off('drawingChange');
                 socketRef.current?.off('connect_error');
                 socketRef.current?.off('connect_failed');
-                socketRef?.current.off('syncDrawing');
                 socketRef.current?.off('disconnected');
             }
         };

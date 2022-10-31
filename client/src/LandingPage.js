@@ -8,7 +8,6 @@ import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import createTheme from '@mui/material/styles/createTheme';
 // import Link from '@mui/material/Link';
 import GoogleOneTapLogin from './components/GoogleOneTapLogIn';
-import ReactRotatingText from 'react-rotating-text';
 
 import { customGlobalScrollBars } from './components/CustomGlobalCSS';
 // import ScrollToColor from './components/ScrollToColor';

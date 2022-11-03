@@ -17,7 +17,7 @@ import { signOut } from 'firebase/auth';
 import TabsNav from './TabsNav';
 import { signOutAction } from '../actions/actions';
 import { auth } from '../firebaseConfig';
-import RightPart from './RightPart';
+import ChatInterface from './ChatInterface';
 
 const drawerWidth = 470;
 
@@ -64,11 +64,11 @@ export default function Home({ themeChange, mode }) {
                         pl: 1,
                         ...(mode === 'dark'
                             ? {
-                                  backgroundColor: 'info.dark',
-                              }
+                                backgroundColor: 'info.dark',
+                            }
                             : {
-                                  backgroundColor: 'primary.main',
-                              }),
+                                backgroundColor: 'primary.main',
+                            }),
                         borderRight: '1px solid',
                         borderColor: 'primary.dark',
                     }}
@@ -119,21 +119,53 @@ export default function Home({ themeChange, mode }) {
                         height: 'calc(100% - 75px)',
                         ...(mode === 'dark'
                             ? {
-                                  borderRight:
-                                      '1px solid rgba(255, 255, 255, 0.12)',
-                              }
+                                borderRight:
+                                    '1px solid rgba(255, 255, 255, 0.12)',
+                            }
                             : {
-                                  borderRight: '1px solid rgba(0, 0, 0, 0.12)',
-                              }),
+                                borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+                            }),
                     }}
                 >
                     <TabsNav mode={mode} setChat={setChat} />
                 </Box>
             </Drawer>
             {chat.length === 0 ? (
-                <p>Loading </p>
+                <Box
+                    sx={{
+                        height: '100vh',
+                        width: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: mode === 'dark' ? '#1f1f1f' : 'whitesmoke',
+                    }}
+                >
+                    {/* Change image depending on the mode */}
+                    <img
+                        src={
+                            mode === 'dark'
+                                ? '/assets/welcome-screen-dark.svg'
+                                : '/assets/welcome-screen.svg'
+                        }
+                        alt='chat'
+                        style={{ width: '400px', height: '400px' }}
+                    />
+
+                    <Typography
+                        sx={{
+                            color: mode === 'dark' ? '#0288d1' : '#1976d2',
+                            fontFamily: 'Comfortaa',
+                            fontWeight: '700',
+                            fontSize: '2rem',
+                        }}
+                    >
+                        welcome to dev chat +
+                    </Typography>
+                </Box>
             ) : (
-                <RightPart mode={mode} chat={chat} />
+                <ChatInterface chat={chat} mode={mode} />
             )}
         </Box>
     );

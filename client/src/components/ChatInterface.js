@@ -23,7 +23,7 @@ import { v4 as uuid } from 'uuid';
 import { db } from '../firebaseConfig';
 import TextBody from './TextBody';
 
-export default function RightPart({ mode, chat }) {
+export default function ChatInterface({ mode, chat }) {
     const inputRef = React.useRef();
     const currentUser = useSelector((state) => state.auth);
 
@@ -104,11 +104,11 @@ export default function RightPart({ mode, chat }) {
                     pl: 2,
                     ...(mode === 'dark'
                         ? {
-                              backgroundColor: 'info.dark',
-                          }
+                            backgroundColor: 'info.dark',
+                        }
                         : {
-                              backgroundColor: 'primary.main',
-                          }),
+                            backgroundColor: 'primary.main',
+                        }),
                     position: 'sticky',
                     top: 0,
                 }}

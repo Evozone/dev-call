@@ -95,11 +95,12 @@ const LandingPage = () => {
 
                 {/* Section : Hero */}
                 <Box
-                    id="hero"
+                    id='hero'
                     sx={{
                         width: '100%',
                         height: '100vh',
-                        background: 'linear-gradient(116.82deg, #0288d1 0%, #1976d2 100%)',
+                        background:
+                            'linear-gradient(116.82deg, #0288d1 0%, #1976d2 100%)',
                         display: 'flex',
                         flexFlow: 'row wrap',
                         justifyContent: 'center',
@@ -119,22 +120,27 @@ const LandingPage = () => {
                             flexGrow: 1,
                             alignItems: 'left',
                             padding: '0 0 0 5rem',
-                        }}>
-
+                        }}
+                    >
                         <Box>
-                            <img src="/assets/landing-logo.svg" alt="Logomark" />
+                            <img
+                                src='/assets/landing-logo.svg'
+                                alt='Logomark'
+                            />
                         </Box>
-
-
                         <Typography
-                            variant="h4"
-                            component="div"
+                            variant='h4'
+                            component='div'
                             sx={{
-                                fontFamily: 'Comfortaa, sans-serif', fontWeight: '700', padding: '1rem 0', fontSize: '3rem',
+                                fontFamily: 'Comfortaa, sans-serif',
+                                fontWeight: '700',
+                                padding: '1rem 0',
+                                fontSize: '3rem',
                             }}
                         >
                             dev chat +
-                            <hr align="left"
+                            <hr
+                                align='left'
                                 style={{
                                     backgroundColor: '#03256C',
                                     height: 7,
@@ -145,15 +151,18 @@ const LandingPage = () => {
                             />
                         </Typography>
                         <Typography
-                            variant="h6"
-                            component="div"
+                            variant='h6'
+                            component='div'
                             sx={{
-                                fontFamily: 'Work Sans, sans-serif', fontWeight: '400', padding: '0', fontSize: '1.4rem', color: '#EFF6EE'
+                                fontFamily: 'Work Sans, sans-serif',
+                                fontWeight: '400',
+                                padding: '0',
+                                fontSize: '1.4rem',
+                                color: '#EFF6EE',
                             }}
                         >
                             Optimize your workflow.
                         </Typography>
-
                     </Box>
                     {/* Description */}
                     <Box
@@ -166,21 +175,26 @@ const LandingPage = () => {
                             alignItems: 'left',
                             padding: '0 2rem',
                             flexGrow: 1,
-                        }}>
+                        }}
+                    >
                         <Typography
-                            variant="h2"
-                            component="div"
+                            variant='h2'
+                            component='div'
                             sx={{
-                                fontFamily: 'Work Sans, sans-serif', fontWeight: '400', fontSize: '3rem',
+                                fontFamily: 'Work Sans, sans-serif',
+                                fontWeight: '400',
+                                fontSize: '3rem',
                             }}
                         >
                             Interact with your team
                         </Typography>
                         <Typography
-                            variant="h4"
-                            component="div"
+                            variant='h4'
+                            component='div'
                             sx={{
-                                fontFamily: 'Work Sans', fontWeight: '400', padding: '0 0 1rem 0',
+                                fontFamily: 'Work Sans',
+                                fontWeight: '400',
+                                padding: '0 0 1rem 0',
                                 color: 'rgba(255, 255, 255, 0.6)',
                             }}
                         >
@@ -188,20 +202,20 @@ const LandingPage = () => {
                         </Typography>
                         <br />
                         <Typography
-                            variant="h5"
-                            component="div"
+                            variant='h5'
+                            component='div'
                             sx={{
-                                fontFamily: 'Work Sans', fontWeight: '500', color: '#03256C', fontSize: '1.5rem',
+                                fontFamily: 'Work Sans',
+                                fontWeight: '500',
+                                color: '#03256C',
+                                fontSize: '1.5rem',
                             }}
                         >
-                            DevChat+ is an awesome
-                            productivity tool  that
-                            combines all the awesome
-                            features of video-calling
-                            with useful tools such as
-                            whiteboarding and a built
-                            in IDE to help you get your
-                            point across, even from home.
+                            DevChat+ is an awesome productivity tool that
+                            combines all the awesome features of video-calling
+                            with useful tools such as whiteboarding and a built
+                            in IDE to help you get your point across, even from
+                            home.
                         </Typography>
                         <GoogleOneTapLogin />
                     </Box>
@@ -257,10 +271,9 @@ const LandingPage = () => {
                         Contact
                     </Typography>
                 </Box> */}
-
             </Box>
-        </ThemeProvider >
+        </ThemeProvider>
     );
-}
+};
 
 export default LandingPage;

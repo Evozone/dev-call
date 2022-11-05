@@ -36,7 +36,7 @@ export default function TextBody({ message, inputRef }) {
         setIsLink(urlRegex.test(message.text));
         setTimeout(() => {
             endRef.current.scrollIntoView({ behavior: 'smooth' });
-        }, 200);
+        }, 500);
     }, [message]);
 
     useEffect(() => {

@@ -15,7 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from 'firebase/auth';
 
 import TabsNav from './TabsNav';
-import { signOutAction } from '../actions/actions';
+import { notifyAction, signOutAction } from '../actions/actions';
 import { auth } from '../firebaseConfig';
 import ChatInterface from './ChatInterface';
 
@@ -34,9 +34,19 @@ export default function Home({ themeChange, mode }) {
                     dispatch(signOutAction());
                 })
                 .catch((error) => {
-                    alert(error);
+                    dispatch(
+                        notifyAction(
+                            true,
+                            'error',
+                            'Log Out action Failed. Please try again'
+                        )
+                    );
                 });
         }
+    };
+
+    const handleInstall = () => {
+        dispatch(notifyAction(true, 'info', 'Install feature coming soon...'));
     };
 
     return (
@@ -64,11 +74,11 @@ export default function Home({ themeChange, mode }) {
                         pl: 1,
                         ...(mode === 'dark'
                             ? {
-                                backgroundColor: 'info.dark',
-                            }
+                                  backgroundColor: 'info.dark',
+                              }
                             : {
-                                backgroundColor: 'primary.main',
-                            }),
+                                  backgroundColor: 'primary.main',
+                              }),
                         borderRight: '1px solid',
                         borderColor: 'primary.dark',
                     }}
@@ -103,7 +113,10 @@ export default function Home({ themeChange, mode }) {
                             </IconButton>
                         </Tooltip>
                         <Tooltip title='Install App '>
-                            <IconButton sx={{ mr: '10px' }}>
+                            <IconButton
+                                onClick={handleInstall}
+                                sx={{ mr: '10px' }}
+                            >
                                 <DownloadIcon sx={{ color: 'whitesmoke' }} />
                             </IconButton>
                         </Tooltip>
@@ -119,12 +132,12 @@ export default function Home({ themeChange, mode }) {
                         height: 'calc(100% - 75px)',
                         ...(mode === 'dark'
                             ? {
-                                borderRight:
-                                    '1px solid rgba(255, 255, 255, 0.12)',
-                            }
+                                  borderRight:
+                                      '1px solid rgba(255, 255, 255, 0.12)',
+                              }
                             : {
-                                borderRight: '1px solid rgba(0, 0, 0, 0.12)',
-                            }),
+                                  borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+                              }),
                     }}
                 >
                     <TabsNav mode={mode} setChat={setChat} />
@@ -139,7 +152,8 @@ export default function Home({ themeChange, mode }) {
                         flexDirection: 'column',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        backgroundColor: mode === 'dark' ? '#1f1f1f' : 'whitesmoke',
+                        backgroundColor:
+                            mode === 'dark' ? '#1f1f1f' : 'whitesmoke',
                     }}
                 >
                     {/* Change image depending on the mode */}

@@ -112,7 +112,9 @@ export default function CodePlayGround() {
 
     const copyRoomURL = () => {
         navigator.clipboard.writeText(window.location.href);
-        alert('Room URL copied to clipboard.');
+        dispatch(
+            notifyAction(true, 'success', 'Room URL copied to clipboard.')
+        );
     };
 
     const handleLangChange = (event) => {
@@ -215,13 +217,12 @@ export default function CodePlayGround() {
     };
 
     return (
-        < Box
+        <Box
             sx={{
                 display: 'flex',
                 minHeight: '100vh',
                 overflow: 'auto',
-            }
-            }
+            }}
         >
             {customGlobalScrollBars('dark')}
             <Box
@@ -261,7 +262,7 @@ export default function CodePlayGround() {
                     <Box
                         sx={{
                             display: 'grid',
-                            gridTemplateColumns: 'repeat(2, 1fr)',
+                            gridTemplateColumns: 'repeat(4, 1fr)',
                             // gridTemplateColumns:
                             //     'repeat(auto-fill, minmax(60px, 1fr))',
                             gap: '16px 8px',
@@ -320,7 +321,7 @@ export default function CodePlayGround() {
                     display: 'flex',
                     flexDirection: 'column',
                     background: 'black',
-                    color: '#EFF6EE'
+                    color: '#EFF6EE',
                 }}
             >
                 <EditorDropdown
@@ -353,6 +354,6 @@ export default function CodePlayGround() {
                 </Button>
                 <OutputDetails outputDetails={outputDetails} />
             </Box>
-        </Box >
+        </Box>
     );
 }

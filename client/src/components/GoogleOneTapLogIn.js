@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Button, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import { Google } from '@mui/icons-material';
 import { signInWithCredential, GoogleAuthProvider } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
@@ -8,7 +8,11 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { signInAction } from '../actions/actions';
 import { auth, db } from '../firebaseConfig';
-import { startLoadingAction, stopLoadingAction } from '../actions/actions';
+import {
+    notifyAction,
+    startLoadingAction,
+    stopLoadingAction,
+} from '../actions/actions';
 
 const GoogleOneTapLogin = () => {
     const navigate = useNavigate();
@@ -55,7 +59,13 @@ const GoogleOneTapLogin = () => {
                 navigate('/chat');
             })
             .catch((error) => {
-                alert(error);
+                dispatch(
+                    notifyAction(
+                        true,
+                        'error',
+                        'Log In Failed. Please try again'
+                    )
+                );
             });
         dispatch(stopLoadingAction());
     };
@@ -77,7 +87,13 @@ const GoogleOneTapLogin = () => {
                 if (notification.isNotDisplayed()) {
                     setDisplayType('none');
                     setGBtnDisplay('flex');
-                    alert('Please enable third party cookies for this site');
+                    dispatch(
+                        notifyAction(
+                            true,
+                            'info',
+                            'Please allow Third Party Cookies'
+                        )
+                    );
                 }
                 if (
                     notification.isSkippedMoment() ||
@@ -88,7 +104,9 @@ const GoogleOneTapLogin = () => {
                 }
             });
         } catch (error) {
-            alert(error);
+            dispatch(
+                notifyAction(true, 'error', 'Log In Failed. Please try again')
+            );
         }
     };
 
@@ -113,7 +131,7 @@ const GoogleOneTapLogin = () => {
                 Login with Google
             </Button>
             <div style={{ display: gBtnDisplay }} ref={googleButton}></div>
-        </React.Fragment >
+        </React.Fragment>
     );
 };
 

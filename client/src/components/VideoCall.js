@@ -135,7 +135,7 @@ export default function VideoCall() {
                             onClick={() => {
                                 jitsiApi.executeCommand(
                                     'sendChatMessage',
-                                    `http://localhost:3000/code/${codeGroundId}`,
+                                    `Code Playground - ${process.env.REACT_APP_BASE_URL}/code/${codeGroundId}`,
                                     '',
                                     true
                                 );
@@ -155,7 +155,7 @@ export default function VideoCall() {
                             onClick={() => {
                                 jitsiApi.executeCommand(
                                     'sendChatMessage',
-                                    `http://localhost:3000/whiteboard/${whiteBoardId}`,
+                                    `Whiteboard - ${process.env.REACT_APP_BASE_URL}/whiteboard/${whiteBoardId}`,
                                     '',
                                     true
                                 );

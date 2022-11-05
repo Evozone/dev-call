@@ -170,7 +170,6 @@ export default function TabsNav({ mode, setChat }) {
 
     useEffect(() => {
         const getUserChats = () => {
-            console.log('getUserChats req called');
             const unsub = onSnapshot(
                 doc(db, 'userChats', currentUser.uid),
                 (doc) => {
@@ -190,7 +189,7 @@ export default function TabsNav({ mode, setChat }) {
 
     const handleSearch = async () => {
         if (!searchText) {
-            alert('Please enter a valid username');
+            dispatch(notifyAction(true, 'error', 'Please enter username'));
             return;
         }
         const q = query(

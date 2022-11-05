@@ -14,10 +14,10 @@ import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from 'firebase/auth';
 
-import TabsNav from './TabsNav';
 import { notifyAction, signOutAction } from '../actions/actions';
 import { auth } from '../firebaseConfig';
 import ChatInterface from './ChatInterface';
+import TabsNav from './TabsNav';
 
 const drawerWidth = 470;
 
@@ -156,7 +156,6 @@ export default function Home({ themeChange, mode }) {
                             mode === 'dark' ? '#1f1f1f' : 'whitesmoke',
                     }}
                 >
-                    {/* Change image depending on the mode */}
                     <img
                         src={
                             mode === 'dark'
@@ -166,7 +165,6 @@ export default function Home({ themeChange, mode }) {
                         alt='chat'
                         style={{ width: '400px', height: '400px' }}
                     />
-
                     <Typography
                         sx={{
                             color: mode === 'dark' ? '#0288d1' : '#1976d2',

@@ -59,6 +59,7 @@ const GoogleOneTapLogin = () => {
                 navigate('/chat');
             })
             .catch((error) => {
+                console.log(error);
                 dispatch(
                     notifyAction(
                         true,
@@ -90,7 +91,7 @@ const GoogleOneTapLogin = () => {
                     dispatch(
                         notifyAction(
                             true,
-                            'info',
+                            'error',
                             'Please allow Third Party Cookies'
                         )
                     );

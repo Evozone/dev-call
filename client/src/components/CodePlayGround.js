@@ -8,7 +8,6 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 import { customGlobalScrollBars } from './CustomGlobalCSS';
-
 import Coder from './Coder';
 import CodeEditor from './CodeEditor';
 import { Typography } from '@mui/material';
@@ -20,9 +19,7 @@ import CodeInput from './CodeInput';
 import OutputDetails from './OutputDetails';
 import { languageOptions } from '../constants/languageOptions';
 import { notifyAction } from '../actions/actions';
-import { SetMealRounded } from '@mui/icons-material';
 
-// CodePlayGround component
 export default function CodePlayGround() {
     const params = useParams();
     const dispatch = useDispatch();

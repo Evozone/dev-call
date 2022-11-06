@@ -301,10 +301,11 @@ export default function Whiteboard() {
                         color: '#fff',
                         fontSize: '1.2rem',
                         fontWeight: 'bold',
-                        margin: '0 0 0 10px',
+                        margin: '0 10px 0 10px',
+                        fontFamily: 'Comfortaa, sans-serif',
                     }}
                 >
-                    Dev Chat+ Draw
+                    dev chat + draw
                 </h6>
             </div>
             <div ref={colorsRef} className='colors'>

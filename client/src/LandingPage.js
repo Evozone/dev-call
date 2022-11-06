@@ -211,11 +211,9 @@ const LandingPage = () => {
                                 fontSize: '1.5rem',
                             }}
                         >
-                            DevChat+ is an awesome productivity tool that
-                            combines all the awesome features of video-calling
-                            with useful tools such as whiteboarding and a built
-                            in IDE to help you get your point across, even from
-                            home.
+                            DevChat+ is a great productivity tool that combines all the awesome
+                            features of video-calling with useful tools such as whiteboarding and
+                            a built in IDE to help you get your point across.
                         </Typography>
                         <GoogleOneTapLogin />
                     </Box>

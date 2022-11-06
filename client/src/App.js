@@ -28,11 +28,19 @@ const App = () => {
         palette: {
             mode: mode,
         },
+
+        typography: {
+            fontFamily: "'Open Sans', sans-serif",
+        },
     });
 
     const alwaysDarkTheme = createTheme({
         palette: {
             mode: 'dark',
+        },
+
+        typography: {
+            fontFamily: "'Open Sans', sans-serif",
         },
     });
 

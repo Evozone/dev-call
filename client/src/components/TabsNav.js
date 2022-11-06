@@ -26,7 +26,6 @@ import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import { useDispatch, useSelector } from 'react-redux';
-// import CloseIcon from '@mui/icons-material/Close';
 
 import { db } from '../firebaseConfig';
 import {

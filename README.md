@@ -3,7 +3,7 @@
 ## Description
 
 This is a Mini Project for Semester 5 (currently pursuing) of Year 3 of Computer Engineering. 
-<br> Dev is specifically a website designed for the professional users like software developers, designers and project managers.
+<br> Dev Chat+ is a web application, specifically designed for professional users like software developers, designers and project managers.
 
 ## Features
 

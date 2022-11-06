@@ -34,6 +34,8 @@ export default function Home({ themeChange, mode }) {
                     dispatch(signOutAction());
                 })
                 .catch((error) => {
+                    // eslint-disable-next-line no-console
+                    console.log(error);
                     dispatch(
                         notifyAction(
                             true,

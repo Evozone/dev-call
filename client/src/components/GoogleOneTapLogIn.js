@@ -121,7 +121,6 @@ const GoogleOneTapLogin = () => {
                     width: 'fit-content',
                     mt: 3,
                     backgroundColor: '#03256C',
-                    boxShadow: '0 0 5px 0 rgba(0,0,0,0.2)',
                     '&:hover': {
                         color: '#fff',
                         backgroundColor: '#03256C99',

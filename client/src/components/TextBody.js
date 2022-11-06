@@ -75,7 +75,6 @@ export default function TextBody({ message, inputRef }) {
     return (
         <React.Fragment>
             <Box
-                ref={endRef}
                 sx={{
                     borderRadius: '20px',
                     borderBottomLeftRadius: '2px',
@@ -216,6 +215,7 @@ export default function TextBody({ message, inputRef }) {
                     </Typography>
                 )}
                 <Typography
+                    ref={endRef}
                     sx={{
                         textAlign: 'right',
                         fontSize: '11px',

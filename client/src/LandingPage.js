@@ -209,6 +209,15 @@ const LandingPage = () => {
                                 fontWeight: '500',
                                 color: '#03256C',
                                 fontSize: '1.5rem',
+                                p: 2,
+                                mb: 2,
+                                mr: 5,
+                                background: ' rgba(255, 255, 255, 0.46)',
+                                borderRadius: '6px',
+                                boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+                                backdropFilter: 'blur(7.1px)',
+                                webKitBackdropFilter: 'blur(7.1px)',
+                                border: '1px solid rgba(255, 255, 255, 0.8)',
                             }}
                         >
                             DevChat+ is a great productivity tool that combines all the awesome

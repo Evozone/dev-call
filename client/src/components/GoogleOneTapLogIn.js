@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import { Google } from '@mui/icons-material';
 import { signInWithCredential, GoogleAuthProvider } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
@@ -114,17 +114,16 @@ const GoogleOneTapLogin = () => {
     return (
         <React.Fragment>
             <Button
-                variant='outlined'
+                variant='contained'
                 startIcon={<Google />}
                 sx={{
                     display: displayType,
                     width: 'fit-content',
                     mt: 3,
-                    backgroundColor: '#fff',
+                    backgroundColor: '#03256C',
                     '&:hover': {
                         color: '#fff',
-                        borderColor: '#fff',
-                        boxShadow: '0 4px 30px rgba(0, 0, 0, 0.3)',
+                        backgroundColor: '#03256C99',
                     },
                 }}
                 onClick={handleGoogleLogIn}
@@ -132,7 +131,7 @@ const GoogleOneTapLogin = () => {
                 Login with Google
             </Button>
             <div style={{ display: gBtnDisplay }} ref={googleButton}></div>
-        </React.Fragment>
+        </React.Fragment >
     );
 };
 

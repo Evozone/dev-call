@@ -248,9 +248,13 @@ export default function CodePlayGround() {
                         />
                         <Typography
                             variant='h6'
-                            sx={{ fontWeight: 'bold', ml: 2 }}
+                            sx={{
+                                ml: 2,
+                                fontFamily: 'Comfortaa, sans-serif',
+                                fontWeight: '700',
+                            }}
                         >
-                            Dev Chat+ Code
+                            dev chat + code
                         </Typography>
                     </Box>
                     <Typography sx={{ mb: 2, mt: 3 }} variant='h6'>

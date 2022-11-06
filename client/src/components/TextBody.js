@@ -23,7 +23,7 @@ export default function TextBody({ message, inputRef }) {
         /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi;
 
     const imageRegex =
-        /(https:\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*(.png|.jpg|.jpeg)(\?[^\s[",><]*)?/gi;
+        /(https:\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*(.png|.jpg|.jpeg|.gif)(\?[^\s[",><]*)?/gi;
 
     useEffect(() => {
         const offset = new Date().getTimezoneOffset() * 60;
@@ -87,19 +87,19 @@ export default function TextBody({ message, inputRef }) {
                     alignItems: 'end',
                     ...(currentUser.uid === message.senderid
                         ? {
-                              alignSelf: 'flex-end',
-                              borderBottomLeftRadius: '20px',
-                              borderBottomRightRadius: '1px',
-                              backgroundColor: '#25D366',
-                          }
+                            alignSelf: 'flex-end',
+                            borderBottomLeftRadius: '20px',
+                            borderBottomRightRadius: '1px',
+                            backgroundColor: '#25D366',
+                        }
                         : { backgroundColor: '#34B7F1' }),
                     ...(isImage
                         ? {
-                              flexDirection: 'column',
-                          }
+                            flexDirection: 'column',
+                        }
                         : {
-                              flexDirection: 'row',
-                          }),
+                            flexDirection: 'row',
+                        }),
                 }}
             >
                 {imageModal && (

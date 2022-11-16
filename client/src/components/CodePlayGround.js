@@ -217,20 +217,24 @@ export default function CodePlayGround() {
         <Box
             sx={{
                 display: 'flex',
+                flexFlow: 'row wrap',
                 minHeight: '100vh',
-                overflow: 'auto',
+                backgroundColor: 'black',
             }}
         >
             {customGlobalScrollBars('dark')}
+            {/* List of Devs */}
             <Box
                 sx={{
+                    flex: '2 0 75px',
                     background:
                         'linear-gradient(30deg, #1976d2 0%, #2196f3 50%, #1976d2 100%)',
                     p: 2,
+                    m: 1,
+                    borderRadius: 1,
                     color: 'white',
                     display: 'flex',
                     flexDirection: 'column',
-                    flex: 2,
                 }}
             >
                 <Box sx={{ flex: 1 }}>
@@ -263,6 +267,7 @@ export default function CodePlayGround() {
                     <Box
                         sx={{
                             display: 'grid',
+                            m: 1,
                             gridTemplateColumns: 'repeat(4, 1fr)',
                             // gridTemplateColumns:
                             //     'repeat(auto-fill, minmax(60px, 1fr))',
@@ -281,10 +286,18 @@ export default function CodePlayGround() {
                             ))}
                     </Box>
                 </Box>
+
                 <Button
                     variant='contained'
-                    sx={{ bgcolor: '#25D366', mb: 2, color: 'white' }}
-                    color='success'
+                    sx={{
+                        width: 'fit-content',
+                        m: 1,
+                        bgcolor: '#03256C',
+                        color: '#fff',
+                        '&:hover': {
+                            bgcolor: '#03256C99',
+                        },
+                    }}
                     disableElevation
                     endIcon={<ContentCopyIcon />}
                     onClick={copyRoomURL}
@@ -293,8 +306,15 @@ export default function CodePlayGround() {
                 </Button>
                 <Button
                     variant='contained'
-                    sx={{ bgcolor: '#25D366', color: 'white', width: '75%' }}
-                    color='success'
+                    sx={{
+                        width: 'fit-content',
+                        m: 1,
+                        bgcolor: '#03256C',
+                        color: '#fff',
+                        '&:hover': {
+                            bgcolor: '#03256C99',
+                        },
+                    }}
                     disableElevation
                     endIcon={<LogoutIcon />}
                     onClick={leaveCodePlayGround}
@@ -302,7 +322,11 @@ export default function CodePlayGround() {
                     Leave
                 </Button>
             </Box>
-            <Box sx={{ flex: 7 }}>
+            {/* Code Editor */}
+            <Box sx={{
+                flex: '8 0 100px',
+                maxWidth: '100%',
+            }}>
                 <CodeEditor
                     socketRef={socketRef}
                     params={params}
@@ -313,12 +337,11 @@ export default function CodePlayGround() {
                     theme={theme}
                 />
             </Box>
-
             {/* Code Side Panel */}
             <Box
                 sx={{
                     p: 2,
-                    flex: 3,
+                    flex: '2 0 150px',
                     display: 'flex',
                     flexDirection: 'column',
                     background: 'black',
@@ -355,6 +378,6 @@ export default function CodePlayGround() {
                 </Button>
                 <OutputDetails outputDetails={outputDetails} />
             </Box>
-        </Box>
+        </Box >
     );
 }

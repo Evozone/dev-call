@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Button, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import { Google } from '@mui/icons-material';
 import { signInWithCredential, GoogleAuthProvider } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';

@@ -7,10 +7,10 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 
-import Coder from '../Coder';
-import { initSocket } from '../../socket';
+import Coder from '../../Coder';
+import { initSocket } from '../../../socket';
 import './Whiteboard.css';
-import { notifyAction } from '../../actions/actions';
+import { notifyAction } from '../../../actions/actions';
 
 export default function Whiteboard() {
     const dispatch = useDispatch();
@@ -282,32 +282,6 @@ export default function Whiteboard() {
     return (
         <div>
             <canvas ref={canvasRef} className='whiteboard' />
-            <div
-                ref={logoRef}
-                className='logo'
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    mb: 2,
-                }}
-            >
-                <img
-                    style={{ height: '40px' }}
-                    src='/assets/landing-logo.svg'
-                    alt='logo'
-                />
-                <h6
-                    style={{
-                        color: '#fff',
-                        fontSize: '1.2rem',
-                        fontWeight: 'bold',
-                        margin: '0 10px 0 10px',
-                        fontFamily: 'Comfortaa, sans-serif',
-                    }}
-                >
-                    dev chat + draw
-                </h6>
-            </div>
             <div ref={colorsRef} className='colors'>
                 <div className='color black' />
                 <div className='color red' />

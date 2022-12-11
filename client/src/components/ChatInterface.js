@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import VideoCallIcon from '@mui/icons-material/VideoCall';
+import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     doc,
@@ -27,6 +28,7 @@ import {
     startLoadingAction,
     stopLoadingAction,
 } from '../actions/actions';
+import Workspaces from '@mui/icons-material/Workspaces';
 
 export default function ChatInterface({ mode, chat }) {
     const inputRef = useRef();
@@ -131,6 +133,10 @@ export default function ChatInterface({ mode, chat }) {
         window.location.href = `/meet/${chat[0]}`;
     };
 
+    const startWorkspace = () => {
+        window.location.href = `/workspace/${chat[0]}`;
+    };
+
     return (
         <Box
             component='main'
@@ -151,11 +157,11 @@ export default function ChatInterface({ mode, chat }) {
                     pl: 2,
                     ...(mode === 'dark'
                         ? {
-                              backgroundColor: 'info.dark',
-                          }
+                            backgroundColor: 'info.dark',
+                        }
                         : {
-                              backgroundColor: 'primary.main',
-                          }),
+                            backgroundColor: 'primary.main',
+                        }),
                     position: 'sticky',
                     top: 0,
                 }}
@@ -176,6 +182,14 @@ export default function ChatInterface({ mode, chat }) {
                     {chat.length > 0 ? chat[1].userInfo.username : 'Chat'}
                 </Typography>
                 <Grid pr='20px' container justifyContent='flex-end'>
+                    <Tooltip title='Workspace'>
+                        <IconButton onClick={startWorkspace}>
+                            <Workspaces
+                                fontSize='large'
+                                sx={{ color: 'whitesmoke' }}
+                            />
+                        </IconButton>
+                    </Tooltip>
                     <Tooltip title='Video Call'>
                         <IconButton onClick={startVideoCall}>
                             <VideoCallIcon

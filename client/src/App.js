@@ -11,8 +11,8 @@ import LandingPage from './LandingPage';
 import Loading from './components/Loading';
 import ProtectedRoute from './components/ProtectedRoute';
 import VideoCall from './components/VideoCall';
+import WorkSpace from './components/workspace/WorkSpace';
 import CodePlayGround from './components/CodePlayGround';
-import Whiteboard from './components/whiteboard/Whiteboard';
 import { customGlobalScrollBars } from './components/CustomGlobalCSS';
 import Notify from './components/Notify';
 
@@ -86,12 +86,16 @@ const App = () => {
                 />
                 <Route path='/meet/:roomId' element={<VideoCall />} />
 
+                <Route path='/workspace/:workspaceId' element={
+                    <ThemeProvider theme={alwaysDarkTheme}>
+                        <WorkSpace />
+                    </ThemeProvider>
+                } />
+
                 <Route path='/code/:groundId' element={
                     <ThemeProvider theme={alwaysDarkTheme}>
                         <CodePlayGround />
                     </ThemeProvider>} />
-
-                <Route path='/whiteboard/:boardId' element={<Whiteboard />} />
             </Routes>
         </ThemeProvider>
     );

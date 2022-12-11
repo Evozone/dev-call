@@ -58,6 +58,9 @@ export default function WorkSpace() {
     // State for keeping track of which toggle button is selected
     const [selected, setSelected] = useState('session');
 
+    // State for keeping track of which main component is selected
+    const [mainComponent, setMainComponent] = useState('code');
+
     // State for keeping track of whether the sidebar is open or not
     const [open, setOpen] = useState(true);
 
@@ -67,6 +70,11 @@ export default function WorkSpace() {
     const handleSelect = (event, newSelected) => {
         if (newSelected !== null) {
             setSelected(newSelected);
+            if (newSelected === 'code') {
+                setMainComponent('code');
+            } else if (newSelected === 'whiteboard') {
+                setMainComponent('whiteboard');
+            }
             if (newSelected === 'whiteboard') {
                 setOpen(false);
             } else {
@@ -176,22 +184,22 @@ export default function WorkSpace() {
                 </Box>
             </Drawer>
 
-            {/* Box with faded gray background and rounded corners */}
-            <Box
-                component="main"
-                sx={{
-                    flexGrow: 1,
-                    bgcolor: '#F5F5F522',
-                    color: 'white',
-                    margin: '5px',
-                    borderRadius: '5px',
-                }}
-            >
-                {/* Call different components based on what's needed. */}
-                {selected === 'session' && <div>Session</div>}
-                {selected === 'code' && <div>Code</div>}
-                {selected === 'whiteboard' && <Whiteboard />}
-            </Box>
+            {/* Main content */}
+            {mainComponent === 'whiteboard' && <Whiteboard />}
+            {mainComponent === 'code' &&
+                <Box
+                    component="main"
+                    sx={{
+                        flexGrow: 1,
+                        bgcolor: '#F5F5F522',
+                        color: 'white',
+                        margin: '5px',
+                        borderRadius: '5px',
+                    }}
+                >
+                    {/* Call different components based on what's needed. */}
+
+                </Box>}
 
             {/* Currently not Draggable component for microphone, deafen, and end call buttons */}
             <Box

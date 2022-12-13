@@ -28,13 +28,14 @@ const LandingPage = () => {
                 <Box
                     id='hero'
                     sx={{
+                        boxSizing: 'border-box',
                         width: '100%',
-                        height: '100vh',
+                        minHeight: '100vh',
+                        padding: '3rem',
                         background:
                             'linear-gradient(116.82deg, #0288d1 0%, #1976d2 100%)',
                         display: 'flex',
                         flexFlow: 'row wrap',
-                        justifyContent: 'center',
                         alignItems: 'center',
                         color: 'white',
                     }}
@@ -42,14 +43,13 @@ const LandingPage = () => {
                     {/* LogoMark */}
                     <Box
                         sx={{
-                            width: '50%',
+                            flex: '0 0 500px',
                             height: '100%',
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
-                            flexGrow: 1,
                             alignItems: 'left',
-                            padding: '0 0 0 5rem',
+                            margin: '2rem',
                         }}
                     >
                         <Box>
@@ -99,14 +99,13 @@ const LandingPage = () => {
                     {/* Description */}
                     <Box
                         sx={{
-                            width: '50%',
+                            flex: '1 0 500px',
                             height: '100%',
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
                             alignItems: 'left',
-                            padding: '0 2rem',
-                            flexGrow: 1,
+                            margin: '2rem',
                         }}
                     >
                         <Typography
@@ -159,7 +158,6 @@ const LandingPage = () => {
                         <GoogleOneTapLogin />
                     </Box>
                 </Box>
-
             </Box>
         </ThemeProvider>
     );

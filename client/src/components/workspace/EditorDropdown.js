@@ -5,7 +5,7 @@ import Select from '@mui/material/Select';
 import InputLabel from '@mui/material/InputLabel';
 import monacoThemes from 'monaco-themes/themes/themelist';
 
-import { languageOptions } from '../constants/languageOptions';
+import { languageOptions } from '../../constants/languageOptions';
 
 export default function EditorDropdown({
     lang,

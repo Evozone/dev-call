@@ -1,6 +1,4 @@
-// A component that will house the code editor and the whiteboard.
-
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -26,9 +24,12 @@ import BrushIcon from '@mui/icons-material/Brush';
 
 import WorkSpaceSidePanel from './WorkSpaceSidePanel';
 import Whiteboard from './whiteboard/Whiteboard';
+import CodeEditor from './CodeEditor';
+
+import { languageOptions } from '../../constants/languageOptions';
+import { Divider } from '@mui/material';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(() => ({
-
     '& .MuiToggleButtonGroup-grouped': {
         margin: 0,
         border: 0,
@@ -54,17 +55,20 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(() => ({
 }));
 
 export default function WorkSpace() {
-
+    const codeRef = useRef(null);
     // State for keeping track of which toggle button is selected
-    const [selected, setSelected] = useState('session');
+    const [selected, setSelected] = useState('code');
 
     // State for keeping track of which main component is selected
     const [mainComponent, setMainComponent] = useState('code');
 
     // State for keeping track of whether the sidebar is open or not
-    const [open, setOpen] = useState(true);
+    const [open, setOpen] = useState(false);
 
     const sideStripWidth = 60;
+
+    const [lang, setLang] = useState(languageOptions[0]);
+    const [theme, setTheme] = useState('vs-dark');
 
     // Function to handle the toggle button selection
     const handleSelect = (event, newSelected) => {
@@ -100,7 +104,18 @@ export default function WorkSpace() {
             <CssBaseline />
 
             {/* Placed here because of z-index issues */}
-            <WorkSpaceSidePanel selected={selected} open={open} />
+            <WorkSpaceSidePanel
+                {...{
+                    lang,
+                    setLang,
+                    theme,
+                    setTheme,
+                    selected,
+                    open,
+                    codeRef,
+                    setOpen,
+                }}
+            />
 
             {/* A side strip which controls the sidebar */}
             <Drawer
@@ -110,9 +125,9 @@ export default function WorkSpace() {
                         display: 'flex',
                         alignItems: 'center',
                         border: 'none',
-                    }
+                    },
                 }}
-                variant="permanent"
+                variant='permanent'
                 sx={{
                     width: sideStripWidth,
                     flexShrink: 0,
@@ -123,17 +138,23 @@ export default function WorkSpace() {
                 }}
             >
                 {/* Dev Call logo */}
-                <a href="/">
+                <a
+                    href='https://github.com/Evozone/dev-call'
+                    target='_blank'
+                    rel='noreferrer'
+                >
                     <img
-                        style={{ height: '40px', margin: '10px auto 10px auto' }}
+                        style={{
+                            height: '40px',
+                            margin: '10px auto 10px auto',
+                        }}
                         src='/assets/landing-logo.svg'
                         alt='logo'
                     />
                 </a>
-
                 {/* Toggle buttons */}
                 <StyledToggleButtonGroup
-                    orientation="vertical"
+                    orientation='vertical'
                     value={selected}
                     exclusive
                     onChange={handleSelect}
@@ -141,43 +162,68 @@ export default function WorkSpace() {
                         width: '100%',
                         justifyContent: 'center',
                         alignItems: 'center',
-                        flexDirection: 'column'
+                        flexDirection: 'column',
                     }}
                 >
-                    <ToggleButton value="session" sx={{ width: '100%', height: '100%' }}>
-                        <Tooltip title="Session Info">
+                    <ToggleButton
+                        value='session'
+                        sx={{
+                            width: '100%',
+                            height: '100%',
+                        }}
+                    >
+                        <Tooltip title='Session Info' placement='right' arrow>
                             <GroupsIcon sx={{ fontSize: '35px' }} />
                         </Tooltip>
                     </ToggleButton>
-                    <ToggleButton value="code" sx={{ width: '100%', height: '100%' }}>
-                        <Tooltip title="Code Editor">
+                    <ToggleButton
+                        value='code'
+                        sx={{ width: '100%', height: '100%' }}
+                    >
+                        <Tooltip title='Code Editor' placement='right' arrow>
                             <CodeIcon sx={{ fontSize: '35px' }} />
                         </Tooltip>
                     </ToggleButton>
-                    <ToggleButton value="whiteboard" sx={{ width: '100%', height: '100%' }}>
-                        <Tooltip title="Whiteboard">
+                    <ToggleButton
+                        value='whiteboard'
+                        sx={{ width: '100%', height: '100%' }}
+                    >
+                        <Tooltip title='Whiteboard' placement='right' arrow>
                             <BrushIcon sx={{ fontSize: '35px' }} />
                         </Tooltip>
                     </ToggleButton>
-
                 </StyledToggleButtonGroup>
 
                 {/* Normal buttons at the end */}
-                <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', height: '100%' }}>
-                    <Tooltip title="Start a call">
+                <Box
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'flex-end',
+                        height: '100%',
+                    }}
+                >
+                    <Tooltip title='Start a call' placement='right' arrow>
                         <IconButton sx={{ color: 'white' }}>
                             <AddIcCallIcon sx={{ fontSize: '35px' }} />
                         </IconButton>
                     </Tooltip>
-                    <Tooltip title="Share Workspace Link">
+                    <Tooltip
+                        title='Share Workspace Link'
+                        placement='right'
+                        arrow
+                    >
                         <IconButton sx={{ color: 'white' }}>
                             <ShareIcon sx={{ fontSize: '35px' }} />
                         </IconButton>
                     </Tooltip>
-                    <Tooltip title="Leave Workspace">
-                        <IconButton sx={{ color: 'lightsteelblue' }} onClick={() => {
-                            window.location.href = '/';
-                        }}>
+                    <Tooltip title='Leave Workspace' placement='right' arrow>
+                        <IconButton
+                            sx={{ color: 'lightsteelblue' }}
+                            onClick={() => {
+                                window.location.href = '/chat';
+                            }}
+                        >
                             <ExitToAppIcon sx={{ fontSize: '35px' }} />
                         </IconButton>
                     </Tooltip>
@@ -186,20 +232,27 @@ export default function WorkSpace() {
 
             {/* Main content */}
             {mainComponent === 'whiteboard' && <Whiteboard />}
-            {mainComponent === 'code' &&
+            {mainComponent === 'code' && (
                 <Box
-                    component="main"
+                    component='main'
                     sx={{
                         flexGrow: 1,
                         bgcolor: '#F5F5F522',
                         color: 'white',
                         margin: '5px',
                         borderRadius: '5px',
+                        transition: 'margin-left 0.3s ease-in-out',
+                        marginLeft: open ? '405px' : '5px',
                     }}
                 >
-                    {/* Call different components based on what's needed. */}
-
-                </Box>}
+                    <CodeEditor
+                        {...{ open, lang, theme }}
+                        onCodeChange={(code) => {
+                            codeRef.current = code;
+                        }}
+                    />
+                </Box>
+            )}
 
             {/* Currently not Draggable component for microphone, deafen, and end call buttons */}
             <Box
@@ -215,23 +268,22 @@ export default function WorkSpace() {
                     justifyContent: 'center',
                 }}
             >
-                <Tooltip title="Mute">
+                <Tooltip title='Mute'>
                     <IconButton sx={{ color: 'white' }}>
                         <MicIcon sx={{ fontSize: '25px' }} />
                     </IconButton>
                 </Tooltip>
-                <Tooltip title="Deafen">
+                <Tooltip title='Deafen'>
                     <IconButton sx={{ color: 'white' }}>
                         <HeadsetIcon sx={{ fontSize: '25px' }} />
                     </IconButton>
                 </Tooltip>
-                <Tooltip title="End Call">
-                    <IconButton sx={{ color: 'maroon' }} onClick={() => { }}>
+                <Tooltip title='End Call'>
+                    <IconButton sx={{ color: 'red' }} onClick={() => {}}>
                         <CallEndIcon sx={{ fontSize: '25px' }} />
                     </IconButton>
                 </Tooltip>
             </Box>
-        </Box >
+        </Box>
     );
 }
-

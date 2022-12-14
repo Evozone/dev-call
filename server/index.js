@@ -21,7 +21,7 @@ function getAllConnectedClients(roomId) {
 }
 
 io.on('connection', (socket) => {
-    // console.log('a user connected', socket.id);
+    console.log('a user connected', socket.id);
 
     socket.on('join', ({ roomId, username }) => {
         users[socket.id] = username;

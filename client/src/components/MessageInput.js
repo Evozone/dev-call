@@ -134,7 +134,12 @@ export default function MessageInput({
                 sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    backgroundColor: mode === 'dark' ? '#1a1a1a' : '#f5f5f5',
+                    backgroundColor:
+                        mode === 'work'
+                            ? '#00205d'
+                            : mode === 'dark'
+                            ? '#1a1a1a'
+                            : '#f5f5f5',
                     p: 1,
                 }}
             >
@@ -145,7 +150,9 @@ export default function MessageInput({
                         '& .MuiOutlinedInput-root': {
                             borderRadius: '15px',
                             backgroundColor:
-                                mode === 'dark' ? '#101010' : '#f0f0f0',
+                                mode === 'dark' || mode === 'work'
+                                    ? '#101010'
+                                    : '#f0f0f0',
                         },
                         border: 'none',
                     }}

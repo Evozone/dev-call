@@ -7,7 +7,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 
-import Coder from '../../Coder';
+import Coder from '../Coder';
 import { initSocket } from '../../../socket';
 import './Whiteboard.css';
 import { notifyAction } from '../../../actions/actions';
@@ -110,7 +110,7 @@ export default function Whiteboard() {
             });
         };
         if (currentUser.username) {
-            init();
+            // init();
         }
 
         const onColorUpdate = (e) => {

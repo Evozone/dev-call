@@ -85,17 +85,22 @@ const App = () => {
                     }
                 />
                 <Route path='/meet/:roomId' element={<VideoCall />} />
-
-                <Route path='/workspace/:workspaceId' element={
-                    <ThemeProvider theme={alwaysDarkTheme}>
-                        <WorkSpace />
-                    </ThemeProvider>
-                } />
-
-                <Route path='/code/:groundId' element={
-                    <ThemeProvider theme={alwaysDarkTheme}>
-                        <CodePlayGround />
-                    </ThemeProvider>} />
+                <Route
+                    path='/workspace/:workspaceId'
+                    element={
+                        <ThemeProvider theme={alwaysDarkTheme}>
+                            <WorkSpace />
+                        </ThemeProvider>
+                    }
+                />
+                <Route
+                    path='/code/:groundId'
+                    element={
+                        <ThemeProvider theme={alwaysDarkTheme}>
+                            <CodePlayGround />
+                        </ThemeProvider>
+                    }
+                />
             </Routes>
         </ThemeProvider>
     );

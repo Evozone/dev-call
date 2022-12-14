@@ -12,7 +12,7 @@ export default function Coder({ username }) {
                 alignItems: 'center',
                 textAlign: 'center',
                 wordBreak: 'break-word',
-                backgroundColor: 'rgba(0, 0, 0, 0.05)',
+                backgroundColor: 'rgb(0 32 93)',
                 padding: '0.5rem',
                 borderRadius: '10px',
             }}

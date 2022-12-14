@@ -8,19 +8,19 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 import { customGlobalScrollBars } from './CustomGlobalCSS';
-import Coder from './Coder';
-import CodeEditor from './CodeEditor';
+import Coder from './workspace/Coder';
+import CodeEditor from './workspace/CodeEditor';
 import { Typography } from '@mui/material';
 import { initSocket } from '../socket';
-import EditorDropdown from './EditorDropdown';
+import EditorDropdown from './workspace/EditorDropdown';
 import { defineTheme } from '../utils/defineTheme';
-import OutputBox from './OutputBox';
-import CodeInput from './CodeInput';
-import OutputDetails from './OutputDetails';
+import OutputBox from './workspace/OutputBox';
+import CodeInput from './workspace/CodeInput';
+import OutputDetails from './workspace/OutputDetails';
 import { languageOptions } from '../constants/languageOptions';
 import { notifyAction } from '../actions/actions';
 
-export default function CodePlayGround() {
+export default function CodePlayGround({ open }) {
     const params = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -35,73 +35,73 @@ export default function CodePlayGround() {
     const [outputDetails, setOutputDetails] = useState(null);
     const [processingCode, setProcessingCode] = useState(false);
 
-    useEffect(() => {
-        if (!window.localStorage.getItem('dev')) {
-            navigate('/');
-        }
-        document.title = 'Dev Chat+ Code';
+    // useEffect(() => {
+    //     if (!window.localStorage.getItem('dev')) {
+    //         navigate('/');
+    //     }
+    //     document.title = 'Dev Chat+ Code';
 
-        const init = async () => {
-            socketRef.current = await initSocket();
+    //     const init = async () => {
+    //         socketRef.current = await initSocket();
 
-            socketRef.current.on('connect_error', (error) =>
-                handleErrors(error)
-            );
-            socketRef.current.on('connect_failed', (error) =>
-                handleErrors(error)
-            );
-            function handleErrors(error) {
-                // eslint-disable-next-line no-console
-                console.log('socket error', error);
-                alert(
-                    'Socket connection failed, PLease close the tab & try again later.'
-                );
-                // navigate('/');
-            }
+    //         socketRef.current.on('connect_error', (error) =>
+    //             handleErrors(error)
+    //         );
+    //         socketRef.current.on('connect_failed', (error) =>
+    //             handleErrors(error)
+    //         );
+    //         function handleErrors(error) {
+    //             // eslint-disable-next-line no-console
+    //             console.log('socket error', error);
+    //             alert(
+    //                 'Socket connection failed, PLease close the tab & try again later.'
+    //             );
+    //             // navigate('/');
+    //         }
 
-            socketRef.current.emit('join', {
-                roomId: params.groundId,
-                username: currentUser.username,
-            });
+    //         socketRef.current.emit('join', {
+    //             roomId: params.groundId,
+    //             username: currentUser.username,
+    //         });
 
-            socketRef.current.on(
-                'joined',
-                ({ clients, username, socketId }) => {
-                    if (username !== currentUser.username) {
-                        dispatch(
-                            notifyAction(true, 'success', `${username} joined`)
-                        );
-                    }
-                    setCoders(clients);
-                    setTimeout(() => {
-                        socketRef.current.emit('syncCode', {
-                            code: codeRef.current,
-                            socketId,
-                        });
-                    }, 1000);
-                }
-            );
+    //         socketRef.current.on(
+    //             'joined',
+    //             ({ clients, username, socketId }) => {
+    //                 if (username !== currentUser.username) {
+    //                     dispatch(
+    //                         notifyAction(true, 'success', `${username} joined`)
+    //                     );
+    //                 }
+    //                 setCoders(clients);
+    //                 setTimeout(() => {
+    //                     socketRef.current.emit('syncCode', {
+    //                         code: codeRef.current,
+    //                         socketId,
+    //                     });
+    //                 }, 1000);
+    //             }
+    //         );
 
-            socketRef.current.on('disconnected', ({ socketId, username }) => {
-                dispatch(notifyAction(true, 'info', `${username} left.`));
-                setCoders((prev) => {
-                    return prev.filter(
-                        (client) => client.socketId !== socketId
-                    );
-                });
-            });
-        };
+    //         socketRef.current.on('disconnected', ({ socketId, username }) => {
+    //             dispatch(notifyAction(true, 'info', `${username} left.`));
+    //             setCoders((prev) => {
+    //                 return prev.filter(
+    //                     (client) => client.socketId !== socketId
+    //                 );
+    //             });
+    //         });
+    //     };
 
-        if (currentUser.username) {
-            init();
-        }
+    //     if (currentUser.username) {
+    //         init();
+    //     }
 
-        return () => {
-            socketRef.current?.disconnect();
-            socketRef.current?.off('joined');
-            socketRef.current?.off('disconnected');
-        };
-    }, [currentUser]);
+    //     return () => {
+    //         socketRef.current?.disconnect();
+    //         socketRef.current?.off('joined');
+    //         socketRef.current?.off('disconnected');
+    //     };
+    // }, [currentUser]);
 
     const leaveCodePlayGround = () => {
         window.close();
@@ -218,13 +218,13 @@ export default function CodePlayGround() {
             sx={{
                 display: 'flex',
                 flexFlow: 'row wrap',
-                minHeight: '100vh',
+                minHeight: '99vh',
                 backgroundColor: 'black',
             }}
         >
             {customGlobalScrollBars('dark')}
             {/* List of Devs */}
-            <Box
+            {/* <Box
                 sx={{
                     flex: '2 0 75px',
                     background:
@@ -321,12 +321,13 @@ export default function CodePlayGround() {
                 >
                     Leave
                 </Button>
-            </Box>
+            </Box> */}
             {/* Code Editor */}
-            <Box sx={{
-                flex: '8 0 100px',
-                maxWidth: '100%',
-            }}>
+            <Box
+                sx={{
+                    width: open ? 'calc(100vw - 470px)' : '100%',
+                }}
+            >
                 <CodeEditor
                     socketRef={socketRef}
                     params={params}
@@ -338,7 +339,7 @@ export default function CodePlayGround() {
                 />
             </Box>
             {/* Code Side Panel */}
-            <Box
+            {/* <Box
                 sx={{
                     p: 2,
                     flex: '2 0 150px',
@@ -377,7 +378,7 @@ export default function CodePlayGround() {
                     {processingCode ? 'Processing...' : 'Compile & Execute'}
                 </Button>
                 <OutputDetails outputDetails={outputDetails} />
-            </Box>
-        </Box >
+            </Box> */}
+        </Box>
     );
 }

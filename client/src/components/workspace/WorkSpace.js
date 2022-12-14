@@ -18,7 +18,7 @@ import CallEndIcon from '@mui/icons-material/CallEnd';
 
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
-import GroupsIcon from '@mui/icons-material/Groups';
+import InfoIcon from '@mui/icons-material/Info';
 import CodeIcon from '@mui/icons-material/Code';
 import BrushIcon from '@mui/icons-material/Brush';
 
@@ -173,7 +173,7 @@ export default function WorkSpace() {
                         }}
                     >
                         <Tooltip title='Session Info' placement='right' arrow>
-                            <GroupsIcon sx={{ fontSize: '35px' }} />
+                            <InfoIcon sx={{ fontSize: '35px' }} />
                         </Tooltip>
                     </ToggleButton>
                     <ToggleButton

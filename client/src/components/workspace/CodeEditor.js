@@ -28,25 +28,24 @@ export default function CodeEditor({
     const handleEditorChange = (value, event) => {
         onCodeChange(value);
         localStorage.setItem(`${params.workspaceId}-code`, value);
-        // if (!event.isFlush) {
-        //     socketRef.current.emit('codeChange', {
-        //         code: value,
-        //         roomId: params.groundId,
-        //     });
-        // }
+        if (!event.isFlush) {
+            socketRef.current.emit('codeChange', {
+                code: value,
+                roomId: params.workspaceId,
+            });
+        }
     };
 
-    // useEffect(() => {
-    //     if (socketRef.current) {
-    //         socketRef.current.on('codeChange', ({ code }) => {
-    //             editorRef.current.setValue(code);
-    //         });
-    //     }
-
-    //     return () => {
-    //         socketRef?.current.off('codeChange');
-    //     };
-    // }, [socketRef.current]);
+    useEffect(() => {
+        if (socketRef.current) {
+            socketRef.current.on('codeChange', ({ code }) => {
+                editorRef.current.setValue(code);
+            });
+        }
+        return () => {
+            socketRef?.current.off('codeChange');
+        };
+    }, [socketRef.current]);
 
     return (
         <Box

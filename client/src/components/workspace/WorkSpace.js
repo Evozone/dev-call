@@ -116,10 +116,17 @@ export default function WorkSpace() {
                                 drawingData: canvasRef?.current?.toDataURL(),
                                 socketId,
                             });
+                            socketRef.current.emit('syncCode', {
+                                code: codeRef.current,
+                                socketId,
+                            });
                         }, 1500);
                     } else {
                         socketRef.current.emit('syncCanvas', {
-                            drawingData: '',
+                            drawingData:
+                                localStorage.getItem(
+                                    `${params.workspaceId}-drawing`
+                                ) || '',
                             socketId,
                         });
                     }
@@ -136,6 +143,9 @@ export default function WorkSpace() {
                     }
                 }
             );
+            socketRef.current.on('codeChange', ({ code }) => {
+                localStorage.setItem(`${params.workspaceId}-code`, code);
+            });
             socketRef.current.on('disconnected', ({ socketId, username }) => {
                 dispatch(notifyAction(true, 'info', `${username} left.`));
                 setCoders((prev) => {
@@ -155,6 +165,7 @@ export default function WorkSpace() {
                 socketRef.current?.disconnect();
                 socketRef.current.off('drawingChange');
                 socketRef.current.off('syncCanvas');
+                socketRef.current.off('codeChange');
                 socketRef.current?.off('addUser');
                 socketRef.current?.off('connect_error');
                 socketRef.current?.off('connect_failed');
@@ -331,7 +342,7 @@ export default function WorkSpace() {
                     }}
                 >
                     <CodeEditor
-                        {...{ open, lang, theme }}
+                        {...{ socketRef, open, lang, theme }}
                         onCodeChange={(code) => {
                             codeRef.current = code;
                         }}

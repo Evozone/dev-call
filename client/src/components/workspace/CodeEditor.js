@@ -12,6 +12,11 @@ export default function CodeEditor({
 }) {
     const editorRef = useRef(null);
     const params = useParams();
+
+    useEffect(() => {
+        document.title = 'Dev Chat+ Code';
+    }, []);
+
     const handleEditorDidMount = (editor) => {
         editorRef.current = editor;
         const savedCode = localStorage.getItem(`${params.workspaceId}-code`);

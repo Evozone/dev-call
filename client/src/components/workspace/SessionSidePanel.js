@@ -10,60 +10,60 @@ import { Typography } from '@mui/material';
 import Coder from './Coder';
 import MessageInput from '../MessageInput';
 
-export default function SessionSidePanel() {
+export default function SessionSidePanel({ coders }) {
     //create an example array of length 50 named coders which will have the random names starting with different alphabetof the coders and a radnom id
-    const coders = [
-        { id: 1, name: 'A' },
-        { id: 2, name: 'B' },
-        { id: 3, name: 'C' },
-        { id: 4, name: 'D' },
-        { id: 5, name: 'E' },
-        { id: 6, name: 'F' },
-        { id: 7, name: 'G' },
-        { id: 8, name: 'H' },
-        { id: 9, name: 'I' },
-        { id: 10, name: 'J' },
-        { id: 11, name: 'K' },
-        { id: 12, name: 'L' },
-        { id: 13, name: 'M' },
-        { id: 14, name: 'N' },
-        { id: 15, name: 'O' },
-        { id: 16, name: 'P' },
-        { id: 17, name: 'Q' },
-        { id: 18, name: 'R' },
-        { id: 19, name: 'S' },
-        { id: 20, name: 'T' },
-        // { id: 21, name: 'U' },
-        // { id: 22, name: 'V' },
-        // { id: 23, name: 'W' },
-        // { id: 24, name: 'X' },
-        // { id: 25, name: 'Y' },
-        // { id: 26, name: 'Z' },
-        // { id: 27, name: 'A' },
-        // { id: 28, name: 'B' },
-        // { id: 29, name: 'C' },
-        // { id: 30, name: 'D' },
-        // { id: 31, name: 'E' },
-        // { id: 32, name: 'F' },
-        // { id: 33, name: 'G' },
-        // { id: 34, name: 'H' },
-        // { id: 35, name: 'I' },
-        // { id: 36, name: 'J' },
-        // { id: 37, name: 'K' },
-        // { id: 38, name: 'L' },
-        // { id: 39, name: 'M' },
-        // { id: 40, name: 'N' },
-        // { id: 41, name: 'O' },
-        // { id: 42, name: 'P' },
-        // { id: 43, name: 'Q' },
-        // { id: 44, name: 'R' },
-        // { id: 45, name: 'S' },
-        // { id: 46, name: 'T' },
-        // { id: 47, name: 'U' },
-        // { id: 48, name: 'V' },
-        // { id: 49, name: 'W' },
-        // { id: 50, name: 'X' },
-    ];
+    // const coders = [
+    //     { id: 1, name: 'A' },
+    //     { id: 2, name: 'B' },
+    //     { id: 3, name: 'C' },
+    //     { id: 4, name: 'D' },
+    //     { id: 5, name: 'E' },
+    //     { id: 6, name: 'F' },
+    //     { id: 7, name: 'G' },
+    //     { id: 8, name: 'H' },
+    //     { id: 9, name: 'I' },
+    //     { id: 10, name: 'J' },
+    //     { id: 11, name: 'K' },
+    //     { id: 12, name: 'L' },
+    //     { id: 13, name: 'M' },
+    //     { id: 14, name: 'N' },
+    //     { id: 15, name: 'O' },
+    //     { id: 16, name: 'P' },
+    //     { id: 17, name: 'Q' },
+    //     { id: 18, name: 'R' },
+    //     { id: 19, name: 'S' },
+    //     { id: 20, name: 'T' },
+    //     // { id: 21, name: 'U' },
+    //     // { id: 22, name: 'V' },
+    //     // { id: 23, name: 'W' },
+    //     // { id: 24, name: 'X' },
+    //     // { id: 25, name: 'Y' },
+    //     // { id: 26, name: 'Z' },
+    //     // { id: 27, name: 'A' },
+    //     // { id: 28, name: 'B' },
+    //     // { id: 29, name: 'C' },
+    //     // { id: 30, name: 'D' },
+    //     // { id: 31, name: 'E' },
+    //     // { id: 32, name: 'F' },
+    //     // { id: 33, name: 'G' },
+    //     // { id: 34, name: 'H' },
+    //     // { id: 35, name: 'I' },
+    //     // { id: 36, name: 'J' },
+    //     // { id: 37, name: 'K' },
+    //     // { id: 38, name: 'L' },
+    //     // { id: 39, name: 'M' },
+    //     // { id: 40, name: 'N' },
+    //     // { id: 41, name: 'O' },
+    //     // { id: 42, name: 'P' },
+    //     // { id: 43, name: 'Q' },
+    //     // { id: 44, name: 'R' },
+    //     // { id: 45, name: 'S' },
+    //     // { id: 46, name: 'T' },
+    //     // { id: 47, name: 'U' },
+    //     // { id: 48, name: 'V' },
+    //     // { id: 49, name: 'W' },
+    //     // { id: 50, name: 'X' },
+    // ];
 
     //create an array of messages of length 50 with random messages and numeric id and sender shoulde be true or false
     const messages = [
@@ -131,7 +131,7 @@ export default function SessionSidePanel() {
         setValue(newValue);
     };
 
-    const mode = 'work';
+    const MODE = 'work';
 
     return (
         <Box
@@ -194,7 +194,10 @@ export default function SessionSidePanel() {
                     >
                         {coders &&
                             coders.map((coder) => (
-                                <Coder key={coder.id} username={coder.name} />
+                                <Coder
+                                    key={coder.socketId}
+                                    username={coder.username}
+                                />
                             ))}
                     </Box>
                 </Box>
@@ -261,7 +264,7 @@ export default function SessionSidePanel() {
                             color: 'black',
                         }}
                     >
-                        <MessageInput {...{ inputRef, mode }} />
+                        <MessageInput inputRef={inputRef} mode={MODE} />
                     </Box>
                 </Box>
             )}

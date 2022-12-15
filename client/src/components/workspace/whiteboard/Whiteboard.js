@@ -1,31 +1,37 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 
-import Coder from '../Coder';
-import { initSocket } from '../../../socket';
 import './Whiteboard.css';
-import { notifyAction } from '../../../actions/actions';
 
-export default function Whiteboard() {
-    const dispatch = useDispatch();
+export default function Whiteboard({ canvasRef, socketRef }) {
     const params = useParams();
     const navigate = useNavigate();
-    const currentUser = useSelector((state) => state.auth);
-
-    const [canvasCurrent, setCanvasCurrent] = useState(null);
-    const [coders, setCoders] = useState(null);
-
-    const canvasRef = useRef(null);
     const colorsRef = useRef(null);
-    const logoRef = useRef(null);
-    const usersRef = useRef(null);
-    const socketRef = useRef();
+    const currentUser = useSelector((state) => state.auth);
+    const [canvasCurrent, setCanvasCurrent] = useState(null);
+
+    useEffect(() => {
+        if (localStorage.getItem(`${params.workspaceId}-drawing`)) {
+            const drawingData = localStorage.getItem(
+                `${params.workspaceId}-drawing`
+            );
+            const canvas = canvasRef.current;
+            const context = canvas.getContext('2d');
+            context.fillStyle = 'white';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            const image = new Image();
+            image.onload = function () {
+                context.drawImage(image, 0, 0);
+            };
+            image.src = drawingData;
+        }
+    }, []);
 
     useEffect(() => {
         if (!window.localStorage.getItem('dev')) {
@@ -41,77 +47,9 @@ export default function Whiteboard() {
             color: 'black',
         };
 
-        const init = async () => {
-            socketRef.current = await initSocket();
-            socketRef.current.on('connect_error', (error) =>
-                handleErrors(error)
-            );
-            socketRef.current.on('connect_failed', (error) =>
-                handleErrors(error)
-            );
-            function handleErrors(error) {
-                // eslint-disable-next-line no-console
-                console.log('socket error', error);
-                alert(
-                    'Socket connection failed, Please close the tab & try again later.'
-                );
-                // navigate('/');
-            }
-            socketRef.current.emit('join', {
-                roomId: params.boardId,
-                username: currentUser.username,
-            });
-            socketRef.current.on(
-                'joined',
-                ({ clients, username, socketId }) => {
-                    if (username !== currentUser.username) {
-                        dispatch(
-                            notifyAction(
-                                true,
-                                'success',
-                                `${username} joined the Canvas.`
-                            )
-                        );
-                    }
-                    setCoders(clients);
-                    setTimeout(() => {
-                        socketRef.current.emit('syncCanvas', {
-                            drawingData: canvas.toDataURL(),
-                            socketId,
-                        });
-                    }, 1000);
-                }
-            );
-            socketRef.current.on(
-                'drawingChange',
-                ({ drawingData, socketId }) => {
-                    if (socketId) {
-                        const canvas = canvasRef.current;
-                        const context = canvas.getContext('2d');
-                        context.fillStyle = 'white';
-                        context.fillRect(0, 0, canvas.width, canvas.height);
-                        const image = new Image();
-                        image.onload = function () {
-                            context.drawImage(image, 0, 0);
-                        };
-                        image.src = drawingData;
-                    } else {
-                        onDrawingEvent(drawingData);
-                    }
-                }
-            );
-            socketRef.current.on('disconnected', ({ socketId, username }) => {
-                dispatch(notifyAction(true, 'info', `${username} left.`));
-                setCoders((prev) => {
-                    return prev.filter(
-                        (client) => client.socketId !== socketId
-                    );
-                });
-            });
-        };
-        if (currentUser.username) {
-            // init();
-        }
+        socketRef.current.on('drawingChange', ({ drawingData }) => {
+            onDrawingEvent(drawingData);
+        });
 
         const onColorUpdate = (e) => {
             current.color = e.target.className.split(' ')[1];
@@ -141,16 +79,17 @@ export default function Whiteboard() {
 
             const w = canvas.width;
             const h = canvas.height;
+            const data = {
+                x0: x0 / w,
+                y0: y0 / h,
+                x1: x1 / w,
+                y1: y1 / h,
+                color,
+            };
 
             socketRef.current.emit('drawingChange', {
-                drawingData: {
-                    x0: x0 / w,
-                    y0: y0 / h,
-                    x1: x1 / w,
-                    y1: y1 / h,
-                    color,
-                },
-                roomId: params.boardId,
+                drawingData: data,
+                roomId: params.workspaceId,
             });
         };
 
@@ -235,13 +174,12 @@ export default function Whiteboard() {
 
         return () => {
             if (socketRef.current) {
-                socketRef.current?.disconnect();
-                socketRef.current?.off('joined');
-                socketRef.current.off('drawingChange');
-                socketRef.current?.off('connect_error');
-                socketRef.current?.off('connect_failed');
-                socketRef.current?.off('disconnected');
+                localStorage.setItem(
+                    `${params.workspaceId}-drawing`,
+                    canvas.toDataURL()
+                );
             }
+            socketRef.current.off('drawingChange');
         };
     }, [currentUser.username]);
 
@@ -260,7 +198,7 @@ export default function Whiteboard() {
         const link = document.createElement('a');
         const time = new Date();
         const imageName = time.toISOString();
-        link.download = `${params.boardId}-${imageName}.png`;
+        link.download = `${params.workspaceId}-${imageName}.png`;
         link.href = image;
         link.click();
 
@@ -332,12 +270,6 @@ export default function Whiteboard() {
                         <ExitToAppIcon />
                     </IconButton>
                 </Tooltip>
-            </div>
-            <div ref={usersRef} className='users'>
-                {coders &&
-                    coders.map((coder) => (
-                        <Coder key={coder.socketId} username={coder.username} />
-                    ))}
             </div>
         </div>
     );

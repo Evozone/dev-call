@@ -19,6 +19,7 @@ export default function WorkSpaceSidePanel({
     open,
     codeRef,
     setOpen,
+    coders,
 }) {
     return (
         <Box
@@ -58,13 +59,15 @@ export default function WorkSpaceSidePanel({
                 >
                     dev chat+
                 </Typography>
-                <Divider />
                 {selected === 'session' ? (
-                    <SessionSidePanel />
+                    <SessionSidePanel coders={coders} />
                 ) : (
-                    <CodeSidePanel
-                        {...{ lang, setLang, theme, setTheme, codeRef }}
-                    />
+                    <React.Fragment>
+                        <Divider />
+                        <CodeSidePanel
+                            {...{ lang, setLang, theme, setTheme, codeRef }}
+                        />
+                    </React.Fragment>
                 )}
                 <Tooltip title='Close Sidebar' placement='right' arrow>
                     <IconButton

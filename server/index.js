@@ -4,32 +4,41 @@ const { Server } = require('socket.io');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
+const io = new Server(server, {
+    cors: {
+        origin: ['http://localhost:3000'],
+    },
+});
 const PORT = process.env.PORT || 5000;
 
-const users = {};
+app.get('/', (req, res) => {
+    res.send('Hello! This is dev chat+ backend.');
+});
 
-function getAllConnectedClients(roomId) {
-    return Array.from(io.sockets.adapter.rooms.get(roomId) || []).map(
-        (socketId) => {
-            return {
-                socketId,
-                username: users[socketId],
-            };
-        }
-    );
+const users = {}; //users { ONKyOYBAguAinDJuAAAD( socket.id): 'itsvishal2417 socket.id'(username) }
+
+function getAllConnectedClients(roomId, namespace) {
+    return Array.from(
+        io.of(`/${namespace}`).adapter.rooms.get(roomId) || []
+    ).map((socketId) => {
+        return {
+            socketId,
+            username: users[socketId],
+        };
+    });
 }
 
-io.on('connection', (socket) => {
-    console.log('a user connected', socket.id);
-
+const workspace = io.of('/workspace');
+workspace.on('connection', (socket) => {
     socket.on('join', ({ roomId, username }) => {
         users[socket.id] = username;
+        console.log('users', users);
         socket.join(roomId);
-        // console.log('joined', roomId);
-        const clients = getAllConnectedClients(roomId);
+        console.log('user -', socket.id, 'joined room', roomId);
+        const clients = getAllConnectedClients(roomId, 'workspace');
+        console.log('clients', clients);
         clients.forEach(({ socketId }) => {
-            io.to(socketId).emit('joined', {
+            workspace.to(socketId).emit('addUser', {
                 clients,
                 username,
                 socketId: socket.id,
@@ -42,7 +51,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('syncCode', ({ code, socketId }) => {
-        io.to(socketId).emit('codeChange', { code });
+        workspace.to(socketId).emit('codeChange', { code });
     });
 
     socket.on('drawingChange', ({ drawingData, roomId }) => {
@@ -50,7 +59,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('syncCanvas', ({ drawingData, socketId }) => {
-        io.to(socketId).emit('drawingChange', { drawingData, socketId });
+        workspace.to(socketId).emit('drawingChange', { drawingData, socketId });
     });
 
     socket.on('disconnecting', () => {
@@ -63,10 +72,17 @@ io.on('connection', (socket) => {
         });
         delete users[socket.id];
         socket.leave();
-        // console.log('User left', socket.id);
+        console.log('User left', socket.id);
+        console.log('users', users);
     });
 });
 
+//add a new socket connection for voice calling
+const voiceCall = io.of('/voiceCall');
+voiceCall.on('connection', (socket) => {
+    console.log('a user connected', socket.id);
+});
+
 server.listen(PORT, () => {
-    console.log('listening on port - ', PORT);
+    console.log('Hello! This is dev chat+ backend, listening on port - ', PORT);
 });

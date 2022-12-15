@@ -33,7 +33,6 @@ import Workspaces from '@mui/icons-material/Workspaces';
 export default function ChatInterface({ mode, chat }) {
     const inputRef = useRef();
     const dispatch = useDispatch();
-
     const currentUser = useSelector((state) => state.auth);
 
     const [messages, setMessages] = useState([]);
@@ -157,11 +156,11 @@ export default function ChatInterface({ mode, chat }) {
                     pl: 2,
                     ...(mode === 'dark'
                         ? {
-                            backgroundColor: 'info.dark',
-                        }
+                              backgroundColor: 'info.dark',
+                          }
                         : {
-                            backgroundColor: 'primary.main',
-                        }),
+                              backgroundColor: 'primary.main',
+                          }),
                     position: 'sticky',
                     top: 0,
                 }}

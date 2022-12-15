@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
@@ -25,9 +27,10 @@ import BrushIcon from '@mui/icons-material/Brush';
 import WorkSpaceSidePanel from './WorkSpaceSidePanel';
 import Whiteboard from './whiteboard/Whiteboard';
 import CodeEditor from './CodeEditor';
+import { initSocket } from '../../socket';
+import { notifyAction } from '../../actions/actions';
 
 import { languageOptions } from '../../constants/languageOptions';
-import { Divider } from '@mui/material';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(() => ({
     '& .MuiToggleButtonGroup-grouped': {
@@ -55,22 +58,122 @@ const StyledToggleButtonGroup = styled(ToggleButtonGroup)(() => ({
 }));
 
 export default function WorkSpace() {
+    const SIDE_STRIP_WIDTH = 60;
+    const dispatch = useDispatch();
+    const params = useParams();
     const codeRef = useRef(null);
-    // State for keeping track of which toggle button is selected
+    const canvasRef = useRef(null);
+    const socketRef = useRef();
+    const currentUser = useSelector((state) => state.auth);
+
     const [selected, setSelected] = useState('code');
-
-    // State for keeping track of which main component is selected
     const [mainComponent, setMainComponent] = useState('code');
-
-    // State for keeping track of whether the sidebar is open or not
     const [open, setOpen] = useState(false);
-
-    const sideStripWidth = 60;
-
     const [lang, setLang] = useState(languageOptions[0]);
     const [theme, setTheme] = useState('vs-dark');
+    const [coders, setCoders] = useState([]);
 
-    // Function to handle the toggle button selection
+    useEffect(() => {
+        if (!window.localStorage.getItem('dev')) {
+            window.location.href = '/';
+        }
+
+        const init = async () => {
+            socketRef.current = await initSocket('workspace');
+            socketRef.current.on('connect_error', (error) =>
+                handleErrors(error)
+            );
+            socketRef.current.on('connect_failed', (error) =>
+                handleErrors(error)
+            );
+            function handleErrors(error) {
+                // eslint-disable-next-line no-console
+                console.log('socket error', error);
+                alert(
+                    'Socket connection failed, Please refresh the app after ~2 minutes.'
+                );
+            }
+            socketRef.current.emit('join', {
+                roomId: params.workspaceId,
+                username: currentUser.username,
+            });
+            socketRef.current.on(
+                'addUser',
+                ({ clients, username, socketId }) => {
+                    if (username !== currentUser.username) {
+                        dispatch(
+                            notifyAction(
+                                true,
+                                'success',
+                                `${username} joined the Canvas.`
+                            )
+                        );
+                    }
+                    setCoders(clients);
+                    if (username !== currentUser.username) {
+                        setTimeout(() => {
+                            socketRef.current.emit('syncCanvas', {
+                                drawingData: canvasRef?.current?.toDataURL(),
+                                socketId,
+                            });
+                            socketRef.current.emit('syncCode', {
+                                code: codeRef.current,
+                                socketId,
+                            });
+                        }, 1500);
+                    } else {
+                        socketRef.current.emit('syncCanvas', {
+                            drawingData:
+                                localStorage.getItem(
+                                    `${params.workspaceId}-drawing`
+                                ) || '',
+                            socketId,
+                        });
+                    }
+                }
+            );
+            socketRef.current.on(
+                'drawingChange',
+                ({ drawingData, socketId }) => {
+                    if (socketId) {
+                        localStorage.setItem(
+                            `${params.workspaceId}-drawing`,
+                            drawingData
+                        );
+                    }
+                }
+            );
+            socketRef.current.on('codeChange', ({ code }) => {
+                localStorage.setItem(`${params.workspaceId}-code`, code);
+            });
+            socketRef.current.on('disconnected', ({ socketId, username }) => {
+                dispatch(notifyAction(true, 'info', `${username} left.`));
+                setCoders((prev) => {
+                    return prev.filter(
+                        (client) => client.socketId !== socketId
+                    );
+                });
+            });
+        };
+
+        if (currentUser.username) {
+            init();
+        }
+
+        return () => {
+            if (socketRef.current) {
+                socketRef.current?.disconnect();
+                socketRef.current.off('drawingChange');
+                socketRef.current.off('syncCanvas');
+                socketRef.current.off('codeChange');
+                socketRef.current?.off('addUser');
+                socketRef.current?.off('connect_error');
+                socketRef.current?.off('connect_failed');
+                socketRef.current?.off('disconnected');
+            }
+        };
+    }, [currentUser.username]);
+
     const handleSelect = (event, newSelected) => {
         if (newSelected !== null) {
             setSelected(newSelected);
@@ -85,7 +188,6 @@ export default function WorkSpace() {
                 setOpen(true);
             }
         } else {
-            // If previous button was whiteboard, then don't open the sidebar
             if (selected === 'whiteboard') {
                 setOpen(false);
             } else {
@@ -94,7 +196,6 @@ export default function WorkSpace() {
         }
     };
 
-    // Function to handle the sidebar open/close
     const toggleSidebar = () => {
         setOpen(!open);
     };
@@ -102,7 +203,6 @@ export default function WorkSpace() {
     return (
         <Box sx={{ display: 'flex', height: '100vh', bgcolor: '#010101' }}>
             <CssBaseline />
-
             {/* Placed here because of z-index issues */}
             <WorkSpaceSidePanel
                 {...{
@@ -114,9 +214,9 @@ export default function WorkSpace() {
                     open,
                     codeRef,
                     setOpen,
+                    coders,
                 }}
             />
-
             {/* A side strip which controls the sidebar */}
             <Drawer
                 PaperProps={{
@@ -129,15 +229,14 @@ export default function WorkSpace() {
                 }}
                 variant='permanent'
                 sx={{
-                    width: sideStripWidth,
+                    width: SIDE_STRIP_WIDTH,
                     flexShrink: 0,
                     [`& .MuiDrawer-paper`]: {
-                        width: sideStripWidth,
+                        width: SIDE_STRIP_WIDTH,
                         boxSizing: 'border-box',
                     },
                 }}
             >
-                {/* Dev Call logo */}
                 <a
                     href='https://github.com/Evozone/dev-call'
                     target='_blank'
@@ -152,7 +251,6 @@ export default function WorkSpace() {
                         alt='logo'
                     />
                 </a>
-                {/* Toggle buttons */}
                 <StyledToggleButtonGroup
                     orientation='vertical'
                     value={selected}
@@ -193,8 +291,6 @@ export default function WorkSpace() {
                         </Tooltip>
                     </ToggleButton>
                 </StyledToggleButtonGroup>
-
-                {/* Normal buttons at the end */}
                 <Box
                     sx={{
                         display: 'flex',
@@ -229,9 +325,9 @@ export default function WorkSpace() {
                     </Tooltip>
                 </Box>
             </Drawer>
-
-            {/* Main content */}
-            {mainComponent === 'whiteboard' && <Whiteboard />}
+            {mainComponent === 'whiteboard' && (
+                <Whiteboard socketRef={socketRef} canvasRef={canvasRef} />
+            )}
             {mainComponent === 'code' && (
                 <Box
                     component='main'
@@ -246,14 +342,13 @@ export default function WorkSpace() {
                     }}
                 >
                     <CodeEditor
-                        {...{ open, lang, theme }}
+                        {...{ socketRef, open, lang, theme }}
                         onCodeChange={(code) => {
                             codeRef.current = code;
                         }}
                     />
                 </Box>
             )}
-
             {/* Currently not Draggable component for microphone, deafen, and end call buttons */}
             <Box
                 sx={{

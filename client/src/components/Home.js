@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -8,16 +8,19 @@ import Grid from '@mui/material/Grid';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import DownloadIcon from '@mui/icons-material/Download';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from 'firebase/auth';
+import { collection, onSnapshot } from 'firebase/firestore';
 
 import { notifyAction, signOutAction } from '../actions/actions';
 import { auth } from '../firebaseConfig';
 import ChatInterface from './ChatInterface';
 import TabsNav from './TabsNav';
+import { db } from '../firebaseConfig';
 
 const drawerWidth = 470;
 
@@ -25,6 +28,59 @@ export default function Home({ themeChange, mode }) {
     const dispatch = useDispatch();
     const currentUser = useSelector((state) => state.auth);
     const [chat, setChat] = useState([]);
+    const [senderid, setSenderid] = useState('');
+    const [notificationGranted, setNotificationGranted] = useState(
+        Notification.permission === 'granted'
+    );
+
+    useEffect(() => {
+        const unsub2 = onSnapshot(collection(db, 'chats'), (snapshot) => {
+            snapshot.docChanges().forEach((change) => {
+                if (change.type === 'modified') {
+                    const modifiedData = change.doc.data();
+                    const length = modifiedData.messages.length;
+                    const newMessage = modifiedData.messages[length - 1];
+                    const sid = newMessage.senderid;
+                    const senderUsername = newMessage?.senderUsername;
+                    if (
+                        sid !== currentUser.uid &&
+                        chat[1]?.userInfo?.uid !== sid
+                    ) {
+                        if (notificationGranted) {
+                            const audio = new Audio(
+                                '/assets/sounds/notification.mp3'
+                            );
+                            const notification = new Notification('Dev Chat+', {
+                                body:
+                                    'New message from ' +
+                                    (senderUsername ? senderUsername : sid),
+                                icon: '/logo192.png',
+                                tag: sid,
+                            });
+                            audio.play();
+                            notification.onclick = () => {
+                                window.focus();
+                            };
+                        } else {
+                            dispatch(
+                                notifyAction(
+                                    true,
+                                    'info',
+                                    'New message from ' +
+                                        (senderUsername ? senderUsername : sid)
+                                )
+                            );
+                        }
+                        setSenderid(sid);
+                    }
+                }
+            });
+        });
+
+        return () => {
+            unsub2();
+        };
+    }, [chat, notificationGranted]);
 
     const logOut = () => {
         const choice = window.confirm('Please click on OK to Log Out.');
@@ -49,6 +105,24 @@ export default function Home({ themeChange, mode }) {
 
     const handleInstall = () => {
         dispatch(notifyAction(true, 'info', 'Install feature coming soon...'));
+    };
+
+    const notificationPrompt = () => {
+        Notification.requestPermission().then((result) => {
+            if (result === 'granted') {
+                setNotificationGranted(true);
+                const notification = new Notification('Dev Chat+', {
+                    body: 'You will be notified like this when you receive a new message',
+                    icon: '/assets/icons/maskable_icon_x48.png',
+                });
+                const audio = new Audio('/assets/sounds/notification.mp3');
+                audio.play();
+                notification.onclick = () => {
+                    window.focus();
+                    audio.pause();
+                };
+            }
+        });
     };
 
     return (
@@ -100,6 +174,16 @@ export default function Home({ themeChange, mode }) {
                         </Typography>
                     </IconButton>
                     <Grid pr='10px' container justifyContent='flex-end'>
+                        <Tooltip title='Notifications'>
+                            <IconButton
+                                sx={{ mr: '10px' }}
+                                onClick={notificationPrompt}
+                            >
+                                <NotificationsActiveIcon
+                                    sx={{ color: 'whitesmoke' }}
+                                />
+                            </IconButton>
+                        </Tooltip>
                         <Tooltip title='Toggle Theme'>
                             <IconButton
                                 onClick={themeChange}
@@ -142,7 +226,9 @@ export default function Home({ themeChange, mode }) {
                               }),
                     }}
                 >
-                    <TabsNav mode={mode} setChat={setChat} />
+                    <TabsNav
+                        {...{ mode, chat, setChat, senderid, setSenderid }}
+                    />
                 </Box>
             </Drawer>
             {chat.length === 0 ? (

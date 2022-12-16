@@ -36,14 +36,18 @@ import {
 
 function TabPanel(props) {
     const {
+        chat,
         item,
         value,
         index,
         empty,
         loading,
+        mode,
         handleSelect,
         search,
         setChat,
+        senderid,
+        setSenderid,
         ...other
     } = props;
 
@@ -57,7 +61,15 @@ function TabPanel(props) {
         >
             {value === index && !empty && !loading && !search && (
                 <Box sx={{ p: 0 }}>
-                    <ListItem onClick={() => setChat(item)} sx={{ p: 0 }}>
+                    <ListItem
+                        onClick={() => {
+                            setChat(item);
+                            if (item[1].userInfo.uid === senderid) {
+                                setSenderid('');
+                            }
+                        }}
+                        sx={{ p: 0 }}
+                    >
                         <ListItemButton sx={{ px: 2, height: '70px' }}>
                             <Avatar
                                 alt={item[1].userInfo.username
@@ -90,6 +102,45 @@ function TabPanel(props) {
                                 </Typography>
                             </Box>
                             {/* <Typography>{item[1].date.seconds}</Typography> */}
+                            {item[1].userInfo.uid === senderid &&
+                                chat[1]?.userInfo?.uid !== senderid && (
+                                    <Box
+                                        sx={{
+                                            width: '15px',
+                                            height: '15px',
+                                            borderRadius: '50%',
+                                            backgroundColor: '#25d366',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            position: 'absolute',
+                                            right: '20px',
+                                            ...(mode === 'dark'
+                                                ? { color: 'black' }
+                                                : { color: 'white' }),
+                                            '&::after': {
+                                                width: '100%',
+                                                height: '100%',
+                                                borderRadius: '50%',
+                                                animation:
+                                                    'ripple 1.2s infinite ease-in-out',
+                                                border: '1px solid #25d366',
+                                                content: '""',
+                                            },
+                                            content: '""',
+                                            '@keyframes ripple': {
+                                                '0%': {
+                                                    transform: 'scale(.8)',
+                                                    opacity: 1,
+                                                },
+                                                '100%': {
+                                                    transform: 'scale(2.4)',
+                                                    opacity: 0,
+                                                },
+                                            },
+                                        }}
+                                    ></Box>
+                                )}
                         </ListItemButton>
                     </ListItem>
                     <Divider />
@@ -156,7 +207,13 @@ function a11yProps(index) {
     };
 }
 
-export default function TabsNav({ mode, setChat }) {
+export default function TabsNav({
+    mode,
+    chat,
+    setChat,
+    senderid,
+    setSenderid,
+}) {
     const dispatch = useDispatch();
     const [value, setValue] = useState(0);
     const [searchResults, setSearchResults] = useState(null);
@@ -350,11 +407,15 @@ export default function TabsNav({ mode, setChat }) {
                         .map((item) => {
                             return (
                                 <TabPanel
+                                    chat={chat}
+                                    mode={mode}
                                     item={item}
                                     value={value}
                                     index={0}
                                     key={item[0]}
                                     setChat={setChat}
+                                    senderid={senderid}
+                                    setSenderid={setSenderid}
                                 />
                             );
                         })}

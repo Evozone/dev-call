@@ -11,6 +11,7 @@ import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     doc,
+    getDoc,
     updateDoc,
     arrayUnion,
     Timestamp,
@@ -33,20 +34,24 @@ import Workspaces from '@mui/icons-material/Workspaces';
 export default function ChatInterface({ mode, chat }) {
     const inputRef = useRef();
     const dispatch = useDispatch();
+
     const currentUser = useSelector((state) => state.auth);
 
     const [messages, setMessages] = useState([]);
 
     useEffect(() => {
-        const getUserMesaages = () => {
-            const unsub = onSnapshot(doc(db, 'chats', chat[0]), (doc) => {
-                doc.exists() && setMessages(doc.data().messages);
-            });
-            return () => {
-                unsub();
-            };
+        const unSub = onSnapshot(doc(db, 'chats', chat[0]), (doc) => {
+            if (doc.data()) {
+                {
+                    if (chat[0].includes(chat[1].userInfo.uid)) {
+                        setMessages(doc.data().messages);
+                    }
+                }
+            }
+        });
+        return () => {
+            unSub();
         };
-        chat.length > 0 && getUserMesaages();
     }, [chat]);
 
     const handleSendMessage = async (text, img) => {
@@ -59,6 +64,7 @@ export default function ChatInterface({ mode, chat }) {
                         id: uuid(),
                         text: lastText,
                         senderid: currentUser.uid,
+                        senderUsername: currentUser.username,
                         date: Timestamp.now(),
                     }),
                 });
@@ -165,20 +171,17 @@ export default function ChatInterface({ mode, chat }) {
                     top: 0,
                 }}
             >
-                {chat.length > 0 ? (
-                    <Avatar
-                        alt={chat[1].userInfo.username.charAt(0).toUpperCase()}
-                        src={chat[1].userInfo.photoURL}
-                        sx={{ width: 50, height: 50, mr: 2 }}
-                    />
-                ) : (
-                    <Avatar sx={{ width: 50, height: 50, mr: 2 }}>i</Avatar>
-                )}
+                <Avatar
+                    alt={chat[1].userInfo.username.charAt(0).toUpperCase()}
+                    src={chat[1].userInfo.photoURL}
+                    sx={{ width: 50, height: 50, mr: 2 }}
+                />
+
                 <Typography
                     sx={{ color: 'whitesmoke', fontWeight: '400' }}
                     variant='h6'
                 >
-                    {chat.length > 0 ? chat[1].userInfo.username : 'Chat'}
+                    {chat[1].userInfo.username}
                 </Typography>
                 <Grid pr='20px' container justifyContent='flex-end'>
                     <Tooltip title='Workspace'>

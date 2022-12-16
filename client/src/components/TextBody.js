@@ -87,19 +87,19 @@ export default function TextBody({ message, inputRef }) {
                     alignItems: 'end',
                     ...(currentUser.uid === message.senderid
                         ? {
-                            alignSelf: 'flex-end',
-                            borderBottomLeftRadius: '20px',
-                            borderBottomRightRadius: '1px',
-                            backgroundColor: '#25D366',
-                        }
+                              alignSelf: 'flex-end',
+                              borderBottomLeftRadius: '20px',
+                              borderBottomRightRadius: '1px',
+                              backgroundColor: '#25D366',
+                          }
                         : { backgroundColor: '#34B7F1' }),
                     ...(isImage
                         ? {
-                            flexDirection: 'column',
-                        }
+                              flexDirection: 'column',
+                          }
                         : {
-                            flexDirection: 'row',
-                        }),
+                              flexDirection: 'row',
+                          }),
                 }}
             >
                 {imageModal && (

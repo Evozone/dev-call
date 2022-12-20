@@ -1,15 +1,24 @@
 import React from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import createTheme from '@mui/material/styles/createTheme';
-
+import Link from '@mui/material/Link';
 import GoogleOneTapLogin from './components/GoogleOneTapLogIn';
 
 import { customGlobalScrollBars } from './components/CustomGlobalCSS';
 import { TypewriterCycle } from './components/TypewriterCycle';
+
+import ScrollToColor from './components/ScrollToColor';
+
+// Create a list of all the sections on the page
+const sections = [
+    { title: 'Features', url: '#features' },
+    { title: 'Contact', url: '#contact' },
+];
 
 const LandingPage = () => {
     const theme = createTheme();
@@ -24,6 +33,68 @@ const LandingPage = () => {
                 {customGlobalScrollBars('teal')}
                 <CssBaseline />
 
+                {/* Navigation Bar */}
+                <ScrollToColor>
+                    <AppBar
+                        position="static"
+                        sx={{
+                            position: 'fixed',
+                            background: 'transparent',
+                            boxShadow: 'none',
+                            color: 'white',
+                            zIndex: 3,
+                        }}
+                    >
+                        <Toolbar
+                            sx={{
+                                display: 'flex',
+                                justifyContent: 'flex-end',
+                                fontSize: '2rem',
+                            }}
+                        >
+                            <Typography
+                                variant="h6"
+                                component="div"
+                                sx={{
+                                    fontFamily: 'Work Sans', fontWeight: '400', padding: '0.5rem',
+                                }}>
+                                <Link href="#hero" underline="none" color="inherit"
+                                    sx={{
+                                        margin: '1rem',
+                                        color: '#03256C',
+                                        '&:hover': {
+                                            fontWeight: 'bold',
+                                            transition: 'all 0.2s ease-in-out',
+                                        }
+                                    }}>
+                                    Login now !
+                                </Link>
+                            </Typography>
+                            {sections.map((section) => (
+                                <Typography
+                                    key={section.title}
+                                    variant="h6"
+                                    component="div"
+                                    sx={{
+                                        fontFamily: 'Work Sans', fontWeight: '400', padding: '0.5rem',
+                                    }}>
+                                    <Link href={section.url} underline="none" color="inherit"
+                                        sx={{
+                                            margin: '1rem',
+                                            color: 'whitesmoke',
+                                            '&:hover': {
+                                                color: '#03256C',
+                                                transition: 'all 0.2s ease-in-out',
+                                            }
+                                        }}>
+                                        {section.title}
+                                    </Link>
+                                </Typography>
+                            ))}
+                        </Toolbar>
+                    </AppBar>
+                </ScrollToColor>
+
                 {/* Section : Hero */}
                 <Box
                     id='hero'
@@ -31,7 +102,7 @@ const LandingPage = () => {
                         boxSizing: 'border-box',
                         width: '100%',
                         minHeight: '100vh',
-                        padding: '3rem',
+                        padding: '4rem',
                         background:
                             'linear-gradient(116.82deg, #0288d1 0%, #1976d2 100%)',
                         display: 'flex',
@@ -43,13 +114,17 @@ const LandingPage = () => {
                     {/* LogoMark */}
                     <Box
                         sx={{
-                            flex: '0 0 500px',
+                            flex: '0 0 50%',
+                            // If windowsize is less than 600px, change flex to 0 0 100%
+                            '@media (max-width:600px)': {
+                                flex: '0 0 100%',
+                                margin: '2rem 0',
+                            },
                             height: '100%',
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
                             alignItems: 'left',
-                            margin: '2rem',
                         }}
                     >
                         <Box>
@@ -99,13 +174,16 @@ const LandingPage = () => {
                     {/* Description */}
                     <Box
                         sx={{
-                            flex: '1 0 500px',
+                            flex: '0 0 50%',
+                            // If windowsize is less than 600px, change flex to 0 0 100%
+                            '@media (max-width:600px)': {
+                                flex: '0 0 100%',
+                            },
                             height: '100%',
                             display: 'flex',
                             flexDirection: 'column',
                             justifyContent: 'center',
                             alignItems: 'left',
-                            margin: '2rem',
                         }}
                     >
                         <Typography
@@ -143,6 +221,10 @@ const LandingPage = () => {
                                 p: 2,
                                 mb: 2,
                                 mr: 5,
+                                '@media (max-width:600px)': {
+                                    mr: 0,
+                                },
+
                                 background: ' rgba(255, 255, 255, 0.46)',
                                 borderRadius: '6px',
                                 boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
@@ -157,6 +239,59 @@ const LandingPage = () => {
                         </Typography>
                         <GoogleOneTapLogin />
                     </Box>
+
+
+                </Box>
+
+                {/* Section : Features */}
+                <Box
+                    id="features"
+                    sx={{
+                        width: '100%',
+                        height: '100vh',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        color: '#0288d1',
+                        background: 'whitesmoke',
+                    }}
+                >
+                    <Typography
+                        variant="h2"
+                        component="div"
+                        sx={{
+                            fontFamily: 'Work Sans', fontWeight: '400',
+                        }}
+                    >
+                        Features
+                    </Typography>
+                </Box>
+
+                {/* Section : Contact and Footer */}
+                <Box
+                    id="contact"
+                    sx={{
+                        width: '100%',
+                        height: 'auto',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        padding: '2rem 0',
+                        background: '#0288d1',
+                        color: 'whitesmoke',
+                    }}
+                >
+                    <Typography
+                        variant="h2"
+                        component="div"
+                        sx={{
+                            fontFamily: 'Work Sans', fontWeight: '400',
+                        }}
+                    >
+                        Contact
+                    </Typography>
                 </Box>
             </Box>
         </ThemeProvider>

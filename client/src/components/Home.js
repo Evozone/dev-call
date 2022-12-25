@@ -3,15 +3,24 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
+
 import Avatar from '@mui/material/Avatar';
-import Grid from '@mui/material/Grid';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
+
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DownloadIcon from '@mui/icons-material/Download';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from 'firebase/auth';
 import { collection, onSnapshot } from 'firebase/firestore';
@@ -32,6 +41,7 @@ export default function Home({ themeChange, mode }) {
     const [notificationGranted, setNotificationGranted] = useState(
         Notification.permission === 'granted'
     );
+    const [anchorEl, setAnchorEl] = useState(null);
 
     useEffect(() => {
         const unsub2 = onSnapshot(collection(db, 'chats'), (snapshot) => {
@@ -67,7 +77,7 @@ export default function Home({ themeChange, mode }) {
                                     true,
                                     'info',
                                     'New message from ' +
-                                        (senderUsername ? senderUsername : sid)
+                                    (senderUsername ? senderUsername : sid)
                                 )
                             );
                         }
@@ -125,6 +135,15 @@ export default function Home({ themeChange, mode }) {
         });
     };
 
+    const handleMenuClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setAnchorEl(null);
+    };
+
+
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
@@ -146,15 +165,16 @@ export default function Home({ themeChange, mode }) {
                     sx={{
                         height: '75px',
                         display: 'flex',
+                        justifyContent: 'space-between',
                         alignItems: 'center',
                         pl: 1,
                         ...(mode === 'dark'
                             ? {
-                                  backgroundColor: 'info.dark',
-                              }
+                                backgroundColor: 'info.dark',
+                            }
                             : {
-                                  backgroundColor: 'primary.main',
-                              }),
+                                backgroundColor: 'primary.main',
+                            }),
                         borderRight: '1px solid',
                         borderColor: 'primary.dark',
                     }}
@@ -173,57 +193,83 @@ export default function Home({ themeChange, mode }) {
                             {currentUser.username}
                         </Typography>
                     </IconButton>
-                    <Grid pr='10px' container justifyContent='flex-end'>
-                        <Tooltip title='Notifications'>
-                            <IconButton
-                                sx={{ mr: '10px' }}
-                                onClick={notificationPrompt}
-                            >
-                                <NotificationsActiveIcon
-                                    sx={{ color: 'whitesmoke' }}
-                                />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title='Toggle Theme'>
-                            <IconButton
-                                onClick={themeChange}
-                                sx={{ mr: '10px' }}
-                            >
-                                {mode === 'dark' ? (
-                                    <LightModeIcon />
-                                ) : (
-                                    <DarkModeIcon
-                                        sx={{ color: 'whitesmoke' }}
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            mr: 1,
+                        }}
+                    >
+                        <IconButton onClick={handleMenuClick}>
+                            <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleMenuClose}
+                        >
+                            <MenuItem onClick={notificationPrompt}>
+                                <ListItemIcon>
+                                    <NotificationsActiveIcon
+                                        sx={{ color: mode === 'dark' ? 'whitesmoke' : 'primary.dark' }}
                                     />
-                                )}
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title='Install App '>
-                            <IconButton
-                                onClick={handleInstall}
-                                sx={{ mr: '10px' }}
-                            >
-                                <DownloadIcon sx={{ color: 'whitesmoke' }} />
-                            </IconButton>
-                        </Tooltip>
+                                </ListItemIcon>
+                                <ListItemText primary="Notifications" />
+                            </MenuItem>
+                            <MenuItem onClick={themeChange}>
+                                <ListItemIcon>
+                                    {mode === 'dark' ? (
+                                        <LightModeIcon
+                                            sx={{ color: mode === 'dark' ? 'whitesmoke' : 'primary.dark' }}
+                                        />
+                                    ) : (
+                                        <DarkModeIcon
+                                            sx={{ color: mode === 'dark' ? 'whitesmoke' : 'primary.dark' }}
+                                        />
+                                    )}
+                                </ListItemIcon>
+                                <ListItemText primary="Toggle Theme" />
+                            </MenuItem>
+                            <MenuItem onClick={handleInstall}>
+                                <ListItemIcon>
+                                    <DownloadIcon
+                                        sx={{ color: mode === 'dark' ? 'whitesmoke' : 'primary.dark' }}
+                                    />
+                                </ListItemIcon>
+                                <ListItemText primary="Install App" />
+                            </MenuItem>
+                        </Menu>
+                        <Divider
+                            orientation='vertical'
+                            sx={{
+                                backgroundColor: mode === 'dark' ? 'whitesmoke' : 'primary.dark',
+                                opacity: 0.5,
+                                height: '40px',
+                                width: '1px',
+                                my: 1,
+                                mr: 0.5
+                            }}
+                        />
                         <Tooltip title='Logout'>
                             <IconButton onClick={logOut}>
                                 <LogoutIcon sx={{ color: 'lightsteelblue' }} />
                             </IconButton>
                         </Tooltip>
-                    </Grid>
+                    </Box>
                 </Box>
                 <Box
                     sx={{
                         height: 'calc(100% - 75px)',
                         ...(mode === 'dark'
                             ? {
-                                  borderRight:
-                                      '1px solid rgba(255, 255, 255, 0.12)',
-                              }
+                                borderRight:
+                                    '1px solid rgba(255, 255, 255, 0.12)',
+                            }
                             : {
-                                  borderRight: '1px solid rgba(0, 0, 0, 0.12)',
-                              }),
+                                borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+                            }),
                     }}
                 >
                     <TabsNav

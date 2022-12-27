@@ -1,26 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
+
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import createTheme from '@mui/material/styles/createTheme';
+
 import Link from '@mui/material/Link';
 import IconButton from '@mui/material/IconButton';
-import GoogleOneTapLogin from './components/GoogleOneTapLogIn';
+import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
 
+import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import EmailIcon from '@mui/icons-material/Email';
 
 import { customGlobalScrollBars } from './components/CustomGlobalCSS';
-import { TypewriterCycle } from './components/TypewriterCycle';
+import { smoothScrolling } from './components/CustomGlobalCSS';
+import TypewriterCycle from './components/TypewriterCycle';
 import FeatureCard from './components/FeatureCard';
+import GoogleOneTapLogin from './components/GoogleOneTapLogIn';
 
 import ScrollToColor from './components/ScrollToColor';
 
 const LandingPage = () => {
     const theme = createTheme();
+
+    // A variable to track components to show/hide on scroll
+    const [scrollComponent, setScrollComponent] = useState('none');
+
+    useEffect(() => {
+        // Add a scroll event listener to the window
+        window.addEventListener('scroll', () => {
+            // If the window is scrolled down more than 100px, show the scroll to top button
+            if (window.scrollY > 50) {
+                setScrollComponent('block');
+            } else {
+                setScrollComponent('none');
+            }
+        });
+    }, []);
 
     // Create a list of all the sections on the page
     const sections = [
@@ -56,8 +79,34 @@ const LandingPage = () => {
                 }}
             >
                 {customGlobalScrollBars('teal')}
+                {smoothScrolling()}
                 <CssBaseline />
 
+                {/* Back to top button */}
+                <Tooltip
+                    title="Back to top"
+                    placement="left"
+                    arrow
+                >
+                    <IconButton
+                        sx={{
+                            display: scrollComponent === 'block' ? 'flex' : 'none',
+                            position: 'fixed',
+                            bottom: '1rem',
+                            right: '1rem',
+                            zIndex: 3,
+                            background: '#314469',
+                            color: 'white',
+                            '&:hover': {
+                                background: '#03256C',
+                                transition: 'all 0.2s ease-in-out',
+                            }
+                        }}
+                        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                    >
+                        <ArrowCircleUpIcon fontSize="large" />
+                    </IconButton>
+                </Tooltip>
                 {/* Navigation Bar */}
                 <ScrollToColor>
                     <AppBar
@@ -73,49 +122,69 @@ const LandingPage = () => {
                         <Toolbar
                             sx={{
                                 display: 'flex',
-                                justifyContent: 'flex-end',
+                                justifyContent: 'space-between',
                                 fontSize: '2rem',
                             }}
                         >
-                            <Typography
-                                variant="h6"
-                                component="div"
+                            <Box>
+                                {/* Only show the logo when the user is not at the top of the page */}
+                                <img
+                                    style={{
+                                        height: '40px',
+                                        margin: '10px auto 10px auto',
+                                        display: scrollComponent === 'block' ? 'block' : 'none',
+                                    }}
+                                    src='/assets/landing-logo.svg'
+                                    alt='logo'
+                                />
+                            </Box>
+                            <Box
                                 sx={{
-                                    fontFamily: 'Work Sans', fontWeight: '400', padding: '0.5rem',
-                                }}>
-                                <Link href="#hero" underline="none" color="inherit"
-                                    sx={{
-                                        margin: '1rem',
-                                        color: '#03256C',
-                                        '&:hover': {
-                                            fontWeight: 'bold',
-                                            transition: 'all 0.2s ease-in-out',
-                                        }
-                                    }}>
-                                    Login now !
-                                </Link>
-                            </Typography>
-                            {sections.map((section) => (
+                                    display: 'flex',
+                                    justifyContent: 'flex-end',
+                                    fontSize: '2rem',
+                                }}
+                            >
                                 <Typography
-                                    key={section.title}
                                     variant="h6"
                                     component="div"
                                     sx={{
                                         fontFamily: 'Work Sans', fontWeight: '400', padding: '0.5rem',
                                     }}>
-                                    <Link href={section.url} underline="none" color="inherit"
+                                    <Link href="#hero" underline="none" color="inherit"
                                         sx={{
                                             margin: '1rem',
-                                            color: 'whitesmoke',
+                                            color: '#03256C',
                                             '&:hover': {
-                                                color: '#03256C',
+                                                fontWeight: 'bold',
                                                 transition: 'all 0.2s ease-in-out',
                                             }
                                         }}>
-                                        {section.title}
+                                        Login now !
                                     </Link>
                                 </Typography>
-                            ))}
+                                {sections.map((section) => (
+                                    <Typography
+                                        key={section.title}
+                                        variant="h6"
+                                        component="div"
+                                        sx={{
+                                            fontFamily: 'Work Sans', fontWeight: '400', padding: '0.5rem',
+                                        }}>
+                                        <Link href={section.url} underline="none" color="inherit"
+                                            sx={{
+                                                margin: '1rem',
+                                                color: 'whitesmoke',
+                                                '&:hover': {
+                                                    color: '#03256C',
+                                                    transition: 'all 0.2s ease-in-out',
+                                                }
+                                            }}>
+                                            {section.title}
+                                        </Link>
+                                    </Typography>
+                                ))}
+                            </Box>
                         </Toolbar>
                     </AppBar>
                 </ScrollToColor>
@@ -141,7 +210,7 @@ const LandingPage = () => {
                         sx={{
                             flex: '0 0 50%',
                             // If windowsize is less than 600px, change flex to 0 0 100%
-                            '@media (max-width:600px)': {
+                            '@media (max-width:800px)': {
                                 flex: '0 0 100%',
                                 margin: '2rem 0',
                             },
@@ -201,7 +270,7 @@ const LandingPage = () => {
                         sx={{
                             flex: '0 0 50%',
                             // If windowsize is less than 600px, change flex to 0 0 100%
-                            '@media (max-width:600px)': {
+                            '@media (max-width:800px)': {
                                 flex: '0 0 100%',
                             },
                             height: '100%',
@@ -246,7 +315,7 @@ const LandingPage = () => {
                                 p: 2,
                                 mb: 2,
                                 mr: 5,
-                                '@media (max-width:600px)': {
+                                '@media (max-width:800px)': {
                                     mr: 0,
                                 },
 
@@ -302,22 +371,131 @@ const LandingPage = () => {
                         height: 'auto',
                         display: 'flex',
                         flexDirection: 'column',
-                        padding: '2rem 0',
+                        padding: '2rem',
                         background: 'linear-gradient(116.82deg, #0288d1 0%, #1976d2 100%)',
                         color: 'whitesmoke',
                     }}
                 >
+                    {/* Feedback and Repository link */}
                     <Box
                         sx={{
-                            width: '90%',
+                            width: '100%',
+                            position: 'relative',
+                            display: 'flex',
+                            flexDirection: 'row',
+                            justifyContent: 'space-around',
+                            alignItems: 'center',
+                            background: '#001126ee',
+                            borderRadius: 3,
+                            padding: '1rem',
+                            margin: '1rem auto',
+                            '@media (max-width:800px)': {
+                                flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            },
+                        }}
+                    >
+                        {/* Floating Faded 'Contact' as a word */}
+                        <Typography
+                            variant='h1'
+                            component='div'
+                            sx={{
+                                fontFamily: 'Work Sans',
+                                fontWeight: '700',
+                                fontSize: '5rem',
+                                color: 'rgba(127, 127, 127, 0.1)',
+                                position: 'absolute',
+                                top: '0',
+                                left: '2rem',
+                            }}
+                        >
+                            CONTACT
+                        </Typography>
+                        {/* Prompt */}
+                        <Typography
+                            variant='h6'
+                            component='div'
+                            sx={{
+                                fontFamily: 'Work Sans',
+                                fontWeight: '400',
+                                margin: '1rem',
+                            }}
+                        >
+                            Want to report a bug or just wanna have a chat?
+                            <br />
+                            Our inbox is always open, feel free to drop a text
+                            <br />
+                            on any of the platforms below.
+
+                        </Typography>
+                        {/* Feedback form button */}
+                        <Button
+                            variant='contained'
+                            href='https://forms.gle/u1H8u2amoyyQrFp98'
+                            target='_blank'
+                            sx={{
+                                backgroundColor: '#314469',
+                                color: '#f5f5f5',
+                                margin: '1rem',
+                                '&:hover': {
+                                    backgroundColor: '#49659C',
+                                },
+                                textTransform: 'none',
+                            }}
+                        >
+                            <Typography
+                                variant='h6'
+                                component='div'
+                                sx={{
+                                    fontFamily: 'Work Sans',
+                                    fontWeight: '400',
+                                    fontSize: 'rem',
+                                }}
+                            >
+                                Feedback Form
+                            </Typography>
+                        </Button>
+                        {/* Github Repository button */}
+                        <Button
+                            variant='contained'
+                            href='https://github.com/Evozone/dev-call'
+                            target='_blank'
+                            sx={{
+                                backgroundColor: '#314469',
+                                color: '#f5f5f5',
+                                margin: '1rem',
+                                '&:hover': {
+                                    backgroundColor: '#49659C',
+                                },
+                                textTransform: 'none',
+                            }}
+                        >
+                            <Typography
+                                variant='h6'
+                                component='div'
+                                sx={{
+                                    fontFamily: 'Work Sans',
+                                    fontWeight: '400',
+                                    fontSize: 'rem',
+                                }}
+                            >
+                                Github Repository
+                            </Typography>
+                        </Button>
+                    </Box>
+
+                    {/* Details of creators */}
+                    <Box
+                        sx={{
+                            width: '100%',
                             height: 'auto',
                             display: 'flex',
                             flexDirection: 'row',
-                            justifyContent: 'center',
+                            justifyContent: 'space-between',
                             alignItems: 'center',
                             margin: '0 auto',
-                            pb: '1rem',
-                            '@media (max-width:600px)': {
+                            '@media (max-width:800px)': {
                                 flexDirection: 'column',
                             },
                         }}
@@ -325,218 +503,207 @@ const LandingPage = () => {
                         {/* For Person 1 */}
                         <Box
                             sx={{
-                                width: '50%',
-                                height: 'auto',
+                                width: '49%',
                                 display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                margin: '0 auto',
-                                '@media (max-width:600px)': {
-                                    width: '100%',
-                                },
-                            }}
-                        >
-                            {/* Box with 90% size of parent, rounded corners */}
-                            <Box
-                                sx={{
-                                    width: '90%',
-                                    height: '90%',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    justifyContent: 'flex-start',
-                                    alignItems: 'center',
-                                    background: '#001126ee',
-                                    borderRadius: 3,
-                                    padding: '1rem',
-                                }}
-                            >
-                                <Typography
-                                    variant='h6'
-                                    component='div'
-                                    sx={{
-                                        fontFamily: 'Work Sans',
-                                        fontWeight: '400',
-                                        margin: '0 1rem',
-                                    }}
-                                >
-                                    Vishal Shinde
-                                </Typography>
-                                <IconButton
-                                    href="https://github.com/your-github-username"
-                                    target="_blank"
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        color: 'white',
-                                        fontSize: '3rem',
-                                        margin: '0 0.5rem',
-                                        transition: 'all 0.2s ease-in-out',
-                                        '&:hover': {
-                                            transform: 'scale(1.2)',
-                                        },
-                                    }}
-                                >
-                                    <GitHubIcon fontSize="large" />
-                                </IconButton>
-                                <IconButton
-                                    href="https://linkedin.com/in/your-linkedin-username"
-                                    target="_blank"
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        color: 'white',
-                                        fontSize: '3rem',
-                                        margin: '0 0.5rem',
-                                        transition: 'all 0.2s ease-in-out',
-                                        '&:hover': {
-                                            transform: 'scale(1.2)',
-                                        },
-                                    }}
-                                >
-                                    <LinkedInIcon fontSize="large" />
-                                </IconButton>
-
-                            </Box>
-                        </Box>
-                        {/* For Person 2 */}
-                        <Box
-                            sx={{
-                                width: '50%',
-                                height: 'auto',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                margin: '0 auto',
-                                '@media (max-width:600px)': {
-                                    width: '100%',
-                                },
-                            }}
-                        >
-                            {/* Box with 90% size of parent, rounded corners */}
-                            <Box
-                                sx={{
-                                    width: '90%',
-                                    height: '90%',
-                                    display: 'flex',
-                                    flexDirection: 'row',
-                                    justifyContent: 'flex-start',
-                                    alignItems: 'center',
-                                    background: '#001126ee',
-                                    borderRadius: 3,
-                                    padding: '1rem',
-                                }}
-                            >
-                                <Typography
-                                    variant='h6'
-                                    component='div'
-                                    sx={{
-                                        fontFamily: 'Work Sans',
-                                        fontWeight: '400',
-                                        margin: '0 1rem',
-                                    }}
-                                >
-                                    Bhargav Modak
-                                </Typography>
-                                <IconButton
-                                    href="https://github.com/your-github-username"
-                                    target="_blank"
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        color: 'white',
-                                        fontSize: '3rem',
-                                        margin: '0 0.5rem',
-                                        transition: 'all 0.2s ease-in-out',
-                                        '&:hover': {
-                                            transform: 'scale(1.2)',
-                                        },
-                                    }}
-                                >
-                                    <GitHubIcon fontSize="large" />
-                                </IconButton>
-                                <IconButton
-                                    href="https://linkedin.com/in/your-linkedin-username"
-                                    target="_blank"
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        color: 'white',
-                                        fontSize: '3rem',
-                                        margin: '0 0.5rem',
-                                        transition: 'all 0.2s ease-in-out',
-                                        '&:hover': {
-                                            transform: 'scale(1.2)',
-                                        },
-                                    }}
-                                >
-                                    <LinkedInIcon fontSize="large" />
-                                </IconButton>
-
-                            </Box>
-                        </Box>
-                    </Box>
-
-
-                    <Box
-                        sx={{
-                            width: '90%',
-                            padding: '0 2rem',
-                            height: 'auto',
-                            margin: '0 auto',
-                        }}
-                    >
-                        {/* Box with 90% size of parent, rounded corners */}
-                        <Box
-                            sx={{
-                                width: '100%',
-                                height: '90%',
-                                display: 'flex',
-                                flexDirection: 'row',
+                                flexFlow: 'row wrap',
                                 justifyContent: 'flex-start',
                                 alignItems: 'center',
                                 background: '#001126ee',
                                 borderRadius: 3,
                                 padding: '1rem',
+                                '@media (max-width:800px)': {
+                                    width: '100%',
+                                },
                             }}
                         >
-                            {/* Plug to repository */}
                             <Typography
-                                variant='h5'
+                                variant='h6'
                                 component='div'
                                 sx={{
                                     fontFamily: 'Work Sans',
                                     fontWeight: '400',
                                     margin: '0 1rem',
+                                }}
+                            >
+                                Vishal Shinde
+                            </Typography>
+                            <IconButton
+                                href="https://github.com/vishal-codes"
+                                target="_blank"
+                                sx={{
                                     display: 'flex',
                                     alignItems: 'center',
                                     justifyContent: 'center',
+                                    color: 'white',
+                                    fontSize: '3rem',
+                                    margin: '0 0.5rem',
+                                    transition: 'all 0.2s ease-in-out',
+                                    '&:hover': {
+                                        transform: 'scale(1.2)',
+                                    },
                                 }}
                             >
                                 <GitHubIcon fontSize="large" />
-                                &nbsp;
-                                <Link
-                                    href="https://github.com/Evozone/dev-call"
-                                    target="_blank"
-                                    sx={{
-                                        color: 'white',
-                                        textDecoration: 'none',
-                                        '&:hover': {
-                                            textDecoration: 'underline',
-                                        },
-                                    }}
-                                >
-                                    Check out the repository if you want to contribute
-                                </Link>
+                            </IconButton>
+                            <IconButton
+                                href="https://www.linkedin.com/in/vishal-shinde-/"
+                                target="_blank"
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: 'white',
+                                    fontSize: '3rem',
+                                    margin: '0 0.5rem',
+                                    transition: 'all 0.2s ease-in-out',
+                                    '&:hover': {
+                                        transform: 'scale(1.2)',
+                                    },
+                                }}
+                            >
+                                <LinkedInIcon fontSize="large" />
+                            </IconButton>
+                            <IconButton
+                                href="https://twitter.com/vishaltwts"
+                                target="_blank"
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: 'white',
+                                    fontSize: '3rem',
+                                    margin: '0 0.5rem',
+                                    transition: 'all 0.2s ease-in-out',
+                                    '&:hover': {
+                                        transform: 'scale(1.2)',
+                                    },
+                                }}
+                            >
+                                <TwitterIcon fontSize="large" />
+                            </IconButton>
+                            <IconButton
+                                href="mailto:itsvishal2417@gmail.com"
+                                target="_blank"
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: 'white',
+                                    fontSize: '3rem',
+                                    margin: '0 0.5rem',
+                                    transition: 'all 0.2s ease-in-out',
+                                    '&:hover': {
+                                        transform: 'scale(1.2)',
+                                    },
+                                }}
+                            >
+                                <EmailIcon fontSize="large" />
+                            </IconButton>
+                        </Box>
+                        {/* For Person 2 */}
+                        <Box
+                            sx={{
+                                width: '49%',
+                                display: 'flex',
+                                flexFlow: 'row wrap',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                                background: '#001126ee',
+                                borderRadius: 3,
+                                padding: '1rem',
+                                '@media (max-width:800px)': {
+                                    marginTop: '1rem',
+                                    width: '100%',
+                                },
+                            }}
+                        >
+                            <Typography
+                                variant='h6'
+                                component='div'
+                                sx={{
+                                    fontFamily: 'Work Sans',
+                                    fontWeight: '400',
+                                    margin: '0 1rem',
+                                }}
+                            >
+                                Bhargav Modak
                             </Typography>
-
+                            <IconButton
+                                href="https://github.com/TheBrahmnicBoy"
+                                target="_blank"
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: 'white',
+                                    fontSize: '3rem',
+                                    margin: '0 0.5rem',
+                                    transition: 'all 0.2s ease-in-out',
+                                    '&:hover': {
+                                        transform: 'scale(1.2)',
+                                    },
+                                }}
+                            >
+                                <GitHubIcon fontSize="large" />
+                            </IconButton>
+                            <IconButton
+                                href="https://www.linkedin.com/in/bhargavmodak/"
+                                target="_blank"
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: 'white',
+                                    fontSize: '3rem',
+                                    margin: '0 0.5rem',
+                                    transition: 'all 0.2s ease-in-out',
+                                    '&:hover': {
+                                        transform: 'scale(1.2)',
+                                    },
+                                }}
+                            >
+                                <LinkedInIcon fontSize="large" />
+                            </IconButton>
+                            <IconButton
+                                href="https://twitter.com/TheBrahmnicBoy"
+                                target="_blank"
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: 'white',
+                                    fontSize: '3rem',
+                                    margin: '0 0.5rem',
+                                    transition: 'all 0.2s ease-in-out',
+                                    '&:hover': {
+                                        transform: 'scale(1.2)',
+                                    },
+                                }}
+                            >
+                                <TwitterIcon fontSize="large" />
+                            </IconButton>
+                            <IconButton
+                                href="mailto:bhargav0modak@gmail.com"
+                                target="_blank"
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: 'white',
+                                    fontSize: '3rem',
+                                    margin: '0 0.5rem',
+                                    transition: 'all 0.2s ease-in-out',
+                                    '&:hover': {
+                                        transform: 'scale(1.2)',
+                                    },
+                                }}
+                            >
+                                <EmailIcon fontSize="large" />
+                            </IconButton>
                         </Box>
                     </Box>
+
+
                 </Box>
 
             </Box>

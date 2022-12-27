@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { blinkingKeyboardCursor } from './CustomGlobalCSS';
 
-export const TypewriterCycle = ({ strings, speed }) => {
+const TypewriterCycle = ({ strings, speed }) => {
 
     const [index, setIndex] = useState(0);
     const [currentString, setCurrentString] = useState('');
@@ -60,3 +60,5 @@ TypewriterCycle.propTypes = {
 TypewriterCycle.defaultProps = {
     speed: 200,
 };
+
+export default TypewriterCycle;

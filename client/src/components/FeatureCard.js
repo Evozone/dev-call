@@ -11,7 +11,7 @@ const FeatureCard = ({ image, title, description, index }) => (
             alignItems: 'center',
             justifyContent: 'center',
             flexDirection: index % 2 === 0 ? 'row' : 'row-reverse',
-            '@media (max-width: 600px)': {
+            '@media (max-width: 800px)': {
                 flexDirection: 'column',
             },
         }}
@@ -23,7 +23,7 @@ const FeatureCard = ({ image, title, description, index }) => (
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                '@media (max-width: 600px)': {
+                '@media (max-width: 800px)': {
                     width: '100%',
                 },
             }}
@@ -35,7 +35,7 @@ const FeatureCard = ({ image, title, description, index }) => (
             sx={{
                 width: '50%',
                 px: 8,
-                '@media (max-width: 600px)': {
+                '@media (max-width: 800px)': {
                     width: '100%',
                 },
             }}

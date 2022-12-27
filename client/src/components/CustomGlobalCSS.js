@@ -81,3 +81,16 @@ export const blinkingKeyboardCursor = () => {
 
     return component;
 }
+
+export const smoothScrolling = () => {
+
+    const component = <GlobalStyles styles={{
+
+        'html': {
+            scrollBehavior: 'smooth',
+        },
+
+    }} />;
+
+    return component;
+}

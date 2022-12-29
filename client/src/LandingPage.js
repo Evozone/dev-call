@@ -54,12 +54,12 @@ const LandingPage = () => {
     // Create a list of all the panels for the features section
     const panelData = [
         {
-            image: `/panel1.jpg`,
+            image: `/assets/landing-page-imgs/chat-feature.png`,
             title: `Chat with rich Images and GIFs`,
             description: `This chat feature allows you to add an extra level of excitement to your conversations by sharing images and GIFs directly within the chat window. You can also easily render images from links, bringing even more visual content to your chats. With this feature, you'll be able to easily add a splash of color and personality to your conversations and make them more engaging and memorable.`,
         },
         {
-            image: `/panel2.jpg`,
+            image: `/assets/landing-page-imgs/workspace-feature.png`,
             title: `Collaborative Workspaces`,
             description: `Our Workspaces feature is the perfect tool for teams who need to work together efficiently and effectively. It includes a built-in code-editor and IDE, a whiteboard, and a voice call function, all within the same workspace. No more juggling multiple tabs or apps - with Workspaces, everything you need for successful teamwork is just a few clicks away. Whether you're coding, brainstorming, or holding a meeting, our Workspaces have you covered.`,
         },
@@ -348,8 +348,8 @@ const LandingPage = () => {
                         flexDirection: 'column',
                         justifyContent: 'flex-start',
                         alignItems: 'center',
-                        color: '#03256c',
-                        background: 'whitesmoke',
+                        color: 'whitesmoke',
+                        background: '#011831',
                     }}
                 >
                     {panelData.map(({ image, title, description }, index) => (

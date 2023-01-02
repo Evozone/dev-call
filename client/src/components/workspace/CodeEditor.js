@@ -20,7 +20,7 @@ export default function CodeEditor({
     const handleEditorDidMount = (editor) => {
         editorRef.current = editor;
         const savedCode = localStorage.getItem(`${params.workspaceId}-code`);
-        if (savedCode && editorRef.current) {
+        if (savedCode) {
             editorRef.current.setValue(savedCode);
         }
     };
@@ -40,6 +40,7 @@ export default function CodeEditor({
         if (socketRef.current) {
             socketRef.current.on('codeChange', ({ code }) => {
                 editorRef.current.setValue(code);
+                localStorage.setItem(`${params.workspaceId}-code`, code);
             });
         }
         return () => {

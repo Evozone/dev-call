@@ -5,14 +5,17 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import GroupsIcon from '@mui/icons-material/Groups';
 import ChatIcon from '@mui/icons-material/Chat';
+import InterpreterModeIcon from '@mui/icons-material/InterpreterMode';
 import { Typography } from '@mui/material';
 
 import Coder from './Coder';
+import CoderOnCall from './CoderOnCall';
 import MessageInput from '../MessageInput';
+import StartCall from './StartCall';
 
 export default function SessionSidePanel({ coders }) {
-    //create an example array of length 50 named coders which will have the random names starting with different alphabetof the coders and a radnom id
-    // const coders = [
+    // create an example array of length 50 named coders which will have the random names starting with different alphabetof the coders and a radnom id
+    // const clients = [
     //     { id: 1, name: 'A' },
     //     { id: 2, name: 'B' },
     //     { id: 3, name: 'C' },
@@ -128,6 +131,7 @@ export default function SessionSidePanel({ coders }) {
     const [value, setValue] = useState(0);
 
     const handleChange = (event, newValue) => {
+        console.log(typeof newValue, newValue);
         setValue(newValue);
     };
 
@@ -167,10 +171,18 @@ export default function SessionSidePanel({ coders }) {
                         sx={{
                             height: '57px',
                             fontSize: '1.1rem',
-
                             borderBottom: '1px solid rgba(255, 255, 255, 0.12)',
                         }}
                         icon={<ChatIcon sx={{ fontSize: '34px' }} />}
+                    />
+                    <Tab
+                        sx={{
+                            height: '57px',
+                            fontSize: '1.1rem',
+                            borderLeft: '1px solid rgba(255, 255, 255, 0.12)',
+                            borderBottom: '1px solid rgba(255, 255, 255, 0.12)',
+                        }}
+                        icon={<InterpreterModeIcon sx={{ fontSize: '34px' }} />}
                     />
                 </Tabs>
             </AppBar>
@@ -180,12 +192,12 @@ export default function SessionSidePanel({ coders }) {
                     <Box
                         sx={{
                             display: 'grid',
-                            gridTemplateColumns: 'repeat(3, 1fr)',
+                            gridTemplateColumns: 'repeat(4, 1fr)',
                             gap: '16px 8px',
                             gridAutoFlow: 'dense',
                             maxHeight: '85%',
                             overflowY: 'auto',
-                            ...(coders.length > 18 && {
+                            ...(coders.length > 28 && {
                                 border: '2px solid rgb(0 32 93)',
                                 borderRadius: '5px',
                                 p: 1,
@@ -268,6 +280,7 @@ export default function SessionSidePanel({ coders }) {
                     </Box>
                 </Box>
             )}
+            {value === 2 && <StartCall handleChange={handleChange} />}
         </Box>
     );
 }

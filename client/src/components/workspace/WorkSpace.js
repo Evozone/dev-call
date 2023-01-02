@@ -111,24 +111,31 @@ export default function WorkSpace() {
                     }
                     setCoders(clients);
                     if (username !== currentUser.username) {
+                        let drawingData = '';
+                        if (
+                            localStorage.getItem(
+                                `${params.workspaceId}-drawing`
+                            )
+                        ) {
+                            drawingData = localStorage.getItem(
+                                `${params.workspaceId}-drawing`
+                            );
+                        } else {
+                            drawingData = canvasRef?.current?.toDataURL();
+                        }
                         setTimeout(() => {
                             socketRef.current.emit('syncCanvas', {
-                                drawingData: canvasRef?.current?.toDataURL(),
+                                drawingData,
                                 socketId,
                             });
                             socketRef.current.emit('syncCode', {
-                                code: codeRef.current,
+                                code:
+                                    localStorage.getItem(
+                                        `${params.workspaceId}-code`
+                                    ) || codeRef.current,
                                 socketId,
                             });
                         }, 1500);
-                    } else {
-                        socketRef.current.emit('syncCanvas', {
-                            drawingData:
-                                localStorage.getItem(
-                                    `${params.workspaceId}-drawing`
-                                ) || '',
-                            socketId,
-                        });
                     }
                 }
             );
@@ -143,9 +150,6 @@ export default function WorkSpace() {
                     }
                 }
             );
-            socketRef.current.on('codeChange', ({ code }) => {
-                localStorage.setItem(`${params.workspaceId}-code`, code);
-            });
             socketRef.current.on('disconnected', ({ socketId, username }) => {
                 dispatch(notifyAction(true, 'info', `${username} left.`));
                 setCoders((prev) => {
@@ -165,7 +169,6 @@ export default function WorkSpace() {
                 socketRef.current?.disconnect();
                 socketRef.current.off('drawingChange');
                 socketRef.current.off('syncCanvas');
-                socketRef.current.off('codeChange');
                 socketRef.current?.off('addUser');
                 socketRef.current?.off('connect_error');
                 socketRef.current?.off('connect_failed');

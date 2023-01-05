@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, cleanup, act } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import { TypewriterCycle } from './TypewriterCycle';
+import TypewriterCycle from '../components/TypewriterCycle.js';
 
 afterEach(cleanup); // clean up the DOM after each test
 

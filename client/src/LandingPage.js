@@ -64,7 +64,7 @@ const LandingPage = () => {
             description: `Our Workspaces feature is the perfect tool for teams who need to work together efficiently and effectively. It includes a built-in code-editor and IDE, a whiteboard, and a voice call function, all within the same workspace. No more juggling multiple tabs or apps - with Workspaces, everything you need for successful teamwork is just a few clicks away. Whether you're coding, brainstorming, or holding a meeting, our Workspaces have you covered.`,
         },
         {
-            image: `/panel3.jpg`,
+            image: `/assets/landing-page-imgs/meeting-feature.png`,
             title: `Meetings from anywhere`,
             description: `Our platform offers separate video conferencing capabilities for when you need to share your screen or webcam with others. Whether you're holding a presentation or just want to show a colleague something on your computer, our video conferencing feature has you covered. With screenshare and webcam sharing options available, you can easily stay connected with your team no matter where you are.`,
         },
@@ -78,7 +78,7 @@ const LandingPage = () => {
                     overflowX: 'hidden',
                 }}
             >
-                {customGlobalScrollBars('teal')}
+                {customGlobalScrollBars('royalblue')}
                 {smoothScrolling()}
                 <CssBaseline />
 
@@ -126,7 +126,13 @@ const LandingPage = () => {
                                 fontSize: '2rem',
                             }}
                         >
-                            <Box>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    flexDirection: 'row',
+                                    alignItems: 'center'
+                                }}
+                            >
                                 {/* Only show the logo when the user is not at the top of the page */}
                                 <img
                                     style={{
@@ -137,6 +143,19 @@ const LandingPage = () => {
                                     src='/assets/landing-logo.svg'
                                     alt='logo'
                                 />
+                                <Typography
+                                    variant='h4'
+                                    component='div'
+                                    sx={{
+                                        display: scrollComponent === 'block' ? 'block' : 'none',
+                                        fontFamily: 'Comfortaa, sans-serif',
+                                        fontWeight: '400',
+                                        fontSize: '1.6rem',
+                                        px: '1rem',
+                                    }}
+                                >
+                                    dev chat +
+                                </Typography>
                             </Box>
                             <Box
                                 sx={{
@@ -197,8 +216,8 @@ const LandingPage = () => {
                         width: '100%',
                         minHeight: '100vh',
                         padding: '4rem',
-                        background:
-                            'linear-gradient(116.82deg, #0288d1 0%, #1976d2 100%)',
+                        background: 'linear-gradient(116.82deg, rgba(2, 136, 209, 0.75) 0%, rgba(25, 118, 210, 0.75) 100%), url(/assets/landing-page-imgs/earth-digital.jpg)',
+                        backgroundRepeat: 'no-repeat',
                         display: 'flex',
                         flexFlow: 'row wrap',
                         alignItems: 'center',

@@ -29,19 +29,19 @@ export const customGlobalScrollBars = (mode) => {
                 },
             }
             : {
-                ...(mode === 'teal'
+                ...(mode === 'royalblue'
                     ? {
                         '*::-webkit-scrollbar-track': {
-                            backgroundColor: '#0288d1',
+                            backgroundColor: '#011831',
                             border: 'none',
                         },
                         '*::-webkit-scrollbar-thumb': {
-                            backgroundColor: '#03256C',
+                            backgroundColor: '#314469',
                             borderRadius: '0.3rem',
-                            border: '2px solid #0288d1',
+                            border: '2px solid #011831',
                         },
                         '*::-webkit-scrollbar-thumb:hover': {
-                            backgroundColor: '#001242',
+                            backgroundColor: '#0288d1',
                         },
                     }
                     : {

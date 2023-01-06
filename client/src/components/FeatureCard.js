@@ -6,7 +6,8 @@ const FeatureCard = ({ image, title, description, index }) => (
     <Box
         sx={{
             width: '100%',
-            height: '500px',
+            boxSizing: 'border-box',
+            p: 4,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -19,16 +20,30 @@ const FeatureCard = ({ image, title, description, index }) => (
         {/* FeatureCard: Image */}
         <Box
             sx={{
+                boxSizing: 'border-box',
+                p: 2,
                 width: '50%',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 '@media (max-width: 800px)': {
                     width: '100%',
+                    p: 3,
                 },
             }}
         >
-            <img src={image} alt={title} />
+            {/* If size is less than 720px, images are smaller */}
+            <Box
+                component="img"
+                sx={{
+                    '@media (max-width: 720px)': {
+                        width: '70%',
+                    },
+                }}
+                src={image}
+                alt={title}
+                maxWidth="95%"
+            />
         </Box>
         {/* FeatureCard: Text */}
         <Box

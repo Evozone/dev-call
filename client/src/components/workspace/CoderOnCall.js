@@ -5,14 +5,25 @@ import Tooltip from '@mui/material/Tooltip';
 import MicOffIcon from '@mui/icons-material/MicOff';
 import MicIcon from '@mui/icons-material/Mic';
 import { IconButton } from '@mui/material';
+import {
+    useHMSStore,
+    useHMSActions,
+    selectIsPeerAudioEnabled,
+    selectLocalPeer,
+} from '@100mslive/hms-video-react';
 
-export default function CoderOnCall({
-    username,
-    provideRef,
-    uid,
-    handleMuteClick,
-    muted,
-}) {
+export default function CoderOnCall({ peer }) {
+    const hmsActions = useHMSActions();
+    const audioEnabled = useHMSStore(selectIsPeerAudioEnabled(peer.id));
+    const localPeer = useHMSStore(selectLocalPeer);
+    const isModerator = localPeer.roleName === 'moderator';
+
+    const mutePeer = () => {
+        if (isModerator) {
+            hmsActions.setRemoteTrackEnabled(peer.audioTrack, false);
+        }
+    };
+
     return (
         <Box
             sx={{
@@ -25,28 +36,40 @@ export default function CoderOnCall({
                 position: 'relative',
             }}
         >
-            <audio
-                controls
-                autoPlay
-                ref={(instance) => {
-                    provideRef(instance, uid);
-                }}
-            />
+            {!audioEnabled ? (
+                <MicOffIcon
+                    sx={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '8px',
+                    }}
+                />
+            ) : isModerator ? (
+                <Tooltip title={`Mute ${peer.name}`}>
+                    <IconButton
+                        sx={{
+                            position: 'absolute',
+                            top: '2px',
+                            right: 0,
+                        }}
+                        onClick={mutePeer}
+                    >
+                        <MicIcon />
+                    </IconButton>
+                </Tooltip>
+            ) : (
+                <MicIcon
+                    sx={{
+                        position: 'absolute',
+                        top: '10px',
+                        right: '8px',
+                    }}
+                />
+            )}
 
-            <IconButton
-                sx={{
-                    position: 'absolute',
-                    top: '5px',
-                    right: '3px',
-                }}
-                onClick={() => handleMuteClick(uid)}
-            >
-                {muted ? <MicOffIcon /> : <MicIcon />}
-            </IconButton>
-
-            <Tooltip title={username}>
+            <Tooltip title={peer.name}>
                 <Avatar
-                    alt={username?.charAt(0).toUpperCase()}
+                    alt={peer.name?.charAt(0).toUpperCase()}
                     src='/static/images/avatar/1.jpg'
                     sx={{
                         width: 40,

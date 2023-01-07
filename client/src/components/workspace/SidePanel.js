@@ -10,7 +10,7 @@ import CodeSidePanel from './CodeSidePanel';
 import { Divider } from '@mui/material';
 import SessionSidePanel from './SessionSidePanel';
 
-export default function WorkSpaceSidePanel({
+export default function SidePanel({
     lang,
     setLang,
     theme,
@@ -20,6 +20,7 @@ export default function WorkSpaceSidePanel({
     codeRef,
     setOpen,
     coders,
+    handleCheckboxChange,
 }) {
     return (
         <Box
@@ -65,7 +66,14 @@ export default function WorkSpaceSidePanel({
                     <React.Fragment>
                         <Divider />
                         <CodeSidePanel
-                            {...{ lang, setLang, theme, setTheme, codeRef }}
+                            {...{
+                                lang,
+                                setLang,
+                                theme,
+                                setTheme,
+                                codeRef,
+                                handleCheckboxChange,
+                            }}
                         />
                     </React.Fragment>
                 )}

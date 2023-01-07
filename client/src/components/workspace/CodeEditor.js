@@ -9,6 +9,7 @@ export default function CodeEditor({
     open,
     lang,
     theme,
+    checkState,
 }) {
     const editorRef = useRef(null);
     const params = useParams();
@@ -65,11 +66,11 @@ export default function CodeEditor({
                 onChange={handleEditorChange}
                 options={{
                     selectOnLineNumbers: true,
-                    wordWrap: 'on',
+                    wordWrap: checkState.wordWrap ? 'on' : 'off',
                     wordWrapColumn: 40,
                     wrappingIndent: 'indent',
                     minimap: {
-                        enabled: false,
+                        enabled: checkState.miniMap,
                     },
                 }}
             />

@@ -4,6 +4,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { HMSRoomProvider } from '@100mslive/hms-video-react';
 
 import { signInAction } from './actions/actions';
 import Home from './components/Home';
@@ -12,7 +13,7 @@ import Loading from './components/Loading';
 import ProtectedRoute from './components/ProtectedRoute';
 import VideoCall from './components/VideoCall';
 import WorkSpace from './components/workspace/WorkSpace';
-import CodePlayGround from './components/CodePlayGround';
+// import CodePlayGround from './components/CodePlayGround';
 import { customGlobalScrollBars } from './components/CustomGlobalCSS';
 import Notify from './components/Notify';
 
@@ -88,19 +89,21 @@ const App = () => {
                 <Route
                     path='/workspace/:workspaceId'
                     element={
-                        <ThemeProvider theme={alwaysDarkTheme}>
-                            <WorkSpace />
-                        </ThemeProvider>
+                        <HMSRoomProvider>
+                            <ThemeProvider theme={alwaysDarkTheme}>
+                                <WorkSpace />
+                            </ThemeProvider>
+                        </HMSRoomProvider>
                     }
                 />
-                <Route
+                {/* <Route
                     path='/code/:groundId'
                     element={
                         <ThemeProvider theme={alwaysDarkTheme}>
                             <CodePlayGround />
                         </ThemeProvider>
                     }
-                />
+                /> */}
             </Routes>
         </ThemeProvider>
     );

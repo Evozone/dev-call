@@ -1,4 +1,6 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
+const uuid4 = require('uuid4');
 const http = require('http');
 const { Server } = require('socket.io');
 
@@ -11,12 +13,58 @@ const io = new Server(server, {
 });
 const PORT = process.env.PORT || 5000;
 
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader(
+        'Access-Control-Allow-Methods',
+        'GET, POST, PUT, PATCH, DELETE'
+    );
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'X-Requested-With, Content-Type, Authorization'
+    );
+    next();
+});
+
 app.get('/', (req, res) => {
     res.send('Hello! This is dev chat+ backend.');
 });
 
-const users = {}; //users { ONKyOYBAguAinDJuAAAD( socket.id): 'itsvishal2417'(username) }
+app.get('/mtoken', (req, res) => {
+    var app_access_key = '63b72982c39d5bf0add58a66';
+    var app_secret =
+        '0av3jQ026ZoVx-7RkTBsGvXzmGd7ZlBBPthk-cPMIcgmnP3Bo-9YH-Qm2Pdn2CorQPTAW8Wo5bue4SlPv1sqaAbP5C3z1TV1qx6sVeYvUfWnGDl1X-YBSNbEYBJh5sMTw2csHVtOKUwydmoPEmrEuOiaPSRTOysE_uE9v3vBkCU=';
+    try {
+        const token = jwt.sign(
+            {
+                access_key: app_access_key,
+                type: 'management',
+                version: 2,
+                iat: Math.floor(Date.now() / 1000),
+                nbf: Math.floor(Date.now() / 1000),
+            },
+            app_secret,
+            {
+                algorithm: 'HS256',
+                expiresIn: '1h',
+                jwtid: uuid4(),
+            }
+        );
+        res.status(200).json({
+            success: true,
+            data: {
+                token,
+            },
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            data: { error },
+        });
+    }
+});
 
+const users = {}; //users { ONKyOYBAguAinDJuAAAD( socket.id): 'itsvishal2417'(username) }
 function getAllConnectedClients(roomId, namespace) {
     return Array.from(
         io.of(`/${namespace}`).adapter.rooms.get(roomId) || []

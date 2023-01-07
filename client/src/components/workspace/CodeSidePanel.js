@@ -2,13 +2,15 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 import EditorDropdown from './EditorDropdown';
 import OutputBox from './OutputBox';
 import CodeInput from './CodeInput';
 import OutputDetails from './OutputDetails';
-import { languageOptions } from '../../constants/languageOptions';
+import { languageOptions } from '../../utils/languageOptions';
 import { defineTheme } from '../../utils/defineTheme';
 import { notifyAction } from '../../actions/actions';
 
@@ -18,6 +20,7 @@ export default function CodeSidePanel({
     theme,
     setTheme,
     codeRef,
+    handleCheckboxChange,
 }) {
     const dispatch = useDispatch();
     const [codeInput, setCodeInput] = useState('');
@@ -142,6 +145,34 @@ export default function CodeSidePanel({
                 handleLangChange={handleLangChange}
                 handleThemeChange={handleThemeChange}
             />
+            <Box
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                }}
+            >
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            onChange={handleCheckboxChange}
+                            color='success'
+                            name='miniMap'
+                        />
+                    }
+                    label='Mini Map'
+                />
+                <FormControlLabel
+                    control={
+                        <Checkbox
+                            onChange={handleCheckboxChange}
+                            defaultChecked
+                            color='success'
+                            name='wordWrap'
+                        />
+                    }
+                    label='Word Wrap'
+                />
+            </Box>
             <OutputBox outputDetails={outputDetails} />
             <CodeInput
                 codeInput={codeInput}

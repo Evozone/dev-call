@@ -138,8 +138,8 @@ export default function MessageInput({
                         mode === 'work'
                             ? '#00205d'
                             : mode === 'dark'
-                            ? '#1a1a1a'
-                            : '#f5f5f5',
+                                ? '#1a1a1a'
+                                : '#f5f5f5',
                     p: 1,
                 }}
             >
@@ -159,7 +159,7 @@ export default function MessageInput({
                     size='small'
                     multiline
                     maxRows={2}
-                    placeholder='Message'
+                    placeholder='Hit Crtl+Enter to send message'
                     autoFocus
                     onKeyDown={handleKey}
                     focused

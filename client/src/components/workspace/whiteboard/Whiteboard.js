@@ -50,7 +50,9 @@ export default function Whiteboard({ canvasRef, socketRef }) {
         socketRef.current.on('drawingChange', ({ drawingData }) => {
             onDrawingEvent(drawingData);
         });
-
+        socketRef.current.on('codeChange', ({ code }) => {
+            localStorage.setItem(`${params.workspaceId}-code`, code);
+        });
         const onColorUpdate = (e) => {
             current.color = e.target.className.split(' ')[1];
         };
@@ -180,6 +182,7 @@ export default function Whiteboard({ canvasRef, socketRef }) {
                 );
             }
             socketRef.current.off('drawingChange');
+            socketRef.current.off('codeChange');
         };
     }, [currentUser.username]);
 

@@ -9,6 +9,7 @@ export default function CodeEditor({
     open,
     lang,
     theme,
+    checkState,
 }) {
     const editorRef = useRef(null);
     const params = useParams();
@@ -20,7 +21,7 @@ export default function CodeEditor({
     const handleEditorDidMount = (editor) => {
         editorRef.current = editor;
         const savedCode = localStorage.getItem(`${params.workspaceId}-code`);
-        if (savedCode && editorRef.current) {
+        if (savedCode) {
             editorRef.current.setValue(savedCode);
         }
     };
@@ -40,6 +41,7 @@ export default function CodeEditor({
         if (socketRef.current) {
             socketRef.current.on('codeChange', ({ code }) => {
                 editorRef.current.setValue(code);
+                localStorage.setItem(`${params.workspaceId}-code`, code);
             });
         }
         return () => {
@@ -64,11 +66,11 @@ export default function CodeEditor({
                 onChange={handleEditorChange}
                 options={{
                     selectOnLineNumbers: true,
-                    wordWrap: 'on',
+                    wordWrap: checkState.wordWrap ? 'on' : 'off',
                     wordWrapColumn: 40,
                     wrappingIndent: 'indent',
                     minimap: {
-                        enabled: false,
+                        enabled: checkState.miniMap,
                     },
                 }}
             />

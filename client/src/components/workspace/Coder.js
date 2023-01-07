@@ -2,7 +2,6 @@ import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Tooltip from '@mui/material/Tooltip';
-import MicOffIcon from '@mui/icons-material/MicOff';
 
 export default function Coder({ username }) {
     return (
@@ -17,13 +16,6 @@ export default function Coder({ username }) {
                 position: 'relative',
             }}
         >
-            <MicOffIcon
-                sx={{
-                    position: 'absolute',
-                    top: '5px',
-                    right: '3px',
-                }}
-            />
             <Tooltip title={username}>
                 <Avatar
                     alt={username.charAt(0).toUpperCase()}

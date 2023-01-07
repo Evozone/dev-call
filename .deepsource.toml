@@ -6,3 +6,8 @@ enabled = true
 
   [analyzers.meta]
   plugins = ["react"]
+  environment = ["nodejs"]
+  dependency_file_paths = [
+  "client/",
+  "server/"
+]

@@ -9,9 +9,6 @@
     "@monaco-editor/react": "^4.4.6",
     "@mui/icons-material": "^5.10.3",
     "@mui/material": "^5.10.3",
-    "@testing-library/jest-dom": "^5.16.5",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
     "firebase": "^9.10.0",
     "jwt-decode": "^3.1.2",
     "monaco-themes": "^0.4.2",
@@ -49,5 +46,12 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "jest": "^27.5.1",
+    "@reduxjs/toolkit": "^1.9.1",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/user-event": "^13.5.0"
   }
 }

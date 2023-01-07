@@ -10,7 +10,7 @@ const Loading = () => {
             open={loading}
             sx={{ zIndex: (theme) => theme.zIndex.modal + 1 }}
         >
-            <CircularProgress sx={{ color: 'white' }} />
+            <CircularProgress sx={{ color: 'white' }} data-testid="loading-spinner" />
         </Backdrop>
     );
 };

@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { blinkingKeyboardCursor } from './CustomGlobalCSS';
 
-export const TypewriterCycle = ({ strings, speed }) => {
+const TypewriterCycle = ({ strings, speed }) => {
 
     const [index, setIndex] = useState(0);
     const [currentString, setCurrentString] = useState('');
@@ -28,7 +28,7 @@ export const TypewriterCycle = ({ strings, speed }) => {
                 // If we're not deleting, add a character.
                 setCurrentString(strings[index].substring(0, currentChar + 1));
 
-                // If we're done adding, turn on the flag and move to the next character.
+                // If we're done adding, turn on the flag and move to the next string.
                 if (currentChar === strings[index].length) {
                     setIsDeleting(true);
                 }
@@ -44,10 +44,10 @@ export const TypewriterCycle = ({ strings, speed }) => {
     return (
         <span style={{
             color: '#03256C',
-        }}>
+        }} role="textbox" aria-label="Typewriter Cycle">
             {currentString}
             {blinkingKeyboardCursor()}
-            <span className="react-rotating-text-cursor">│</span>
+            <span className="react-rotating-text-cursor" data-testid="cursor">│</span>
         </span>
     );
 };
@@ -60,3 +60,5 @@ TypewriterCycle.propTypes = {
 TypewriterCycle.defaultProps = {
     speed: 200,
 };
+
+export default TypewriterCycle;

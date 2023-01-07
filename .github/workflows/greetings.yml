@@ -17,7 +17,7 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           issue-message: "Thanks for opening your first issue in our repository! We appreciate your feedback and will do our best to address it as soon as possible."
           pr-message: "Thanks for opening your first pull request in our repository! We appreciate your contribution and will review it as soon as possible."
-      - uses: actions/labeler@v4
+      - uses: Naturalclar/issue-action@v1.0.0
         with:
-            repo-token: ${{ secrets.GITHUB_TOKEN }}
-            labels: 'good first issue'
+          labels: '["good first issue"]'
+          github-token: "${{ secrets.GITHUB_TOKEN }}"

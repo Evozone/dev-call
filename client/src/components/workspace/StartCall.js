@@ -9,10 +9,12 @@ import {
 } from '@100mslive/hms-video-react';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
+import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 
 import CoderOnCall from './CoderOnCall';
+import { Typography } from '@mui/material';
 
 export default function StartCall() {
     const currentUser = useSelector((state) => state.auth);
@@ -94,6 +96,7 @@ export default function StartCall() {
     return (
         <Box
             sx={{
+                display: 'flex',
                 height: '83vh',
             }}
         >
@@ -122,24 +125,52 @@ export default function StartCall() {
                     </Box>
                 </Box>
             ) : (
-                <Button
+                <Box
                     sx={{
-                        bgcolor: '#25D366',
-                        color: 'white',
-                        width: 'fit-content',
-                        alignSelf: 'end',
-                        mt: 2,
-                        ml: 1,
+                        flexGrow: 1,
+                        backgroundColor: 'rgb(0 32 93)',
+                        m: 1,
+                        borderRadius: '5px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'center',
+                        alignItems: 'center',
                     }}
-                    color='success'
-                    variant='contained'
-                    endIcon={<AddIcCallIcon />}
-                    onClick={joinCall}
-                    disableElevation
                 >
-                    Join a Call
-                </Button>
-            )}
-        </Box>
+                    {/* Circular button with PhoneInTalk icon */}
+                    <IconButton
+                        color="primary"
+                        aria-label="join call"
+                        onClick={joinCall}
+                        sx={{
+                            bgcolor: 'white',
+                            width: '70px',
+                            height: '70px',
+                            borderRadius: '50%',
+                            border: '2px solid rgb(0 32 93)',
+                            '&:hover': {
+                                bgcolor: 'white',
+                                color: 'rgb(0 32 93)',
+                                boxShadow: '0 0 10px 2px rgba(0,0,0,0.5)',
+                            }
+                        }}
+                    >
+                        <PhoneInTalkIcon sx={{ fontSize: '35px' }} />
+                    </IconButton>
+                    <Typography
+                        variant="h6"
+                        sx={{
+                            color: 'white',
+                            opacity: '0.8',
+                            mt: 2,
+                            fontFamily: 'Work Sans',
+                        }}
+                    >
+                        Join Voice room
+                    </Typography>
+                </Box>
+            )
+            }
+        </Box >
     );
 }

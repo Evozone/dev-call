@@ -134,9 +134,6 @@ export default function CodeSidePanel({
                 display: 'flex',
                 flexDirection: 'column',
                 color: '#EFF6EE',
-                //set maxHeight as 100vh -67px
-                maxHeight: 'calc(100vh - 70px)',
-                overflowY: 'auto',
             }}
         >
             <EditorDropdown

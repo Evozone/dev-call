@@ -216,10 +216,6 @@ export default function Whiteboard({ canvasRef, socketRef }) {
         }, 2000);
     };
 
-    const leaveBoard = () => {
-        window.close();
-    };
-
     return (
         <div>
             <canvas ref={canvasRef} className='whiteboard' />
@@ -259,18 +255,6 @@ export default function Whiteboard({ canvasRef, socketRef }) {
                         sx={{ color: '#03256C' }}
                     >
                         <PermMediaIcon />
-                    </IconButton>
-                </Tooltip>
-
-                {/* Create a ToolTip with IconButton to Leave */}
-                <Tooltip title='Leave'>
-                    <IconButton
-                        onClick={leaveBoard}
-                        className='leave'
-                        aria-label='leave'
-                        sx={{ color: '#EE4B2B' }}
-                    >
-                        <ExitToAppIcon />
                     </IconButton>
                 </Tooltip>
             </div>

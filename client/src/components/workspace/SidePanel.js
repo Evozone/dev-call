@@ -26,9 +26,8 @@ export default function SidePanel({
         <Box
             sx={{
                 width: open ? '400px' : '0px',
-                maxHeight: '100vh',
-                display: 'flex',
-                flexDirection: 'column',
+                height: '100vh',
+                overflowY: 'none',
             }}
         >
             <Drawer
@@ -39,10 +38,14 @@ export default function SidePanel({
                     '& .MuiDrawer-paper': {
                         boxSizing: 'border-box',
                         width: '400px',
+                        height: '100vh',
+                        overflowY: 'none',
                         marginLeft: '60px',
                         border: 'none',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        boxShadow: '0px 0px 8px 0px black',
                         backgroundColor: '#03256C',
-                        maxHeight: '100vh',
                     },
                 }}
             >
@@ -53,12 +56,12 @@ export default function SidePanel({
                         fontFamily: 'Comfortaa, sans-serif',
                         fontWeight: '700',
                         mt: '12px',
-                        ml: 1,
+                        ml: 2,
                         mb: '15px',
                         fontSize: '2rem',
                     }}
                 >
-                    dev chat+
+                    dev chat + {selected == 'session' ? '' : 'code'}
                 </Typography>
                 {selected === 'session' ? (
                     <SessionSidePanel coders={coders} />
@@ -81,7 +84,7 @@ export default function SidePanel({
                     <IconButton
                         sx={{
                             position: 'absolute',
-                            top: '6px',
+                            top: '7px',
                             right: '10px',
                         }}
                         onClick={() => {
@@ -92,6 +95,6 @@ export default function SidePanel({
                     </IconButton>
                 </Tooltip>
             </Drawer>
-        </Box>
+        </Box >
     );
 }

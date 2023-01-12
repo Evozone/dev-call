@@ -50,30 +50,23 @@ export default function CodeEditor({
     }, [socketRef.current]);
 
     return (
-        <Box
-            sx={{
-                transition: 'width 0.2s',
-                width: open ? 'calc(100vw - 470px)' : '100%',
+        <Editor
+            height='100%'
+            width='100%'
+            language={lang?.value}
+            onMount={handleEditorDidMount}
+            theme={theme}
+            defaultValue="//Code is saved in your browser's local storage w.r.t the workspace."
+            onChange={handleEditorChange}
+            options={{
+                selectOnLineNumbers: true,
+                wordWrap: checkState.wordWrap ? 'on' : 'off',
+                wordWrapColumn: 40,
+                wrappingIndent: 'indent',
+                minimap: {
+                    enabled: checkState.miniMap,
+                },
             }}
-        >
-            <Editor
-                height='99.3vh'
-                width='inherit'
-                language={lang?.value}
-                onMount={handleEditorDidMount}
-                theme={theme}
-                defaultValue="//Code is saved in your browser's local storage w.r.t the workspace."
-                onChange={handleEditorChange}
-                options={{
-                    selectOnLineNumbers: true,
-                    wordWrap: checkState.wordWrap ? 'on' : 'off',
-                    wordWrapColumn: 40,
-                    wrappingIndent: 'indent',
-                    minimap: {
-                        enabled: checkState.miniMap,
-                    },
-                }}
-            />
-        </Box>
+        />
     );
 }

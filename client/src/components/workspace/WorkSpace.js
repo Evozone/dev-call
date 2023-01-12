@@ -77,7 +77,12 @@ export default function WorkSpace() {
     };
 
     return (
-        <Box sx={{ display: 'flex', height: '100vh', bgcolor: '#010101' }}>
+        <Box sx={{
+            display: 'flex',
+            height: '100vh',
+            justifyContent: 'flex-end',
+            bgcolor: '#010101'
+        }}>
             {customGlobalScrollBars('dark')}
             <CssBaseline />
             {/* Placed here because of z-index issues */}
@@ -104,13 +109,8 @@ export default function WorkSpace() {
                 <Box
                     component='main'
                     sx={{
-                        flexGrow: 1,
-                        bgcolor: '#F5F5F522',
-                        color: 'white',
-                        margin: '5px',
-                        borderRadius: '5px',
-                        transition: 'margin-left 0.3s ease-in-out',
-                        marginLeft: open ? '405px' : '5px',
+                        transition: 'width 0.2s',
+                        width: open ? 'calc(100vw - 460px)' : '100%',
                     }}
                 >
                     <CodeEditor

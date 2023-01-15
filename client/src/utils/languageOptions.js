@@ -1,10 +1,4 @@
 export const languageOptions = [
-    {
-        id: 63,
-        name: 'JavaScript (Node.js 12.14.0)',
-        label: 'JavaScript (Node.js 12.14.0)',
-        value: 'javascript',
-    },
     // {
     //     id: 45,
     //     name: 'Assembly (NASM 2.14.02)',
@@ -155,7 +149,12 @@ export const languageOptions = [
         label: 'Java (OpenJDK 13.0.1)',
         value: 'java',
     },
-
+    {
+        id: 63,
+        name: 'JavaScript (Node.js 12.14.0)',
+        label: 'JavaScript (Node.js 12.14.0)',
+        value: 'javascript',
+    },
     // {
     //     id: 78,
     //     name: 'Kotlin (1.3.70)',

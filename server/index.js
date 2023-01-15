@@ -94,11 +94,13 @@ workspace.on('connection', (socket) => {
     });
 
     socket.on('codeChange', ({ code, roomId }) => {
-        socket.in(roomId).emit('codeChange', { code });
+        socket.in(roomId).emit('codeChange', { code, syncCode: false });
     });
 
     socket.on('syncCode', ({ code, socketId }) => {
-        workspace.to(socketId).emit('codeChange', { code, socketId });
+        workspace
+            .to(socketId)
+            .emit('codeChange', { code, socketId, syncCode: true });
     });
 
     socket.on('drawingChange', ({ drawingData, roomId }) => {

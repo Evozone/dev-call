@@ -77,12 +77,14 @@ export default function WorkSpace() {
     };
 
     return (
-        <Box sx={{
-            display: 'flex',
-            height: '100vh',
-            justifyContent: 'flex-end',
-            bgcolor: '#010101'
-        }}>
+        <Box
+            sx={{
+                display: 'flex',
+                height: '100vh',
+                justifyContent: 'flex-end',
+                bgcolor: '#010101',
+            }}
+        >
             {customGlobalScrollBars('dark')}
             <CssBaseline />
             {/* Placed here because of z-index issues */}
@@ -114,7 +116,7 @@ export default function WorkSpace() {
                     }}
                 >
                     <CodeEditor
-                        {...{ socketRef, open, lang, theme, checkState }}
+                        {...{ socketRef, lang, theme, checkState }}
                         onCodeChange={(code) => {
                             codeRef.current = code;
                         }}

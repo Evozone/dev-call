@@ -220,8 +220,8 @@ export default function SessionSidePanel({ coders }) {
                 >
                     <Box
                         sx={{
-                            height: '90%',
-                            maxHeight: '90%',
+                            height: 'calc(100vh - 20px)',
+                            maxHeight: 'calc(100vh - 188px)',
                             overflowY: 'auto',
                             backgroundColor: '#101010',
                             backgroundImage: `url('/assets/chat-background-dark.svg')`,
@@ -247,13 +247,13 @@ export default function SessionSidePanel({ coders }) {
                                         alignItems: 'end',
                                         ...(message.sender
                                             ? {
-                                                alignSelf: 'flex-end',
-                                                borderBottomLeftRadius:
-                                                    '20px',
-                                                borderBottomRightRadius:
-                                                    '1px',
-                                                backgroundColor: '#25D366',
-                                            }
+                                                  alignSelf: 'flex-end',
+                                                  borderBottomLeftRadius:
+                                                      '20px',
+                                                  borderBottomRightRadius:
+                                                      '1px',
+                                                  backgroundColor: '#25D366',
+                                              }
                                             : { backgroundColor: '#34B7F1' }),
                                     }}
                                 >

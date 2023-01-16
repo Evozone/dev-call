@@ -282,15 +282,7 @@ export default function Whiteboard() {
     return (
         <div>
             <canvas ref={canvasRef} className='whiteboard' />
-            <div
-                ref={logoRef}
-                className='logo'
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    mb: 2,
-                }}
-            >
+            <div ref={logoRef} className='logo'>
                 <img
                     style={{ height: '40px' }}
                     src='/assets/landing-logo.svg'

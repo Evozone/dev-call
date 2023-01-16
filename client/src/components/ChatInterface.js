@@ -126,9 +126,9 @@ export default function ChatInterface({ mode, chat }) {
                             and much more. Join me on this room: 
                             ${process.env.REACT_APP_BASE_URL}/meet/${chat[0]}`;
 
-    const startVideoCall = () => {
-        // handleSendMessage(INVITE_TEMPLATE, true);
-        window.location.href = `/meet/${chat[0]}`;
+    const startVideoCall = async () => {
+        handleSendMessage(INVITE_TEMPLATE, false);
+        window.open(`/meet/${chat[0]}`, '_blank', 'noopener,noreferrer');
     };
 
     return (

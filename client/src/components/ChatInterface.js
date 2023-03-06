@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid';
 import Tooltip from '@mui/material/Tooltip';
 import IconButton from '@mui/material/IconButton';
 import VideoCallIcon from '@mui/icons-material/VideoCall';
+import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     doc,
@@ -28,7 +29,6 @@ import {
     startLoadingAction,
     stopLoadingAction,
 } from '../actions/actions';
-import HubIcon from '@mui/icons-material/Hub';
 
 export default function ChatInterface({ mode, chat }) {
     const inputRef = useRef();
@@ -185,7 +185,7 @@ export default function ChatInterface({ mode, chat }) {
                 <Grid pr='20px' container justifyContent='flex-end'>
                     <Tooltip title='Workspace'>
                         <IconButton onClick={startWorkspace}>
-                            <HubIcon
+                            <WorkspacesIcon
                                 fontSize='large'
                                 sx={{ color: 'whitesmoke' }}
                             />

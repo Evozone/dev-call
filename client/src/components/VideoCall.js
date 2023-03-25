@@ -5,9 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import CallIcon from '@mui/icons-material/Call';
-import TerminalIcon from '@mui/icons-material/Terminal';
+import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import Tooltip from '@mui/material/Tooltip';
-import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import Draggable from 'react-draggable';
 import { v4 as uuid } from 'uuid';
@@ -17,8 +16,7 @@ export default function VideoCall() {
     const currentUser = useSelector((state) => state.auth);
 
     const [jitsiApi, setJitsiApi] = useState(null);
-    const [codeGroundId, setCodeGroundId] = useState(null);
-    const [whiteBoardId, setWhiteBoardId] = useState(null);
+    const [workspaceId, setWorkspaceId] = useState(null);
     const nodeRef = React.useRef(null);
 
     useEffect(() => {
@@ -26,8 +24,7 @@ export default function VideoCall() {
             navigate('/');
         }
         document.title = 'Dev Chat+ Call';
-        setCodeGroundId(uuid());
-        setWhiteBoardId(uuid());
+        setWorkspaceId(uuid());
     }, [currentUser]);
 
     const FRAME_HEIGHT = (window.innerHeight - 28).toString() + 'px';
@@ -93,7 +90,7 @@ export default function VideoCall() {
                 scale={1}
                 bounds='parent'
                 nodeRef={nodeRef}
-                onMouseDown={() => {}}
+                onMouseDown={() => { }}
             >
                 <Box
                     ref={nodeRef}
@@ -130,42 +127,19 @@ export default function VideoCall() {
                         </IconButton>
                     </Tooltip>
 
-                    <Tooltip title='Code Ground'>
+                    <Tooltip title='WorkSpace'>
                         <IconButton
                             onClick={() => {
                                 jitsiApi.executeCommand(
                                     'sendChatMessage',
-                                    `Code Playground - ${process.env.REACT_APP_BASE_URL}/code/${codeGroundId}`,
+                                    `Code Playground - ${process.env.REACT_APP_BASE_URL}/workspace/${workspaceId}`,
                                     '',
                                     true
                                 );
-                                window.open(`/code/${codeGroundId}`, '_blank');
+                                window.open(`/workspace/${workspaceId}`, '_blank');
                             }}
                         >
-                            <TerminalIcon
-                                sx={{
-                                    color: '#888786',
-                                }}
-                            />
-                        </IconButton>
-                    </Tooltip>
-
-                    <Tooltip title='Whiteboard'>
-                        <IconButton
-                            onClick={() => {
-                                jitsiApi.executeCommand(
-                                    'sendChatMessage',
-                                    `Whiteboard - ${process.env.REACT_APP_BASE_URL}/whiteboard/${whiteBoardId}`,
-                                    '',
-                                    true
-                                );
-                                window.open(
-                                    `/whiteboard/${whiteBoardId}`,
-                                    '_blank'
-                                );
-                            }}
-                        >
-                            <DriveFileRenameOutlineIcon
+                            <WorkspacesIcon
                                 sx={{
                                     color: '#888786',
                                 }}

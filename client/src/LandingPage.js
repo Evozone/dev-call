@@ -522,7 +522,7 @@ const LandingPage = () => {
                         {/* For Person 1 */}
                         <Box
                             sx={{
-                                width: '49%',
+                                width: '33%',
                                 display: 'flex',
                                 flexFlow: 'row wrap',
                                 justifyContent: 'flex-start',
@@ -622,7 +622,7 @@ const LandingPage = () => {
                         {/* For Person 2 */}
                         <Box
                             sx={{
-                                width: '49%',
+                                width: '33%',
                                 display: 'flex',
                                 flexFlow: 'row wrap',
                                 justifyContent: 'flex-start',
@@ -720,9 +720,108 @@ const LandingPage = () => {
                                 <EmailIcon fontSize="large" />
                             </IconButton>
                         </Box>
+                        {/* For Person 3 */}
+                        <Box
+                            sx={{
+                                width: '33%',
+                                display: 'flex',
+                                flexFlow: 'row wrap',
+                                justifyContent: 'flex-start',
+                                alignItems: 'center',
+                                background: '#001126ee',
+                                borderRadius: 3,
+                                padding: '1rem',
+                                '@media (max-width:800px)': {
+                                    marginTop: '1rem',
+                                    width: '100%',
+                                },
+                            }}
+                        >
+                            <Typography
+                                variant='h6'
+                                component='div'
+                                sx={{
+                                    fontFamily: 'Work Sans',
+                                    fontWeight: '400',
+                                    margin: '0 1rem',
+                                }}
+                            >
+                                Manas Telavane
+                            </Typography>
+                            <IconButton
+                                href="https://github.com/TheBrahmnicBoy"
+                                target="_blank"
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: 'white',
+                                    fontSize: '3rem',
+                                    margin: '0 0.5rem',
+                                    transition: 'all 0.2s ease-in-out',
+                                    '&:hover': {
+                                        transform: 'scale(1.2)',
+                                    },
+                                }}
+                            >
+                                <GitHubIcon fontSize="large" />
+                            </IconButton>
+                            <IconButton
+                                href="https://www.linkedin.com/in/bhargavmodak/"
+                                target="_blank"
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: 'white',
+                                    fontSize: '3rem',
+                                    margin: '0 0.5rem',
+                                    transition: 'all 0.2s ease-in-out',
+                                    '&:hover': {
+                                        transform: 'scale(1.2)',
+                                    },
+                                }}
+                            >
+                                <LinkedInIcon fontSize="large" />
+                            </IconButton>
+                            <IconButton
+                                href="https://twitter.com/TheBrahmnicBoy"
+                                target="_blank"
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: 'white',
+                                    fontSize: '3rem',
+                                    margin: '0 0.5rem',
+                                    transition: 'all 0.2s ease-in-out',
+                                    '&:hover': {
+                                        transform: 'scale(1.2)',
+                                    },
+                                }}
+                            >
+                                <TwitterIcon fontSize="large" />
+                            </IconButton>
+                            <IconButton
+                                href="mailto:bhargav0modak@gmail.com"
+                                target="_blank"
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: 'white',
+                                    fontSize: '3rem',
+                                    margin: '0 0.5rem',
+                                    transition: 'all 0.2s ease-in-out',
+                                    '&:hover': {
+                                        transform: 'scale(1.2)',
+                                    },
+                                }}
+                            >
+                                <EmailIcon fontSize="large" />
+                            </IconButton>
+                        </Box>
                     </Box>
-
-
                 </Box>
 
             </Box>

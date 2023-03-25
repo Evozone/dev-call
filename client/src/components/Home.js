@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+
+// MUI components
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -27,15 +29,23 @@ import { collection, onSnapshot } from 'firebase/firestore';
 
 import { notifyAction, signOutAction } from '../actions/actions';
 import { auth } from '../firebaseConfig';
+import { db } from '../firebaseConfig';
+
+// Custom components
 import ChatInterface from './ChatInterface';
 import TabsNav from './TabsNav';
-import { db } from '../firebaseConfig';
+import UserProfileModal from './UserProfileModal';
 
 const drawerWidth = 470;
 
+// Component
 export default function Home({ themeChange, mode }) {
+
     const dispatch = useDispatch();
+
     const currentUser = useSelector((state) => state.auth);
+
+    const [modalOpen, setModalOpen] = useState(false);
     const [chat, setChat] = useState([]);
     const [senderid, setSenderid] = useState('');
     const [notificationGranted, setNotificationGranted] = useState(
@@ -143,10 +153,13 @@ export default function Home({ themeChange, mode }) {
         setAnchorEl(null);
     };
 
-
+    // Layout
     return (
+        // Parent Box
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
+
+            {/* Left side */}
             <Drawer
                 sx={{
                     width: drawerWidth,
@@ -161,25 +174,23 @@ export default function Home({ themeChange, mode }) {
                 variant='permanent'
                 anchor='left'
             >
+                {/* The header with the name of the person. */}
                 <Box
                     sx={{
                         height: '75px',
                         display: 'flex',
                         justifyContent: 'space-between',
-                        alignItems: 'center',
                         pl: 1,
-                        ...(mode === 'dark'
-                            ? {
-                                backgroundColor: 'info.dark',
-                            }
-                            : {
-                                backgroundColor: 'primary.main',
-                            }),
+                        backgroundColor: mode === 'light' ? 'primary.main' : 'info.dark',
                         borderRight: '1px solid',
                         borderColor: 'primary.dark',
                     }}
                 >
-                    <IconButton sx={{ borderRadius: '0' }}>
+                    {/* The profile icon and name */}
+                    <IconButton
+                        sx={{ borderRadius: '0' }}
+                        onClick={() => setModalOpen(true)}
+                    >
                         <Avatar
                             sx={{
                                 width: 50,
@@ -193,6 +204,17 @@ export default function Home({ themeChange, mode }) {
                             {currentUser.username}
                         </Typography>
                     </IconButton>
+
+                    {modalOpen && (
+                        <UserProfileModal
+                            modalOpen={modalOpen}
+                            setModalOpen={setModalOpen}
+                            themeChange={themeChange}
+                            mode={mode}
+                        />
+                    )}
+
+                    {/* The Menu and Logout Button*/}
                     <Box
                         sx={{
                             display: 'flex',
@@ -259,6 +281,8 @@ export default function Home({ themeChange, mode }) {
                         </Tooltip>
                     </Box>
                 </Box>
+
+                {/* Not the header */}
                 <Box
                     sx={{
                         height: 'calc(100% - 75px)',
@@ -277,6 +301,8 @@ export default function Home({ themeChange, mode }) {
                     />
                 </Box>
             </Drawer>
+
+            {/* Right side */}
             {chat.length === 0 ? (
                 <Box
                     sx={{

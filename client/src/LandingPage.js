@@ -822,8 +822,6 @@ const LandingPage = () => {
                             </IconButton>
                         </Box>
                     </Box>
-
-
                 </Box>
 
             </Box>

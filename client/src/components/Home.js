@@ -209,6 +209,7 @@ export default function Home({ themeChange, mode }) {
                         <UserProfileModal
                             modalOpen={modalOpen}
                             setModalOpen={setModalOpen}
+                            themeChange={themeChange}
                             mode={mode}
                         />
                     )}

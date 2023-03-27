@@ -28,7 +28,7 @@ export default function StartCall() {
     useEffect(() => {
         const getManagementToken = async () => {
             var managementToken = '';
-            await fetch('http://192.168.0.109:5000/mtoken', {
+            await fetch(`${process.env.REACT_APP_SERVER_URL}/mtoken`, {
                 method: 'GET',
             })
                 .then((res) => res.json())
@@ -139,8 +139,8 @@ export default function StartCall() {
                 >
                     {/* Circular button with PhoneInTalk icon */}
                     <IconButton
-                        color="primary"
-                        aria-label="join call"
+                        color='primary'
+                        aria-label='join call'
                         onClick={joinCall}
                         sx={{
                             bgcolor: 'white',
@@ -152,13 +152,13 @@ export default function StartCall() {
                                 bgcolor: 'white',
                                 color: 'rgb(0 32 93)',
                                 boxShadow: '0 0 10px 2px rgba(0,0,0,0.5)',
-                            }
+                            },
                         }}
                     >
                         <PhoneInTalkIcon sx={{ fontSize: '35px' }} />
                     </IconButton>
                     <Typography
-                        variant="h6"
+                        variant='h6'
                         sx={{
                             color: 'white',
                             opacity: '0.8',
@@ -169,8 +169,7 @@ export default function StartCall() {
                         Join Voice room
                     </Typography>
                 </Box>
-            )
-            }
-        </Box >
+            )}
+        </Box>
     );
 }

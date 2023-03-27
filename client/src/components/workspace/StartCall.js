@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
     useHMSActions,
     useHMSStore,
@@ -15,10 +15,12 @@ import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 
 import CoderOnCall from './CoderOnCall';
 import { Typography } from '@mui/material';
+import { startLoadingAction, stopLoadingAction } from '../../actions/actions';
 
 export default function StartCall() {
     const currentUser = useSelector((state) => state.auth);
     const hmsActions = useHMSActions();
+    const dispatch = useDispatch();
     const { workspaceId } = useParams();
 
     const [roomId, setRoomId] = useState('');
@@ -75,22 +77,24 @@ export default function StartCall() {
         return token;
     };
 
-    const joinCall = () => {
-        getToken()
-            .then((token) => {
-                hmsActions.join({
-                    userName: currentUser.username || 'Anonymous',
-                    authToken: token,
-                    settings: {
-                        isAudioMuted: true,
-                    },
-                    initEndpoint:
-                        process.env.REACT_APP_100MS_TOKEN_ENDPOINT || undefined,
-                });
-            })
-            .catch((error) => {
-                console.log('Token API Error', error);
+    const joinCall = async () => {
+        dispatch(startLoadingAction());
+        try {
+            const response = await getToken();
+            console.log(response);
+            await hmsActions.join({
+                userName: currentUser.username || 'Anonymous',
+                authToken: response,
+                settings: {
+                    isAudioMuted: true,
+                },
+                initEndpoint:
+                    process.env.REACT_APP_100MS_TOKEN_ENDPOINT || undefined,
             });
+        } catch (error) {
+            console.log(error);
+        }
+        dispatch(stopLoadingAction());
     };
 
     return (

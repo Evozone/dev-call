@@ -16,7 +16,7 @@ const io = new Server(server, {
 const PORT = process.env.PORT || 5000;
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_URL);
     res.setHeader(
         'Access-Control-Allow-Methods',
         'GET, POST, PUT, PATCH, DELETE'

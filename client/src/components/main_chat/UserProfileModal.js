@@ -22,10 +22,10 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import CloseIcon from '@mui/icons-material/Close';
 
 // Firebase
-import { auth } from '../../firebaseConfig';
 import { db } from '../../firebaseConfig';
 import { doc, setDoc, updateDoc, getDoc } from 'firebase/firestore';
 
+// Actions
 import {
     notifyAction,
     startLoadingAction,
@@ -35,7 +35,6 @@ import {
 export default function UserProfileModal({
     modalOpen,
     setModalOpen,
-    themeChange,
     mode,
 }) {
     const dispatch = useDispatch();

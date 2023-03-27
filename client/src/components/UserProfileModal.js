@@ -12,6 +12,7 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import InputAdornment from '@mui/material/InputAdornment';
+import { useDispatch } from 'react-redux';
 
 // MUI icons
 import GitHubIcon from '@mui/icons-material/GitHub';
@@ -23,9 +24,21 @@ import CloseIcon from '@mui/icons-material/Close';
 // Firebase
 import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, setDoc, updateDoc, getDoc } from 'firebase/firestore';
 
-export default function UserProfileModal({ modalOpen, setModalOpen, themeChange, mode }) {
+import {
+    notifyAction,
+    startLoadingAction,
+    stopLoadingAction,
+} from '../actions/actions';
+
+export default function UserProfileModal({
+    modalOpen,
+    setModalOpen,
+    themeChange,
+    mode,
+}) {
+    const dispatch = useDispatch();
 
     const currentUser = useSelector((state) => state.auth);
 
@@ -33,12 +46,31 @@ export default function UserProfileModal({ modalOpen, setModalOpen, themeChange,
 
     // Object to get changes of user profile
     const [userProfile, setUserProfile] = useState({
-        name: currentUser.name ? currentUser.name : '',
-        githubLink: currentUser.githubLink ? currentUser.githubLink : '',
-        linkedinLink: currentUser.linkedinLink ? currentUser.linkedinLink : '',
-        twitterLink: currentUser.twitterLink ? currentUser.twitterLink : '',
-        bio: currentUser.bio ? currentUser.bio : '',
+        name: '',
+        githubLink: '',
+        linkedinLink: '',
+        twitterLink: '',
+        bio: '',
     });
+
+    useEffect(() => {
+        const getUserProfile = async () => {
+            dispatch(startLoadingAction());
+            const docRef = doc(db, 'users', currentUser.uid);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                setUserProfile({
+                    name: docSnap.data().name,
+                    githubLink: docSnap.data().githubLink,
+                    linkedinLink: docSnap.data().linkedinLink,
+                    twitterLink: docSnap.data().twitterLink,
+                    bio: docSnap.data().bio,
+                });
+            }
+            dispatch(stopLoadingAction());
+        };
+        getUserProfile();
+    }, []);
 
     // array to store form inputs to map over
     const formInputs = [
@@ -63,10 +95,34 @@ export default function UserProfileModal({ modalOpen, setModalOpen, themeChange,
     ];
 
     // Function to save changes to firebase and redux store
-    const saveChanges = () => {
-        // Save changes to firebase
-
-        // Close modal
+    const saveChanges = async () => {
+        dispatch(startLoadingAction());
+        try {
+            await updateDoc(doc(db, 'users', currentUser.uid), {
+                name: userProfile.name,
+                githubLink: userProfile.githubLink,
+                linkedinLink: userProfile.linkedinLink,
+                twitterLink: userProfile.twitterLink,
+                bio: userProfile.bio,
+            });
+            dispatch(
+                notifyAction(
+                    true,
+                    'success',
+                    'Your profile has been updated successfully.'
+                )
+            );
+        } catch (error) {
+            dispatch(
+                notifyAction(
+                    true,
+                    'error',
+                    'Something went wrong! please try again later.'
+                )
+            );
+            console.log(error);
+        }
+        dispatch(stopLoadingAction());
         setModalOpen(false);
     };
 
@@ -96,7 +152,8 @@ export default function UserProfileModal({ modalOpen, setModalOpen, themeChange,
                     minWidth: '80vw',
                     minHeight: '80vh',
 
-                    backgroundColor: mode === 'light' ? 'whitesmoke' : '#1a1a1a',
+                    backgroundColor:
+                        mode === 'light' ? 'whitesmoke' : '#1a1a1a',
                     boxShadow: 24,
                     borderRadius: 3,
                     p: 4,
@@ -114,11 +171,7 @@ export default function UserProfileModal({ modalOpen, setModalOpen, themeChange,
                         width: '100%',
                     }}
                 >
-                    <Typography
-                        variant='h4'
-                    >
-                        Your Profile
-                    </Typography>
+                    <Typography variant='h4'>Your Profile</Typography>
                     <IconButton onClick={() => setModalOpen(false)}>
                         <CloseIcon />
                     </IconButton>
@@ -143,21 +196,21 @@ export default function UserProfileModal({ modalOpen, setModalOpen, themeChange,
                         }}
                     >
                         <Avatar
-                            alt={currentUser.name
-                                .charAt(0)
-                                .toUpperCase()}
+                            alt={currentUser.name.charAt(0).toUpperCase()}
                             src={currentUser.photoURL}
                             sx={{
                                 width: 100,
                                 height: 100,
                                 mb: 1,
-                                backgroundColor: mode === 'light' ? 'lightgrey' : '#1a1a1a',
-                                border: mode === 'light' ? `2px solid black` : `2px solid white`,
+                                backgroundColor:
+                                    mode === 'light' ? 'lightgrey' : '#1a1a1a',
+                                border:
+                                    mode === 'light'
+                                        ? `2px solid black`
+                                        : `2px solid white`,
                             }}
                         >
-                            {currentUser.name
-                                .charAt(0)
-                                .toUpperCase()}
+                            {currentUser.name.charAt(0).toUpperCase()}
                         </Avatar>
                         <Box
                             sx={{
@@ -206,7 +259,8 @@ export default function UserProfileModal({ modalOpen, setModalOpen, themeChange,
                             onChange={handleInputChange}
                             sx={{
                                 width: '100%',
-                                backgroundColor: mode === 'light' ? '#fff' : '#1a1a1a',
+                                backgroundColor:
+                                    mode === 'light' ? '#fff' : '#1a1a1a',
                             }}
                         />
                         <TextField
@@ -218,7 +272,8 @@ export default function UserProfileModal({ modalOpen, setModalOpen, themeChange,
                             onChange={handleInputChange}
                             sx={{
                                 width: '100%',
-                                backgroundColor: mode === 'light' ? '#fff' : '#1a1a1a',
+                                backgroundColor:
+                                    mode === 'light' ? '#fff' : '#1a1a1a',
                             }}
                         />
                         <Stack
@@ -240,7 +295,10 @@ export default function UserProfileModal({ modalOpen, setModalOpen, themeChange,
                                     onChange={handleInputChange}
                                     sx={{
                                         width: '100%',
-                                        backgroundColor: mode === 'light' ? '#fff' : '#1a1a1a',
+                                        backgroundColor:
+                                            mode === 'light'
+                                                ? '#fff'
+                                                : '#1a1a1a',
                                     }}
                                     InputProps={{
                                         startAdornment: (
@@ -259,7 +317,8 @@ export default function UserProfileModal({ modalOpen, setModalOpen, themeChange,
                     color='success'
                     sx={{
                         mt: 3,
-                        backgroundColor: mode === 'light' ? 'primary.main' : 'primary.dark',
+                        backgroundColor:
+                            mode === 'light' ? 'primary.main' : 'primary.dark',
                     }}
                     variant='contained'
                     disabled={buttonStatus}
@@ -269,5 +328,5 @@ export default function UserProfileModal({ modalOpen, setModalOpen, themeChange,
                 </Button>
             </Box>
         </Modal>
-    )
+    );
 }

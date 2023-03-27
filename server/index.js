@@ -2,19 +2,21 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const uuid4 = require('uuid4');
 const http = require('http');
+const dotenv = require('dotenv');
 const { Server } = require('socket.io');
 
 const app = express();
+dotenv.config();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: ['http://localhost:3000'],
+        origin: [process.env.CLIENT_URL],
     },
 });
 const PORT = process.env.PORT || 5000;
 
 app.use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Origin', process.env.CLIENT_URL);
     res.setHeader(
         'Access-Control-Allow-Methods',
         'GET, POST, PUT, PATCH, DELETE'
@@ -31,8 +33,8 @@ app.get('/', (req, res) => {
 });
 
 app.get('/mtoken', (req, res) => {
-    var app_access_key = '';
-    var app_secret = '';
+    var app_access_key = process.env.HMS_ACCESS_KEY;
+    var app_secret = process.env.HMS_SECRET_APP;
     try {
         const token = jwt.sign(
             {

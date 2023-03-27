@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {
     useHMSActions,
     useHMSStore,
@@ -15,10 +15,12 @@ import PhoneInTalkIcon from '@mui/icons-material/PhoneInTalk';
 
 import CoderOnCall from './CoderOnCall';
 import { Typography } from '@mui/material';
+import { startLoadingAction, stopLoadingAction } from '../../actions/actions';
 
 export default function StartCall() {
     const currentUser = useSelector((state) => state.auth);
     const hmsActions = useHMSActions();
+    const dispatch = useDispatch();
     const { workspaceId } = useParams();
 
     const [roomId, setRoomId] = useState('');
@@ -28,7 +30,7 @@ export default function StartCall() {
     useEffect(() => {
         const getManagementToken = async () => {
             var managementToken = '';
-            await fetch('http://192.168.0.109:5000/mtoken', {
+            await fetch(`${process.env.REACT_APP_SERVER_URL}/mtoken`, {
                 method: 'GET',
             })
                 .then((res) => res.json())
@@ -75,22 +77,24 @@ export default function StartCall() {
         return token;
     };
 
-    const joinCall = () => {
-        getToken()
-            .then((token) => {
-                hmsActions.join({
-                    userName: currentUser.username || 'Anonymous',
-                    authToken: token,
-                    settings: {
-                        isAudioMuted: true,
-                    },
-                    initEndpoint:
-                        process.env.REACT_APP_100MS_TOKEN_ENDPOINT || undefined,
-                });
-            })
-            .catch((error) => {
-                console.log('Token API Error', error);
+    const joinCall = async () => {
+        dispatch(startLoadingAction());
+        try {
+            const response = await getToken();
+            console.log(response);
+            await hmsActions.join({
+                userName: currentUser.username || 'Anonymous',
+                authToken: response,
+                settings: {
+                    isAudioMuted: true,
+                },
+                initEndpoint:
+                    process.env.REACT_APP_100MS_TOKEN_ENDPOINT || undefined,
             });
+        } catch (error) {
+            console.log(error);
+        }
+        dispatch(stopLoadingAction());
     };
 
     return (
@@ -139,8 +143,8 @@ export default function StartCall() {
                 >
                     {/* Circular button with PhoneInTalk icon */}
                     <IconButton
-                        color="primary"
-                        aria-label="join call"
+                        color='primary'
+                        aria-label='join call'
                         onClick={joinCall}
                         sx={{
                             bgcolor: 'white',
@@ -152,13 +156,13 @@ export default function StartCall() {
                                 bgcolor: 'white',
                                 color: 'rgb(0 32 93)',
                                 boxShadow: '0 0 10px 2px rgba(0,0,0,0.5)',
-                            }
+                            },
                         }}
                     >
                         <PhoneInTalkIcon sx={{ fontSize: '35px' }} />
                     </IconButton>
                     <Typography
-                        variant="h6"
+                        variant='h6'
                         sx={{
                             color: 'white',
                             opacity: '0.8',
@@ -169,8 +173,7 @@ export default function StartCall() {
                         Join Voice room
                     </Typography>
                 </Box>
-            )
-            }
-        </Box >
+            )}
+        </Box>
     );
 }

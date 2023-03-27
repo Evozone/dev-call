@@ -8,7 +8,7 @@ import SidePanel from './SidePanel';
 import Whiteboard from './whiteboard/Whiteboard';
 import CodeEditor from './CodeEditor';
 import SideStrip from './SideStrip';
-import useWorkspaceSocket from '../hooks/useWorkspaceSocket';
+import useWorkspaceSocket from '../../hooks/useWorkspaceSocket';
 import { languageOptions } from '../../utils/languageOptions';
 import { customGlobalScrollBars } from '../CustomGlobalCSS';
 

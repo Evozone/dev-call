@@ -31,7 +31,8 @@ export default function CoderOnCall({ peer }) {
                 flexDirection: 'column',
                 alignItems: 'center',
                 backgroundColor: 'rgb(0 32 93)',
-                padding: '0.9rem',
+                padding: '1rem',
+                px: '1.9rem',
                 borderRadius: '10px',
                 position: 'relative',
             }}
@@ -42,6 +43,7 @@ export default function CoderOnCall({ peer }) {
                         position: 'absolute',
                         top: '10px',
                         right: '8px',
+                        zIndex: 10,
                     }}
                 />
             ) : isModerator ? (
@@ -51,6 +53,7 @@ export default function CoderOnCall({ peer }) {
                             position: 'absolute',
                             top: '2px',
                             right: 0,
+                            zIndex: 10,
                         }}
                         onClick={mutePeer}
                     >

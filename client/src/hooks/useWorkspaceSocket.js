@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { initSocket } from '../../socket';
-import { notifyAction } from '../../actions/actions';
+import { initSocket } from '../socket';
+import { notifyAction } from '../actions/actions';
 
 export default function useWorkspaceSocket(
     currentUser,

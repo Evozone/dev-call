@@ -27,12 +27,12 @@ import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { db } from '../firebaseConfig';
+import { db } from '../../firebaseConfig';
 import {
     notifyAction,
     startLoadingAction,
     stopLoadingAction,
-} from '../actions/actions';
+} from '../../actions/actions';
 
 function TabPanel(props) {
     const {
@@ -95,9 +95,9 @@ function TabPanel(props) {
                                     {item[1].lastMessage &&
                                         (item[1].lastMessage.text.length > 30
                                             ? item[1].lastMessage.text.substring(
-                                                  0,
-                                                  30
-                                              ) + '.......'
+                                                0,
+                                                30
+                                            ) + '.......'
                                             : item[1].lastMessage.text)}
                                 </Typography>
                             </Box>
@@ -366,17 +366,17 @@ export default function TabsNav({
                             fontSize: '1.1rem',
                             ...(mode === 'dark'
                                 ? {
-                                      borderRight:
-                                          '1px solid rgba(255, 255, 255, 0.12)',
-                                      borderBottom:
-                                          '1px solid rgba(255, 255, 255, 0.12)',
-                                  }
+                                    borderRight:
+                                        '1px solid rgba(255, 255, 255, 0.12)',
+                                    borderBottom:
+                                        '1px solid rgba(255, 255, 255, 0.12)',
+                                }
                                 : {
-                                      borderRight:
-                                          '1px solid rgba(0, 0, 0, 0.12)',
-                                      borderBottom:
-                                          '1px solid rgba(0, 0, 0, 0.12)',
-                                  }),
+                                    borderRight:
+                                        '1px solid rgba(0, 0, 0, 0.12)',
+                                    borderBottom:
+                                        '1px solid rgba(0, 0, 0, 0.12)',
+                                }),
                         }}
                         label='CHATS'
                         {...a11yProps(0)}
@@ -387,13 +387,13 @@ export default function TabsNav({
                             fontSize: '1.1rem',
                             ...(mode === 'dark'
                                 ? {
-                                      borderBottom:
-                                          '1px solid rgba(255, 255, 255, 0.12)',
-                                  }
+                                    borderBottom:
+                                        '1px solid rgba(255, 255, 255, 0.12)',
+                                }
                                 : {
-                                      borderBottom:
-                                          '1px solid rgba(0, 0, 0, 0.12)',
-                                  }),
+                                    borderBottom:
+                                        '1px solid rgba(0, 0, 0, 0.12)',
+                                }),
                         }}
                         label='SEARCH'
                         {...a11yProps(1)}

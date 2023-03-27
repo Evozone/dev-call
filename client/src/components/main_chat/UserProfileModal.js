@@ -22,15 +22,15 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import CloseIcon from '@mui/icons-material/Close';
 
 // Firebase
-import { auth } from '../firebaseConfig';
-import { db } from '../firebaseConfig';
+import { auth } from '../../firebaseConfig';
+import { db } from '../../firebaseConfig';
 import { doc, setDoc, updateDoc, getDoc } from 'firebase/firestore';
 
 import {
     notifyAction,
     startLoadingAction,
     stopLoadingAction,
-} from '../actions/actions';
+} from '../../actions/actions';
 
 export default function UserProfileModal({
     modalOpen,

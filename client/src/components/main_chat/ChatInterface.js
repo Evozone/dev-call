@@ -21,14 +21,14 @@ import {
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { v4 as uuid } from 'uuid';
 
-import { db, storage } from '../firebaseConfig';
+import { db, storage } from '../../firebaseConfig';
 import TextBody from './TextBody';
 import MessageInput from './MessageInput';
 import {
     notifyAction,
     startLoadingAction,
     stopLoadingAction,
-} from '../actions/actions';
+} from '../../actions/actions';
 
 export default function ChatInterface({ mode, chat }) {
     const inputRef = useRef();

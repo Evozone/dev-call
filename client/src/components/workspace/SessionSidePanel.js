@@ -9,7 +9,7 @@ import InterpreterModeIcon from '@mui/icons-material/InterpreterMode';
 import { Typography } from '@mui/material';
 
 import Coder from './Coder';
-import MessageInput from '../MessageInput';
+import MessageInput from '../main_chat/MessageInput';
 import StartCall from './StartCall';
 
 export default function SessionSidePanel({ coders }) {

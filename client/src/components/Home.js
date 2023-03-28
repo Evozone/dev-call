@@ -32,9 +32,9 @@ import { auth } from '../firebaseConfig';
 import { db } from '../firebaseConfig';
 
 // Custom components
-import ChatInterface from './ChatInterface';
-import TabsNav from './TabsNav';
-import UserProfileModal from './UserProfileModal';
+import ChatInterface from './main_chat/ChatInterface';
+import TabsNav from './main_chat/TabsNav';
+import UserProfileModal from './main_chat/UserProfileModal';
 
 const drawerWidth = 470;
 
@@ -209,7 +209,6 @@ export default function Home({ themeChange, mode }) {
                         <UserProfileModal
                             modalOpen={modalOpen}
                             setModalOpen={setModalOpen}
-                            themeChange={themeChange}
                             mode={mode}
                         />
                     )}

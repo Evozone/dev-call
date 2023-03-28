@@ -6,13 +6,13 @@ import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
-import { signInAction } from '../actions/actions';
-import { auth, db } from '../firebaseConfig';
+import { signInAction } from '../../actions/actions';
+import { auth, db } from '../../firebaseConfig';
 import {
     notifyAction,
     startLoadingAction,
     stopLoadingAction,
-} from '../actions/actions';
+} from '../../actions/actions';
 
 const GoogleOneTapLogin = () => {
     const navigate = useNavigate();

@@ -21,14 +21,18 @@ import {
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { v4 as uuid } from 'uuid';
 
-import { db, storage } from '../firebaseConfig';
+import { db, storage } from '../../firebaseConfig';
+
+// User Components
 import TextBody from './TextBody';
 import MessageInput from './MessageInput';
+import OtherUserModal from './other_user_modal/OtherUserModal';
+
 import {
     notifyAction,
     startLoadingAction,
     stopLoadingAction,
-} from '../actions/actions';
+} from '../../actions/actions';
 
 export default function ChatInterface({ mode, chat }) {
     const inputRef = useRef();
@@ -37,6 +41,7 @@ export default function ChatInterface({ mode, chat }) {
     const currentUser = useSelector((state) => state.auth);
 
     const [messages, setMessages] = useState([]);
+    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         const unSub = onSnapshot(doc(db, 'chats', chat[0]), (doc) => {
@@ -153,6 +158,15 @@ export default function ChatInterface({ mode, chat }) {
                 backgroundColor: mode === 'dark' ? '#1a1a1a' : '#f5f5f5',
             }}
         >
+            {modalOpen && (
+                <OtherUserModal
+                    modalOpen={modalOpen}
+                    setModalOpen={setModalOpen}
+                    mode={mode}
+                    otherUser={chat[1].userInfo}
+                />
+            )}
+
             <Box
                 sx={{
                     height: '75px',
@@ -170,18 +184,29 @@ export default function ChatInterface({ mode, chat }) {
                     top: 0,
                 }}
             >
-                <Avatar
-                    alt={chat[1].userInfo.username.charAt(0).toUpperCase()}
-                    src={chat[1].userInfo.photoURL}
-                    sx={{ width: 50, height: 50, mr: 2 }}
-                />
-
-                <Typography
-                    sx={{ color: 'whitesmoke', fontWeight: '400' }}
-                    variant='h6'
+                <IconButton
+                    sx={{
+                        borderRadius: 2,
+                        '&:hover': {
+                            border: `1px solid grey`,
+                        },
+                    }}
+                    onClick={() => setModalOpen(true)}
                 >
-                    {chat[1].userInfo.username}
-                </Typography>
+                    <Avatar
+                        alt={chat[1].userInfo.username.charAt(0).toUpperCase()}
+                        src={chat[1].userInfo.photoURL}
+                        sx={{ width: 50, height: 50, mr: 2 }}
+                    />
+
+                    <Typography
+                        sx={{ color: 'whitesmoke', fontWeight: '400' }}
+                        variant='h6'
+                    >
+                        {chat[1].userInfo.username}
+                    </Typography>
+                </IconButton>
+
                 <Grid pr='20px' container justifyContent='flex-end'>
                     <Tooltip title='Workspace'>
                         <IconButton onClick={startWorkspace}>
@@ -200,6 +225,7 @@ export default function ChatInterface({ mode, chat }) {
                         </IconButton>
                     </Tooltip>
                 </Grid>
+
             </Box>
             <Box
                 sx={{
@@ -271,6 +297,6 @@ export default function ChatInterface({ mode, chat }) {
                 mode={mode}
                 uploadFile={uploadFile}
             />
-        </Box>
+        </Box >
     );
 }

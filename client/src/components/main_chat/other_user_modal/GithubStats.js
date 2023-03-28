@@ -21,39 +21,18 @@ const GithubStats = ({ mode, userGithub }) => {
         <Box
             sx={{
                 display: 'flex',
-                flexDirection: 'row',
                 justifyContent: 'center',
                 width: '100%',
-                mt: 2,
             }}
         >
-            <Box
-                sx={{
-                    width: '80%',
-                    backgroundColor: mode === 'light' ? '#D5D7DB' : '#121212',
-                    p: 2,
+            <img
+                src={apiUrl}
+                alt="Github Stats"
+                style={{
                     borderRadius: 5,
+                    width: '100%',
                 }}
-            >
-                <Typography
-                    variant="h6"
-                    component="h4"
-                    sx={{
-                        color: mode === 'light' ? 'black' : 'whitesmoke',
-                        mb: 1,
-                    }}
-                >
-                    <b>On Github:</b>
-                </Typography>
-                <img
-                    src={apiUrl}
-                    alt="Github Stats"
-                    style={{
-                        borderRadius: 5,
-                        width: '100%',
-                    }}
-                />
-            </Box>
+            />
         </Box>
     );
 };

@@ -1,42 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import { Octokit } from '@octokit/core';
-
-import CircularProgress from '@mui/material/CircularProgress';
 
 const GithubStats = ({ mode, userGithub }) => {
-    const [stats, setStats] = useState(null);
+
+    let username = '';
+
+    const [apiUrl, setApiUrl] = useState('');
 
     useEffect(() => {
-        const octokit = new Octokit();
-
         // Wait for userGithub to be set
         if (!userGithub) return;
 
-        const username = userGithub.split('/').pop();
+        username = userGithub.split('/').pop();
 
-        const fetchStats = async () => {
-            try {
-                const [
-                    repos,
-                    user,
-                ] = await Promise.all([
-                    octokit.request(`GET /users/${username}/repos`),
-                    octokit.request(`GET /users/${username}`),
-                ]);
+        setApiUrl(`https://github-readme-stats.vercel.app/api?username=${username}&theme=${mode === 'light' ? 'default' : 'dark'}&show_icons=true`);
 
-                setStats({
-                    reposCount: repos.data.length,
-                    followersCount: user.data.followers,
-                });
-
-                console.log(repos, user);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        fetchStats();
     }, [userGithub]);
 
     return (
@@ -44,67 +22,38 @@ const GithubStats = ({ mode, userGithub }) => {
             sx={{
                 display: 'flex',
                 flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'flex-start',
+                justifyContent: 'center',
                 width: '100%',
+                mt: 2,
             }}
         >
-            {stats ? (
-                <>
-                    <Box
-                        sx={{
-                            backgroundColor: mode === 'light' ? 'whitesmoke' : '#121212',
-                            p: 2,
-                            borderRadius: 5,
-                        }}
-                    >
-                        <Typography
-                            variant="h6"
-                            component="h2"
-                            sx={{
-                                color: mode === 'light' ? 'black' : 'whitesmoke',
-                                mb: 1,
-                            }}
-                        >
-                            <b>Github Stats</b>
-                        </Typography>
-                        {stats ? (
-                            <>
-                                <Typography
-                                    variant="body1"
-                                    component="p"
-                                    sx={{
-                                        color: mode === 'light' ? 'black' : 'whitesmoke',
-                                    }}
-                                >
-                                    {`Repositories: ${stats.reposCount}`}
-                                </Typography>
-                                <Typography
-                                    variant="body1"
-                                    component="p"
-                                    sx={{
-                                        color: mode === 'light' ? 'black' : 'whitesmoke',
-                                    }}
-                                >
-                                    {`Followers: ${stats.followersCount}`}
-                                </Typography>
-                            </>
-                        ) : (
-                            <CircularProgress color="primary" />
-                        )}
-                    </Box>
-                </>
-            ) : (
+            <Box
+                sx={{
+                    width: '80%',
+                    backgroundColor: mode === 'light' ? '#D5D7DB' : '#121212',
+                    p: 2,
+                    borderRadius: 5,
+                }}
+            >
                 <Typography
                     variant="h6"
-                    component="h2"
+                    component="h4"
                     sx={{
                         color: mode === 'light' ? 'black' : 'whitesmoke',
+                        mb: 1,
                     }}
                 >
-                    <b>Loading Github stats...</b>
+                    <b>On Github:</b>
                 </Typography>
-            )}
+                <img
+                    src={apiUrl}
+                    alt="Github Stats"
+                    style={{
+                        borderRadius: 5,
+                        width: '100%',
+                    }}
+                />
+            </Box>
         </Box>
     );
 };

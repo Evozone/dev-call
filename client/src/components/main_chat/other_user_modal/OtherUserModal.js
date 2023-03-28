@@ -112,7 +112,9 @@ export default function OtherUserModal({
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
                     minWidth: '60vw',
-                    minHeight: '60vh',
+                    height: 'clamp(30rem, 60vh, 60rem)',
+
+                    overflow: 'auto',
 
                     backgroundColor:
                         mode === 'light' ? 'whitesmoke' : '#1a1a1a',

@@ -149,7 +149,7 @@ export default function UserProfileModal({
                     transform: 'translate(-50%, -50%)',
 
                     minWidth: '80vw',
-                    minHeight: '80vh',
+                    height: 'auto',
 
                     backgroundColor:
                         mode === 'light' ? 'whitesmoke' : '#1a1a1a',
@@ -267,6 +267,7 @@ export default function UserProfileModal({
                             variant='outlined'
                             name='bio'
                             multiline
+                            maxRows={4}
                             value={userProfile.bio}
                             onChange={handleInputChange}
                             sx={{
@@ -315,7 +316,6 @@ export default function UserProfileModal({
                 <Button
                     color='success'
                     sx={{
-                        mt: 3,
                         backgroundColor:
                             mode === 'light' ? 'primary.main' : 'primary.dark',
                     }}

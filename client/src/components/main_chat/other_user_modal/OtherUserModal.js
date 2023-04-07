@@ -111,10 +111,8 @@ export default function OtherUserModal({
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    minWidth: '60vw',
-                    height: 'clamp(30rem, 60vh, 60rem)',
-
-                    overflow: 'auto',
+                    width: '90vw',
+                    height: 'fit-content',
 
                     backgroundColor:
                         mode === 'light' ? 'whitesmoke' : '#1a1a1a',
@@ -158,7 +156,7 @@ export default function OtherUserModal({
                         alignItems: 'center',
                         justifyContent: 'flex-start',
                         width: '100%',
-                        my: 2,
+                        mt: 4,
                     }}
                 >
                     <Avatar
@@ -178,7 +176,7 @@ export default function OtherUserModal({
                         direction="column"
                         spacing={1}
                         sx={{
-                            width: '100%',
+                            width: '80%',
                             mt: 2,
                         }}
                     >
@@ -186,11 +184,13 @@ export default function OtherUserModal({
                         <InfoSection label="Email" content={user.email} mode={mode} />
                         <FollowSection links={userLinks} mode={mode} />
                     </Stack>
+                    <Divider orientation="vertical" flexItem sx={{
+                        backgroundColor: mode === 'light' ? '#000' : '#fff',
+                        mx: 3,
+                    }} />
+                    {/* Github Stats */}
+                    <GithubStats mode={mode} userGithub={user.githubLink} />
                 </Box>
-
-                {/* Github Stats */}
-                <GithubStats mode={mode} userGithub={user.githubLink} />
-
             </Box>
         </Modal>
     )

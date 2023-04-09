@@ -1,8 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CssBaseline from '@mui/material/CssBaseline';
+import Tooltip from '@mui/material/Tooltip';
+import { doc, updateDoc } from 'firebase/firestore';
 
 import SidePanel from './SidePanel';
 import Whiteboard from './whiteboard/Whiteboard';
@@ -11,12 +15,19 @@ import SideStrip from './SideStrip';
 import useWorkspaceSocket from '../../hooks/useWorkspaceSocket';
 import { languageOptions } from '../../utils/languageOptions';
 import { customGlobalScrollBars } from '../CustomGlobalCSS';
+import { db } from '../../firebaseConfig';
+import {
+    notifyAction,
+    startLoadingAction,
+    stopLoadingAction,
+} from '../../actions/actions';
 
 export default function WorkSpace() {
     const params = useParams();
     const canvasRef = useRef(null);
     const socketRef = useRef();
     const codeRef = useRef(null);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (!window.localStorage.getItem('dev')) {
@@ -42,6 +53,7 @@ export default function WorkSpace() {
         miniMap: false,
         wordWrap: true,
     });
+    const [messages, setMessages] = useState(null);
 
     const handleSelect = (event, newSelected) => {
         if (newSelected !== null) {
@@ -76,6 +88,28 @@ export default function WorkSpace() {
         });
     };
 
+    const uploadDataToCloud = async () => {
+        try {
+            dispatch(startLoadingAction());
+            const canvasData = localStorage.getItem(
+                `${params.workspaceId}-drawing`
+            );
+            const code = localStorage.getItem(`${params.workspaceId}-code`);
+            const data = {
+                code,
+                canvasData,
+            };
+            const dbRef = doc(db, 'workspace', params.workspaceId);
+            await updateDoc(dbRef, data);
+        } catch (error) {
+            dispatch(
+                notifyAction('error', true, 'Error uploading data to cloud')
+            );
+        } finally {
+            dispatch(stopLoadingAction());
+        }
+    };
+
     return (
         <Box
             sx={{
@@ -100,6 +134,9 @@ export default function WorkSpace() {
                     setOpen,
                     coders,
                     handleCheckboxChange,
+                    params,
+                    messages,
+                    setMessages,
                 }}
             />
             {/* A side strip which controls the sidebar */}
@@ -123,6 +160,24 @@ export default function WorkSpace() {
                     />
                 </Box>
             )}
+            <Tooltip title='Backup workspace data to cloud' placement='top'>
+                <Fab
+                    sx={{
+                        position: 'absolute',
+                        bottom: 16,
+                        right: 16,
+                        backgroundColor: '#03256C',
+                        color: 'white',
+
+                        '&:hover': {
+                            backgroundColor: '#2196f3',
+                        },
+                    }}
+                    onClick={uploadDataToCloud}
+                >
+                    <CloudUploadIcon />
+                </Fab>
+            </Tooltip>
         </Box>
     );
 }

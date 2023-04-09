@@ -11,7 +11,6 @@ import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     doc,
-    getDoc,
     updateDoc,
     arrayUnion,
     Timestamp,
@@ -175,11 +174,11 @@ export default function ChatInterface({ mode, chat }) {
                     pl: 2,
                     ...(mode === 'dark'
                         ? {
-                            backgroundColor: 'info.dark',
-                        }
+                              backgroundColor: 'info.dark',
+                          }
                         : {
-                            backgroundColor: 'primary.main',
-                        }),
+                              backgroundColor: 'primary.main',
+                          }),
                     position: 'sticky',
                     top: 0,
                 }}
@@ -225,7 +224,6 @@ export default function ChatInterface({ mode, chat }) {
                         </IconButton>
                     </Tooltip>
                 </Grid>
-
             </Box>
             <Box
                 sx={{
@@ -297,6 +295,6 @@ export default function ChatInterface({ mode, chat }) {
                 mode={mode}
                 uploadFile={uploadFile}
             />
-        </Box >
+        </Box>
     );
 }

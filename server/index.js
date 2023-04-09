@@ -1,18 +1,11 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const uuid4 = require('uuid4');
-const http = require('http');
 const dotenv = require('dotenv');
 const { Server } = require('socket.io');
 
 const app = express();
 dotenv.config();
-const server = http.createServer(app);
-const io = new Server(server, {
-    cors: {
-        origin: [process.env.CLIENT_URL],
-    },
-});
 const PORT = process.env.PORT || 5000;
 
 app.use((req, res, next) => {
@@ -65,6 +58,17 @@ app.get('/mtoken', (req, res) => {
     }
 });
 
+const server = app.listen(PORT, () =>
+    console.log("Hello! This is dev chat's backend, listening on port - ", PORT)
+);
+
+const io = new Server(server, {
+    pingTimeout: 60000,
+    cors: {
+        origin: process.env.CLIENT_URL,
+    },
+});
+
 const users = {}; //users { ONKyOYBAguAinDJuAAAD( socket.id): 'itsvishal2417'(username) }
 function getAllConnectedClients(roomId, namespace) {
     return Array.from(
@@ -113,6 +117,17 @@ workspace.on('connection', (socket) => {
         workspace.to(socketId).emit('drawingChange', { drawingData, socketId });
     });
 
+    socket.on('syncMessages', ({ messages, socketId }) => {
+        workspace.to(socketId).emit('syncMessages', { messages });
+    });
+
+    socket.on('message', ({ roomId, message }) => {
+        console.log(roomId);
+        socket.in(roomId).emit('message', {
+            message,
+        });
+    });
+
     socket.on('disconnecting', () => {
         const rooms = [...socket.rooms];
         rooms.forEach((roomId) => {
@@ -126,126 +141,4 @@ workspace.on('connection', (socket) => {
         // console.log('User left', socket.id);
         // console.log('users', users);
     });
-});
-
-//add a new socket connection for voice calling
-const socketUserMap = {};
-const voiceCall = io.of('/voiceCall');
-voiceCall.on('connection', (socket) => {
-    console.log('a user JOINED a call - ', socket.id);
-
-    socket.on('join', ({ roomId, user }) => {
-        socketUserMap[socket.id] = user;
-        const clients = Array.from(
-            io.of('/voiceCall').adapter.rooms.get(roomId) || []
-        );
-        clients.forEach((clientId) => {
-            voiceCall.to(clientId).emit('addPeer', {
-                peerId: socket.id,
-                createOffer: false,
-                user,
-            });
-            socket.emit('addPeer', {
-                peerId: clientId,
-                createOffer: true,
-                user: socketUserMap[clientId],
-            });
-
-            console.log(
-                'user ',
-                user.username,
-                ' with clientId -> ',
-                clientId,
-                '& socket.id -> ',
-                socket.id,
-                'joined voicecall room',
-                roomId
-            );
-        });
-        socket.join(roomId);
-        console.log('clients - ', clients);
-        // console.log('socketUserMap - ', socketUserMap);
-    });
-
-    socket.on('relayIce', ({ peerId, icecandidate }) => {
-        voiceCall.to(peerId).emit('iceCandidate', {
-            peerId: socket.id,
-            icecandidate,
-        });
-    });
-
-    socket.on('relaySdp', ({ peerId, sessionDescription }) => {
-        voiceCall.to(peerId).emit('sessionDescription', {
-            peerId: socket.id,
-            sessionDescription,
-        });
-    });
-
-    socket.on('mute', ({ roomId, userId }) => {
-        const clients = Array.from(
-            io.of('/voiceCall').adapter.rooms.get(roomId) || []
-        );
-        clients.forEach((clientId) => {
-            voiceCall.to(clientId).emit('mute', {
-                peerId: socket.id,
-                userId,
-            });
-        });
-    });
-
-    socket.on('unmute', ({ roomId, userId }) => {
-        const clients = Array.from(
-            io.of('/voiceCall').adapter.rooms.get(roomId) || []
-        );
-        clients.forEach((clientId) => {
-            voiceCall.to(clientId).emit('unmute', {
-                peerId: socket.id,
-                userId,
-            });
-        });
-    });
-
-    socket.on('muteInfo', ({ userId, roomId, isMute }) => {
-        const clients = Array.from(
-            io.of('/voiceCall').adapter.rooms.get(roomId) || []
-        );
-        clients.forEach((clientId) => {
-            if (clientId !== socket.id) {
-                console.log('mute info');
-                voiceCall.to(clientId).emit('muteInfo', {
-                    userId,
-                    isMute,
-                });
-            }
-        });
-    });
-
-    const leaveRoom = () => {
-        const { rooms } = socket;
-        Array.from(rooms).forEach((roomId) => {
-            const clients = Array.from(
-                io.of('/voiceCall').adapter.rooms.get(roomId) || []
-            );
-            clients.forEach((clientId) => {
-                voiceCall.to(clientId).emit('removePeer', {
-                    peerId: socket.id,
-                    userId: socketUserMap[socket.id]?.id,
-                });
-
-                // socket.emit('removePeer', {
-                //     peerId: clientId,
-                //     userId: socketUserMap[clientId]?.id,
-                // });
-            });
-            socket.leave(roomId);
-        });
-        delete socketUserMap[socket.id];
-    };
-
-    socket.on('leave', leaveRoom);
-    socket.on('disconnecting', leaveRoom);
-});
-
-server.listen(PORT, () => {
-    console.log('Hello! This is dev chat+ backend, listening on port - ', PORT);
 });

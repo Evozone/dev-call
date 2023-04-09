@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import CancelIcon from '@mui/icons-material/Cancel';
 
-export default function TextBody({ message, inputRef }) {
+export default function TextBody({ message, inputRef, sendername }) {
     const endRef = useRef();
 
     const currentUser = useSelector((state) => state.auth);
@@ -100,6 +100,7 @@ export default function TextBody({ message, inputRef }) {
                         : {
                               flexDirection: 'row',
                           }),
+                    ...(sendername && { display: 'block' }),
                 }}
             >
                 {imageModal && (
@@ -155,6 +156,18 @@ export default function TextBody({ message, inputRef }) {
                             </a>
                         </Box>
                     </Modal>
+                )}
+                {sendername && (
+                    <Typography
+                        sx={{
+                            fontSize: '12px',
+                            fontWeight: 'bold',
+                            color: 'white',
+                            mr: '5px',
+                        }}
+                    >
+                        {message.senderUsername}
+                    </Typography>
                 )}
                 {isLink ? (
                     <Box sx={{ wordBreak: 'break-word' }}>

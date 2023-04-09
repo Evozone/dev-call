@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, cleanup, act } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import TypewriterCycle from '../components/TypewriterCycle.js';
+import TypewriterCycle from '../components/landing_page/TypewriterCycle.js';
 
 afterEach(cleanup); // clean up the DOM after each test
 
@@ -36,7 +36,6 @@ it('renders the correct text', () => {
     }
     expect(getByRole('textbox')).toHaveTextContent('World');
 });
-
 
 it('renders the cursor', () => {
     const { getByTestId } = render(

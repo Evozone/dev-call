@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
-import FeatureCard from '../components/FeatureCard';
+import FeatureCard from '../components/landing_page/FeatureCard';
 
 test('renders correct image and text content', () => {
     const image = '../public/logo192.png';
@@ -21,4 +21,3 @@ test('renders correct image and text content', () => {
     const descriptionElement = getByText(description);
     expect(descriptionElement).toBeInTheDocument();
 });
-

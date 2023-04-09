@@ -21,6 +21,9 @@ export default function SidePanel({
     setOpen,
     coders,
     handleCheckboxChange,
+    params,
+    messages,
+    setMessages,
 }) {
     return (
         <Box
@@ -64,7 +67,9 @@ export default function SidePanel({
                     dev chat + {selected == 'session' ? '' : 'code'}
                 </Typography>
                 {selected === 'session' ? (
-                    <SessionSidePanel coders={coders} />
+                    <SessionSidePanel
+                        {...{ coders, params, messages, setMessages }}
+                    />
                 ) : (
                     <React.Fragment>
                         <Divider />
@@ -95,6 +100,6 @@ export default function SidePanel({
                     </IconButton>
                 </Tooltip>
             </Drawer>
-        </Box >
+        </Box>
     );
 }

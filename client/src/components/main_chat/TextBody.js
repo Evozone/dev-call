@@ -1,10 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
 import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { markdownHTML } from '../CustomGlobalCSS';
 
 export default function TextBody({ message, inputRef, sendername }) {
     const endRef = useRef();
@@ -74,6 +77,7 @@ export default function TextBody({ message, inputRef, sendername }) {
 
     return (
         <React.Fragment>
+            {markdownHTML()}
             <Box
                 sx={{
                     borderRadius: '20px',
@@ -87,19 +91,19 @@ export default function TextBody({ message, inputRef, sendername }) {
                     alignItems: 'end',
                     ...(currentUser.uid === message.senderid
                         ? {
-                              alignSelf: 'flex-end',
-                              borderBottomLeftRadius: '20px',
-                              borderBottomRightRadius: '1px',
-                              backgroundColor: '#25D366',
-                          }
+                            alignSelf: 'flex-end',
+                            borderBottomLeftRadius: '20px',
+                            borderBottomRightRadius: '1px',
+                            backgroundColor: '#25D366',
+                        }
                         : { backgroundColor: '#34B7F1' }),
                     ...(isImage
                         ? {
-                              flexDirection: 'column',
-                          }
+                            flexDirection: 'column',
+                        }
                         : {
-                              flexDirection: 'row',
-                          }),
+                            flexDirection: 'row',
+                        }),
                     ...(sendername && { display: 'block' }),
                 }}
             >
@@ -116,8 +120,8 @@ export default function TextBody({ message, inputRef, sendername }) {
                                 top: '50%',
                                 left: '50%',
                                 transform: 'translate(-50%, -50%)',
-                                width: 950,
-                                height: 650,
+                                width: '80vw',
+                                height: '90vh',
                                 bgcolor: 'background.paper',
                                 boxShadow: 24,
                                 borderRadius: '10px',
@@ -157,6 +161,8 @@ export default function TextBody({ message, inputRef, sendername }) {
                         </Box>
                     </Modal>
                 )}
+
+                {/* This is for the Workspace Chat */}
                 {sendername && (
                     <Typography
                         sx={{
@@ -169,6 +175,8 @@ export default function TextBody({ message, inputRef, sendername }) {
                         {message.senderUsername}
                     </Typography>
                 )}
+
+                {/* If link, then is image? */}
                 {isLink ? (
                     <Box sx={{ wordBreak: 'break-word' }}>
                         {funcSplitMessage(message.text).map((item, index) => {
@@ -223,10 +231,12 @@ export default function TextBody({ message, inputRef, sendername }) {
                         })}
                     </Box>
                 ) : (
-                    <Typography sx={{ wordBreak: 'break-word' }}>
+                    <ReactMarkdown remarkPlugins={[gfm]}>
                         {message.text}
-                    </Typography>
+                    </ReactMarkdown>
                 )}
+
+                {/* Time */}
                 <Typography
                     ref={endRef}
                     sx={{
@@ -241,6 +251,6 @@ export default function TextBody({ message, inputRef, sendername }) {
                     {messageTime}
                 </Typography>
             </Box>
-        </React.Fragment>
+        </React.Fragment >
     );
 }

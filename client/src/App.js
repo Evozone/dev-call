@@ -1,21 +1,26 @@
-import { useState, useEffect } from 'react';
+// React imports
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Routes, Route, useNavigate } from 'react-router-dom';
+
+// Npm libraries
 import jwtDecode from 'jwt-decode';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { HMSRoomProvider } from '@100mslive/hms-video-react';
 
+// Actions
 import { signInAction } from './actions/actions';
+
+// Custom components
 import Home from './components/home/Home';
 import LandingPage from './LandingPage';
-import Loading from './components/Loading';
-import ProtectedRoute from './components/ProtectedRoute';
-import VideoCall from './components/VideoCall';
+import Loading from './components/util/Loading';
+import ProtectedRoute from './components/util/ProtectedRoute';
+import VideoCall from './components/util/VideoCall';
 import WorkSpace from './components/workspace/WorkSpace';
-// import CodePlayGround from './components/CodePlayGround';
 import { customGlobalScrollBars } from './components/CustomGlobalCSS';
-import Notify from './components/Notify';
+import Notify from './components/util/Notify';
 
 const App = () => {
     const dispatch = useDispatch();

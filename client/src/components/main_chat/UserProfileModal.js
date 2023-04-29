@@ -60,10 +60,10 @@ export default function UserProfileModal({
             if (docSnap.exists()) {
                 setUserProfile({
                     name: docSnap.data().name,
-                    githubLink: docSnap.data().githubLink,
-                    linkedinLink: docSnap.data().linkedinLink,
-                    twitterLink: docSnap.data().twitterLink,
-                    bio: docSnap.data().bio,
+                    githubLink: docSnap.data().githubLink || '',
+                    linkedinLink: docSnap.data().linkedinLink || '',
+                    twitterLink: docSnap.data().twitterLink || '',
+                    bio: docSnap.data().bio || '',
                 });
             }
             dispatch(stopLoadingAction());

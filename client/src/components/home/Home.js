@@ -22,9 +22,11 @@ export default function Home({ themeChange, mode }) {
         // Parent Box
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
+            <Box>
+                {/* Left side */}
+                <HomeLeftSide themeChange={themeChange} mode={mode} currentUser={currentUser} chat={chat} setChat={setChat} />
+            </Box>
 
-            {/* Left side */}
-            <HomeLeftSide themeChange={themeChange} mode={mode} currentUser={currentUser} chat={chat} setChat={setChat} />
 
             {/* Right side */}
             {chat.length === 0 ? (

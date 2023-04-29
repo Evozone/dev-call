@@ -25,6 +25,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
+import ChatIcon from '@mui/icons-material/Chat';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { db } from '../../firebaseConfig';
@@ -349,55 +351,33 @@ export default function TabsNav({
         setValue(0);
     };
 
+    const tabStyle = {
+        p: 0,
+        fontSize: '1rem',
+        ...(mode === 'dark'
+            ? {
+                borderRight: '1px solid rgba(255, 255, 255, 0.12)',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.12)',
+            }
+            : {
+                borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+                borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
+            }),
+    };
+
     return (
         <Box sx={{ bgcolor: 'background.paper', width: '100%' }}>
             <AppBar elevation={0} color='inherit' position='static'>
                 <Tabs
-                    sx={{ height: '75px', alignItems: 'center' }}
+                    sx={{ height: '70px', alignItems: 'center' }}
                     value={value}
                     onChange={handleChange}
                     textColor='inherit'
                     variant='fullWidth'
                     aria-label='full width tabs example'
                 >
-                    <Tab
-                        sx={{
-                            height: '75px',
-                            fontSize: '1.1rem',
-                            ...(mode === 'dark'
-                                ? {
-                                    borderRight:
-                                        '1px solid rgba(255, 255, 255, 0.12)',
-                                    borderBottom:
-                                        '1px solid rgba(255, 255, 255, 0.12)',
-                                }
-                                : {
-                                    borderRight:
-                                        '1px solid rgba(0, 0, 0, 0.12)',
-                                    borderBottom:
-                                        '1px solid rgba(0, 0, 0, 0.12)',
-                                }),
-                        }}
-                        label='CHATS'
-                        {...a11yProps(0)}
-                    />
-                    <Tab
-                        sx={{
-                            height: '75px',
-                            fontSize: '1.1rem',
-                            ...(mode === 'dark'
-                                ? {
-                                    borderBottom:
-                                        '1px solid rgba(255, 255, 255, 0.12)',
-                                }
-                                : {
-                                    borderBottom:
-                                        '1px solid rgba(0, 0, 0, 0.12)',
-                                }),
-                        }}
-                        label='SEARCH'
-                        {...a11yProps(1)}
-                    />
+                    <Tab sx={tabStyle} icon={<ChatIcon />} iconPosition="start" label='CHATS' {...a11yProps(0)} />
+                    <Tab sx={{ ...tabStyle, borderRight: 'none' }} icon={<PersonSearchIcon />} iconPosition="start" label='SEARCH' {...a11yProps(1)} />
                 </Tabs>
             </AppBar>
             <List sx={{ p: 0 }}>

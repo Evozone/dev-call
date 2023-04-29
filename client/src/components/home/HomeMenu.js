@@ -135,8 +135,7 @@ export default function HomeMenu({
       <Divider
         orientation='vertical'
         sx={{
-          backgroundColor: mode === 'dark' ? 'whitesmoke' : 'primary.dark',
-          opacity: 0.5,
+          backgroundColor: mode === 'light' ? '#0b3660' : 'whitemsmoke',
           height: '40px',
           width: '1px',
           my: 1,
@@ -145,7 +144,7 @@ export default function HomeMenu({
       />
       <Tooltip title='Logout'>
         <IconButton onClick={logOut}>
-          <LogoutIcon sx={{ color: 'lightsteelblue' }} />
+          <LogoutIcon sx={{}} />
         </IconButton>
       </Tooltip>
     </Box>

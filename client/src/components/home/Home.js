@@ -7,7 +7,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { useSelector } from 'react-redux';
 
 // Custom components
-import ChatInterface from '../main_chat/ChatInterface';
+import HomeRightSide from './HomeRightSide';
 import HomeLeftSide from './HomeLeftSide';
 import NoChatTemplate from './NoChatTemplate';
 
@@ -30,7 +30,7 @@ export default function Home({ themeChange, mode }) {
             {chat.length === 0 ? (
                 <NoChatTemplate mode={mode} />
             ) : (
-                <ChatInterface chat={chat} mode={mode} />
+                <HomeRightSide chat={chat} mode={mode} />
             )}
 
         </Box>

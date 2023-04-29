@@ -7,7 +7,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { HMSRoomProvider } from '@100mslive/hms-video-react';
 
 import { signInAction } from './actions/actions';
-import Home from './components/Home';
+import Home from './components/home/Home';
 import LandingPage from './LandingPage';
 import Loading from './components/Loading';
 import ProtectedRoute from './components/ProtectedRoute';

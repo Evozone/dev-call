@@ -1,13 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import Tooltip from '@mui/material/Tooltip';
-import IconButton from '@mui/material/IconButton';
-import VideoCallIcon from '@mui/icons-material/VideoCall';
-import WorkspacesIcon from '@mui/icons-material/Workspaces';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     doc,
@@ -25,7 +18,7 @@ import { db, storage } from '../../firebaseConfig';
 // User Components
 import TextBody from '../main_chat/TextBody';
 import MessageInput from '../main_chat/MessageInput';
-import OtherUserModal from '../main_chat/other_user_modal/OtherUserModal';
+import OtherUserHeader from '../main_chat/OtherUserHeader';
 
 import {
     notifyAction,
@@ -40,7 +33,6 @@ export default function HomeRightSide({ mode, chat }) {
     const currentUser = useSelector((state) => state.auth);
 
     const [messages, setMessages] = useState([]);
-    const [modalOpen, setModalOpen] = useState(false);
 
     useEffect(() => {
         const unSub = onSnapshot(doc(db, 'chats', chat[0]), (doc) => {
@@ -136,15 +128,6 @@ export default function HomeRightSide({ mode, chat }) {
                             and much more. Join me on this room: 
                             ${process.env.REACT_APP_BASE_URL}/meet/${chat[0]}`;
 
-    const startVideoCall = () => {
-        // handleSendMessage(INVITE_TEMPLATE, true);
-        window.location.href = `/meet/${chat[0]}`;
-    };
-
-    const startWorkspace = () => {
-        window.location.href = `/workspace/${chat[0]}`;
-    };
-
     return (
         <Box
             component='main'
@@ -157,79 +140,12 @@ export default function HomeRightSide({ mode, chat }) {
                 backgroundColor: mode === 'dark' ? '#1a1a1a' : '#f5f5f5',
             }}
         >
-            {modalOpen && (
-                <OtherUserModal
-                    modalOpen={modalOpen}
-                    setModalOpen={setModalOpen}
-                    mode={mode}
-                    otherUser={chat[1].userInfo}
-                />
-            )}
-
-            <Box
-                sx={{
-                    height: '75px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    pl: 2,
-                    ...(mode === 'dark'
-                        ? {
-                            backgroundColor: 'info.dark',
-                        }
-                        : {
-                            backgroundColor: 'primary.main',
-                        }),
-                    position: 'sticky',
-                    top: 0,
-                }}
-            >
-                <IconButton
-                    sx={{
-                        borderRadius: 2,
-                        '&:hover': {
-                            border: `1px solid grey`,
-                        },
-                    }}
-                    onClick={() => setModalOpen(true)}
-                >
-                    <Avatar
-                        alt={chat[1].userInfo.username.charAt(0).toUpperCase()}
-                        src={chat[1].userInfo.photoURL}
-                        sx={{ width: 50, height: 50, mr: 2 }}
-                    />
-
-                    <Typography
-                        sx={{ color: 'whitesmoke', fontWeight: '400' }}
-                        variant='h6'
-                    >
-                        {chat[1].userInfo.username}
-                    </Typography>
-                </IconButton>
-
-                <Grid pr='20px' container justifyContent='flex-end'>
-                    <Tooltip title='Workspace'>
-                        <IconButton onClick={startWorkspace}>
-                            <WorkspacesIcon
-                                fontSize='large'
-                                sx={{ color: 'whitesmoke' }}
-                            />
-                        </IconButton>
-                    </Tooltip>
-                    <Tooltip title='Video Call'>
-                        <IconButton onClick={startVideoCall}>
-                            <VideoCallIcon
-                                fontSize='large'
-                                sx={{ color: 'whitesmoke' }}
-                            />
-                        </IconButton>
-                    </Tooltip>
-                </Grid>
-            </Box>
+            <OtherUserHeader chat={chat} mode={mode} />
             <Box
                 sx={{
                     pt: '20px',
                     px: '20px',
-                    height: 'calc(100vh - 140px)',
+                    height: 'calc(100vh - 130px)',
                     overflowY: 'scroll',
                     overflowX: 'hidden',
                     display: 'flex',

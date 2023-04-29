@@ -53,7 +53,7 @@ export default function MessageInput({
 
     const handleKey = (e) => {
         const text = inputRef.current.value;
-        e.code === 'Enter' && e.ctrlKey && handleSendMessage(text, false);
+        e.code === 'Enter' && !e.shiftKey && handleSendMessage(text, false);
     };
 
     const handleSendMsg = () => {
@@ -145,24 +145,23 @@ export default function MessageInput({
             >
                 <TextField
                     inputRef={inputRef}
+                    variant='outlined'
                     sx={{
                         width: '100%',
                         '& .MuiOutlinedInput-root': {
-                            borderRadius: '15px',
+                            borderRadius: '10px',
                             backgroundColor:
                                 mode === 'dark' || mode === 'work'
                                     ? '#101010'
-                                    : '#f0f0f0',
+                                    : 'rgba(0, 0, 0, 0.05)',
                         },
-                        border: 'none',
                     }}
                     size='small'
                     multiline
-                    maxRows={2}
-                    placeholder='Hit Crtl+Enter to send message'
+                    maxRows={4}
+                    placeholder='Enter to send, Shift + Enter for new line'
                     autoFocus
                     onKeyDown={handleKey}
-                    focused
                 />
                 <input
                     accept='image/*'
@@ -185,8 +184,8 @@ export default function MessageInput({
                     </label>
                 </IconButton>
 
-                <IconButton onClick={handleSendMsg} sx={{ mr: '10px' }}>
-                    <Tooltip title='Hit Ctrl + Enter to send'>
+                <IconButton onClick={handleSendMsg} sx={{}}>
+                    <Tooltip title='Hit Enter to send'>
                         <SendIcon
                             sx={{
                                 fontSize: '33px',

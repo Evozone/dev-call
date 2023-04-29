@@ -57,9 +57,14 @@ export default function OtherUserHeader({ chat = [], mode }) {
                         src={chat[1].userInfo.photoURL}
                     />
                     &nbsp; &nbsp;
-                    <Typography sx={{ color: 'whitesmoke' }} variant='h5'>
-                        {chat[1].userInfo.username}
-                    </Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                        <Typography sx={{ color: 'whitesmoke' }} variant='h6'>
+                            {chat[1].userInfo.name}
+                        </Typography>
+                        <Typography sx={{ color: 'lightsteelblue' }} variant='subtitle2'>
+                            @{chat[1].userInfo.username}
+                        </Typography>
+                    </Box>
                 </Box>
 
                 <Box
@@ -68,9 +73,6 @@ export default function OtherUserHeader({ chat = [], mode }) {
                         my: 1,
                         mr: 2,
                         backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                        '&:hover': {
-                            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                        },
                     }}
                 >
                     <Tooltip title='See their profile' arrow>

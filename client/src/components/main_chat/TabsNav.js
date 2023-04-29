@@ -36,6 +36,9 @@ import {
     stopLoadingAction,
 } from '../../actions/actions';
 
+const imageRegex =
+    /(https:\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*(.png|.jpg|.jpeg|.gif)(\?[^\s[",><]*)?/gi;
+
 function TabPanel(props) {
     const {
         chat,
@@ -62,7 +65,7 @@ function TabPanel(props) {
             {...other}
         >
             {value === index && !empty && !loading && !search && (
-                <Box sx={{ p: 0 }}>
+                <Box sx={{ py: 0.5, px: 1, borderRadius: '50px' }}>
                     <ListItem
                         onClick={() => {
                             setChat(item);
@@ -70,9 +73,13 @@ function TabPanel(props) {
                                 setSenderid('');
                             }
                         }}
-                        sx={{ p: 0 }}
+                        sx={{
+                            p: 0,
+                            backgroundColor: mode === 'light' ? '#F2F2F2' : '#2f3136',
+                            borderRadius: '50px',
+                        }}
                     >
-                        <ListItemButton sx={{ px: 2, height: '70px' }}>
+                        <ListItemButton sx={{ px: 1, height: '60px', borderRadius: '50px', display: 'flex', alignItems: 'center' }}>
                             <Avatar
                                 alt={item[1].userInfo.username
                                     .charAt(0)
@@ -86,24 +93,47 @@ function TabPanel(props) {
                                 }}
                             >
                                 <Typography sx={{ fontSize: '18px' }}>
-                                    {item[1].userInfo.username}
+                                    {item[1].userInfo.name}
                                 </Typography>
                                 <Typography
                                     sx={{
                                         fontSize: '14px',
-                                        color: 'lightsteelblue',
+                                        color: mode === 'light' ? 'darkgray' : 'lightsteelblue',
                                     }}
                                 >
                                     {item[1].lastMessage &&
-                                        (item[1].lastMessage.text.length > 30
-                                            ? item[1].lastMessage.text.substring(
-                                                0,
-                                                30
-                                            ) + '.......'
-                                            : item[1].lastMessage.text)}
+                                        item[1].lastMessage.text &&
+                                        item[1].lastMessage.text.match(imageRegex) ? (
+                                        <span>
+                                            🖼️{' '} Image
+                                        </span>
+                                    ) : item[1].lastMessage &&
+                                    (item[1].lastMessage.text.length > 30
+                                        ? item[1].lastMessage.text.substring(
+                                            0,
+                                            30
+                                        ) + '.......'
+                                        : item[1].lastMessage.text)}
                                 </Typography>
                             </Box>
-                            {/* <Typography>{item[1].date.seconds}</Typography> */}
+                            <Typography
+                                sx={{
+                                    position: 'absolute',
+                                    right: '20px',
+                                    fontSize: '12px',
+                                    color: mode === 'light' ? 'darkgray' : 'lightsteelblue',
+                                }}
+                            >
+                                {/* if item[1].date is the same as today's date, then extract the time only as hh:mm */}
+                                {item[1].date.toDate().toDateString() ===
+                                    new Date().toDateString()
+                                    ? item[1].date.toDate().toLocaleTimeString().slice(0, -3)
+                                    // else extract the date only as 12 Jan
+                                    : item[1].date.toDate().toLocaleDateString("en-US", {
+                                        day: "numeric",
+                                        month: "short",
+                                    })}
+                            </Typography>
                             {item[1].userInfo.uid === senderid &&
                                 chat[1]?.userInfo?.uid !== senderid && (
                                     <Box
@@ -145,7 +175,6 @@ function TabPanel(props) {
                                 )}
                         </ListItemButton>
                     </ListItem>
-                    <Divider />
                 </Box>
             )}
             {value === index && !empty && !loading && search && (
@@ -406,7 +435,7 @@ export default function TabsNav({
                         <TextField
                             label='username'
                             sx={{
-                                m: 2,
+                                m: 1,
                                 width: '93%',
                                 '& .MuiOutlinedInput-root': {
                                     paddingRight: '6px',

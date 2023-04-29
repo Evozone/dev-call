@@ -158,8 +158,8 @@ export default function MessageInput({
                     }}
                     size='small'
                     multiline
-                    maxRows={2}
-                    placeholder='Hit Crtl+Enter to send message'
+                    maxRows={4}
+                    placeholder='Hit Ctrl+Enter to send message'
                     autoFocus
                     onKeyDown={handleKey}
                     focused

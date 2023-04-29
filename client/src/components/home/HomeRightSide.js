@@ -23,9 +23,9 @@ import { v4 as uuid } from 'uuid';
 import { db, storage } from '../../firebaseConfig';
 
 // User Components
-import TextBody from './TextBody';
-import MessageInput from './MessageInput';
-import OtherUserModal from './other_user_modal/OtherUserModal';
+import TextBody from '../main_chat/TextBody';
+import MessageInput from '../main_chat/MessageInput';
+import OtherUserModal from '../main_chat/other_user_modal/OtherUserModal';
 
 import {
     notifyAction,
@@ -33,7 +33,7 @@ import {
     stopLoadingAction,
 } from '../../actions/actions';
 
-export default function ChatInterface({ mode, chat }) {
+export default function HomeRightSide({ mode, chat }) {
     const inputRef = useRef();
     const dispatch = useDispatch();
 
@@ -174,11 +174,11 @@ export default function ChatInterface({ mode, chat }) {
                     pl: 2,
                     ...(mode === 'dark'
                         ? {
-                              backgroundColor: 'info.dark',
-                          }
+                            backgroundColor: 'info.dark',
+                        }
                         : {
-                              backgroundColor: 'primary.main',
-                          }),
+                            backgroundColor: 'primary.main',
+                        }),
                     position: 'sticky',
                     top: 0,
                 }}

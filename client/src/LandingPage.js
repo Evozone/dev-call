@@ -1,3 +1,4 @@
+// React imports
 import React, { useEffect, useState } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 
@@ -10,14 +11,10 @@ import ThemeProvider from '@mui/material/styles/ThemeProvider';
 import createTheme from '@mui/material/styles/createTheme';
 import Link from '@mui/material/Link';
 import IconButton from '@mui/material/IconButton';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 
 // Material UI Icons
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
-
-import { customGlobalScrollBars } from './components/CustomGlobalCSS';
-import { smoothScrolling } from './components/CustomGlobalCSS';
 
 // Custom Components
 import TypewriterCycle from './components/landing_page/TypewriterCycle';
@@ -27,6 +24,10 @@ import Creator from './components/landing_page/Creator';
 import ButtonLink from './components/landing_page/ButtonLink';
 
 import ScrollToColor from './components/landing_page/ScrollToColor';
+
+import { customGlobalScrollBars } from './components/CustomGlobalCSS';
+import { smoothScrolling } from './components/CustomGlobalCSS';
+
 
 const LandingPage = () => {
     const theme = createTheme();

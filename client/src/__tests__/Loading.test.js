@@ -3,7 +3,7 @@ import { render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
-import Loading from '../components/Loading.js';
+import Loading from '../components/util/Loading';
 
 describe('Loading', () => {
     it('should render a loading spinner when the loading state is true', () => {

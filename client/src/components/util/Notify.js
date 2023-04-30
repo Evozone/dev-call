@@ -26,7 +26,7 @@ const Notify = () => {
             <Alert
                 onClose={handleClose}
                 severity={notify.severity}
-                sx={{ borderRadius: '5px' }}
+                sx={{ borderRadius: '50px' }}
                 variant='filled'
                 elevation={6}
             >

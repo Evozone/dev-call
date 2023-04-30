@@ -9,7 +9,7 @@ import Modal from '@mui/material/Modal';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { markdownHTML } from '../CustomGlobalCSS';
 
-export default function TextBody({ message, inputRef, sendername }) {
+export default function TextBody({ message, inputRef, sendername, boxSize = '40rem' }) {
     const endRef = useRef();
 
     const currentUser = useSelector((state) => state.auth);
@@ -82,7 +82,7 @@ export default function TextBody({ message, inputRef, sendername }) {
                 sx={{
                     borderRadius: '20px',
                     borderBottomLeftRadius: '2px',
-                    maxWidth: '40rem',
+                    maxWidth: boxSize,
                     width: 'fit-content',
                     p: '12px',
                     color: 'white',

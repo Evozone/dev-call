@@ -269,15 +269,20 @@ export default function TabsNav({
 
     useEffect(() => {
         const getUserChats = () => {
-            const unsub = onSnapshot(
-                doc(db, 'userChats', currentUser.uid),
-                (doc) => {
-                    setUserChats(doc.data());
-                }
-            );
-            return () => {
-                unsub();
-            };
+            dispatch(notifyAction(true, 'info', 'Loading your chats...'));
+            try {
+                const unsub = onSnapshot(
+                    doc(db, 'userChats', currentUser.uid),
+                    (doc) => {
+                        setUserChats(doc.data());
+                    }
+                );
+                return () => {
+                    unsub();
+                };
+            } catch (error) {
+                console.log(error);
+            }
         };
         currentUser.uid && getUserChats();
     }, [currentUser.uid]);

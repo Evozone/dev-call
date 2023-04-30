@@ -158,7 +158,7 @@ export default function MessageInput({
                     }}
                     size='small'
                     multiline
-                    maxRows={4}
+                    maxRows={18}
                     placeholder='Enter to send, Shift + Enter for new line'
                     autoFocus
                     onKeyDown={handleKey}

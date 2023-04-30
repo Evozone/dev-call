@@ -454,7 +454,9 @@ export default function TabsNav({
             </List>
             <List sx={{ p: 0 }} >
                 {value === 1 && (
-                    <React.Fragment>
+                    <Box
+                        sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                    >
                         <TextField
                             label='username'
                             sx={{
@@ -479,8 +481,8 @@ export default function TabsNav({
                             onChange={(e) => handleSearchText(e)}
                             onKeyDown={handleKey}
                         />
-                        <Divider />
-                    </React.Fragment>
+                        <Divider flexItem />
+                    </Box>
                 )}
 
                 {searchResults && (

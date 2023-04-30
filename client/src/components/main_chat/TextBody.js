@@ -82,13 +82,13 @@ export default function TextBody({ message, inputRef, sendername }) {
                 sx={{
                     borderRadius: '20px',
                     borderBottomLeftRadius: '2px',
-                    maxWidth: '30rem',
+                    maxWidth: '40rem',
                     width: 'fit-content',
                     p: '12px',
                     color: 'white',
                     mb: 1,
                     display: 'flex',
-                    alignItems: 'end',
+                    alignItems: 'flex-end',
                     ...(currentUser.uid === message.senderid
                         ? {
                             alignSelf: 'flex-end',
@@ -102,7 +102,8 @@ export default function TextBody({ message, inputRef, sendername }) {
                             flexDirection: 'column',
                         }
                         : {
-                            flexDirection: 'row',
+                            // Was: flexDirection: 'row',
+                            flexDirection: 'column',
                         }),
                     ...(sendername && { display: 'block' }),
                 }}

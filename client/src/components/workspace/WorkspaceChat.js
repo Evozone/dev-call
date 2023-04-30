@@ -119,11 +119,7 @@ export default function WorkspaceChat({ params, messages, setMessages }) {
     };
 
     return (
-        <Box
-            sx={{
-                height: '83vh',
-            }}
-        >
+        <Box>
             <Box
                 sx={{
                     height: 'calc(100vh - 20px)',
@@ -135,6 +131,7 @@ export default function WorkspaceChat({ params, messages, setMessages }) {
                     display: 'flex',
                     flexDirection: 'column',
                     p: 1,
+                    pb: 2,
                 }}
             >
                 {messages &&
@@ -144,6 +141,7 @@ export default function WorkspaceChat({ params, messages, setMessages }) {
                             message={message}
                             key={message.id}
                             sendername={true}
+                            boxSize='23rem'
                         />
                     ))}
             </Box>

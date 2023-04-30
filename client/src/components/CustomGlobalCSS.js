@@ -97,19 +97,30 @@ export const smoothScrolling = () => {
 
 export const markdownHTML = () => {
 
+    const theme = window.localStorage.getItem('devcallTheme');
+
     const component = <GlobalStyles styles={{
 
         'p': {
             margin: 0,
         },
 
+        // Dark mode
         'pre': {
-            color: 'black',
+            maxWidth: '100%',
+            overflowX: 'auto',
+            color: theme === 'dark' ? '#f5f5f5' : '#1a1a1a',
             fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
             fontSize: '0.9rem',
-            backgroundColor: '#f5f5f5',
+            backgroundColor: theme === 'dark' ? '#1a1a1a' : '#f5f5f5',
             padding: '0.2rem 0.4rem',
             borderRadius: '0.3rem',
+            border: theme === 'dark' ? '2px solid #f5f5f5' : '2px solid #1a1a1a',
+        },
+
+        'code': {
+            // Fit the parent
+            width: '100%',
         },
 
         'table': {

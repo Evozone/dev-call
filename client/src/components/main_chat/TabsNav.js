@@ -269,15 +269,20 @@ export default function TabsNav({
 
     useEffect(() => {
         const getUserChats = () => {
-            const unsub = onSnapshot(
-                doc(db, 'userChats', currentUser.uid),
-                (doc) => {
-                    setUserChats(doc.data());
-                }
-            );
-            return () => {
-                unsub();
-            };
+            dispatch(notifyAction(true, 'info', 'Loading your chats...'));
+            try {
+                const unsub = onSnapshot(
+                    doc(db, 'userChats', currentUser.uid),
+                    (doc) => {
+                        setUserChats(doc.data());
+                    }
+                );
+                return () => {
+                    unsub();
+                };
+            } catch (error) {
+                console.log(error);
+            }
         };
         currentUser.uid && getUserChats();
     }, [currentUser.uid]);
@@ -449,7 +454,9 @@ export default function TabsNav({
             </List>
             <List sx={{ p: 0 }} >
                 {value === 1 && (
-                    <React.Fragment>
+                    <Box
+                        sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                    >
                         <TextField
                             label='username'
                             sx={{
@@ -474,8 +481,8 @@ export default function TabsNav({
                             onChange={(e) => handleSearchText(e)}
                             onKeyDown={handleKey}
                         />
-                        <Divider />
-                    </React.Fragment>
+                        <Divider flexItem />
+                    </Box>
                 )}
 
                 {searchResults && (

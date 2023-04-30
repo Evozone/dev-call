@@ -6,6 +6,8 @@ import Tooltip from '@mui/material/Tooltip';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
+import { db } from './../../../firebaseConfig';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 
 import './Whiteboard.css';
 
@@ -17,6 +19,25 @@ export default function Whiteboard({ canvasRef, socketRef }) {
     const [canvasCurrent, setCanvasCurrent] = useState(null);
 
     useEffect(() => {
+        const fetchData=async()=>{
+            const drawingData = await getDoc(doc(db, 'workspace', params.workspaceId));
+            if (drawingData.exists()) {
+                const canvas = canvasRef.current;
+                const context = canvas.getContext('2d');
+                context.fillStyle = 'white';
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                const image = new Image();
+                image.onload = function () {
+                    context.drawImage(image, 0, 0);
+                };
+                image.src = drawingData.data()?.canvasData;
+                localStorage.setItem(
+                    `${params.workspaceId}-drawing`,
+                    drawingData.data().canvasData
+                );
+            }
+        }
+
         if (localStorage.getItem(`${params.workspaceId}-drawing`)) {
             const drawingData = localStorage.getItem(
                 `${params.workspaceId}-drawing`
@@ -30,6 +51,9 @@ export default function Whiteboard({ canvasRef, socketRef }) {
                 context.drawImage(image, 0, 0);
             };
             image.src = drawingData;
+            
+        }else{
+            fetchData();
         }
     }, []);
 

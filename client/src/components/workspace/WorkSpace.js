@@ -6,7 +6,7 @@ import Fab from '@mui/material/Fab';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CssBaseline from '@mui/material/CssBaseline';
 import Tooltip from '@mui/material/Tooltip';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, setDoc } from 'firebase/firestore';
 
 import SidePanel from './SidePanel';
 import Whiteboard from './whiteboard/Whiteboard';
@@ -100,10 +100,11 @@ export default function WorkSpace() {
                 canvasData,
             };
             const dbRef = doc(db, 'workspace', params.workspaceId);
+            await setDoc(dbRef,{code:'',canvasData:''});
             await updateDoc(dbRef, data);
         } catch (error) {
             dispatch(
-                notifyAction('error', true, 'Error uploading data to cloud')
+                notifyAction(true, 'error', 'Error uploading data to cloud')
             );
         } finally {
             dispatch(stopLoadingAction());

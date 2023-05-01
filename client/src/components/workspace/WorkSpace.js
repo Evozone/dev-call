@@ -100,7 +100,6 @@ export default function WorkSpace() {
                 canvasData,
             };
             const dbRef = doc(db, 'workspace', params.workspaceId);
-            await setDoc(dbRef,{code:'',canvasData:''});
             await updateDoc(dbRef, data);
         } catch (error) {
             dispatch(

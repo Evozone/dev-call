@@ -137,12 +137,12 @@ export default function HomeRightSide({ mode, chat }) {
                             ${process.env.REACT_APP_BASE_URL}/meet/${chat[0]}`;
 
     const startVideoCall = () => {
-        // handleSendMessage(INVITE_TEMPLATE, true);
+        handleSendMessage(INVITE_TEMPLATE, true);
         window.location.href = `/meet/${chat[0]}`;
     };
 
     const startWorkspace = () => {
-        // handleSendMessage(INVITE_TEMPLATE, true);
+        handleSendMessage(INVITE_TEMPLATE, true);
         window.location.href = `/workspace/${chat[0]}`;
     };
 

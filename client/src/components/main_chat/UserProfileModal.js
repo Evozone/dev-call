@@ -23,7 +23,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 // Firebase
 import { db } from '../../firebaseConfig';
-import { doc, setDoc, updateDoc, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDoc } from 'firebase/firestore';
 
 // Actions
 import {
@@ -59,7 +59,7 @@ export default function UserProfileModal({
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 setUserProfile({
-                    name: docSnap.data().name,
+                    name: docSnap.data().name || '',
                     githubLink: docSnap.data().githubLink || '',
                     linkedinLink: docSnap.data().linkedinLink || '',
                     twitterLink: docSnap.data().twitterLink || '',

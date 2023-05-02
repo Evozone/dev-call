@@ -100,7 +100,6 @@ export default function WorkSpace() {
                 canvasData,
             };
             const dbRef = doc(db, 'workspace', params.workspaceId);
-            await setDoc(dbRef,{code:'',canvasData:''});
             await updateDoc(dbRef, data);
         } catch (error) {
             dispatch(
@@ -161,24 +160,24 @@ export default function WorkSpace() {
                     />
                 </Box>
             )}
-            <Tooltip title='Backup workspace data to cloud' placement='top'>
-                <Fab
-                    sx={{
-                        position: 'absolute',
-                        bottom: 16,
-                        right: 16,
-                        backgroundColor: '#03256C',
-                        color: 'white',
+            {/* <Tooltip title='Backup workspace data to cloud' placement='top'>
+                    <Fab
+                        sx={{
+                            position: 'absolute',
+                            bottom: 16,
+                            right: 16,
+                            backgroundColor: '#03256C',
+                            color: 'white',
 
-                        '&:hover': {
-                            backgroundColor: '#2196f3',
-                        },
-                    }}
-                    onClick={uploadDataToCloud}
-                >
-                    <CloudUploadIcon />
-                </Fab>
-            </Tooltip>
+                            '&:hover': {
+                                backgroundColor: '#2196f3',
+                            },
+                        }}
+                        onClick={uploadDataToCloud}
+                    >
+                        <CloudUploadIcon />
+                    </Fab>
+                </Tooltip> */}
         </Box>
     );
 }

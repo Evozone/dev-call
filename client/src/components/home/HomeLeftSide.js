@@ -1,7 +1,4 @@
-// React imports
 import React, { useState, useEffect } from 'react';
-
-// Redux imports
 import { useDispatch } from 'react-redux';
 import { notifyAction } from '../../actions/actions';
 

@@ -23,6 +23,15 @@ import MicOffIcon from '@mui/icons-material/MicOff';
 import HeadsetIcon from '@mui/icons-material/Headset';
 import HeadsetOffIcon from '@mui/icons-material/HeadsetOff';
 import CallEndIcon from '@mui/icons-material/CallEnd';
+import { doc, updateDoc, setDoc } from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
+import { useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import {
+    notifyAction,
+    startLoadingAction,
+    stopLoadingAction,
+} from '../../actions/actions';
 
 const StyledToggleButtonGroup = styled(ToggleButtonGroup)(() => ({
     '& .MuiToggleButtonGroup-grouped': {
@@ -57,6 +66,8 @@ export default function SideStrip({ handleSelect, selected }) {
     const isConnected = useHMSStore(selectIsConnectedToRoom);
     const isLocalAudioEnabled = useHMSStore(selectIsLocalAudioEnabled);
     const peers = useHMSStore(selectPeers);
+    const dispatch = useDispatch();
+    const params = useParams();
 
     const setPeersVolume = (volume) => {
         for (const peer of peers) {
@@ -69,6 +80,35 @@ export default function SideStrip({ handleSelect, selected }) {
     const toggleDeafen = () => {
         setDeafen(!deafen);
         deafen ? setPeersVolume(100) : setPeersVolume(0);
+    };
+
+    const uploadDataToCloud = async () => {
+        try {
+            dispatch(startLoadingAction());
+            dispatch(notifyAction(true, 'success', 'Uploading data to cloud'));
+            const canvasData = localStorage.getItem(
+                `${params.workspaceId}-drawing`
+            );
+            const code = localStorage.getItem(`${params.workspaceId}-code`);
+            const data = {
+                code,
+                canvasData,
+            };
+            const dbRef = doc(db, 'workspace', params.workspaceId);
+            await updateDoc(dbRef, data);
+            window.location.href = '/chat';
+        } catch (error) {
+            console.log(error);
+            dispatch(
+                notifyAction(true, 'error', 'Error uploading data to cloud')
+            );
+        } finally {
+            dispatch(stopLoadingAction());
+        }
+    };
+
+    const leaveWorkspace = () => {
+        uploadDataToCloud();
     };
 
     return (
@@ -220,16 +260,26 @@ export default function SideStrip({ handleSelect, selected }) {
                 )}
 
                 <Tooltip title='Share Workspace Link' placement='right' arrow>
-                    <IconButton sx={{ color: 'white' }}>
+                    <IconButton
+                        sx={{ color: 'white' }}
+                        onClick={() => {
+                            navigator.clipboard.writeText(window.location.href);
+                            dispatch(
+                                notifyAction(
+                                    true,
+                                    'success',
+                                    'Workspace link copied to clipboard'
+                                )
+                            );
+                        }}
+                    >
                         <ShareIcon sx={{ fontSize: '35px' }} />
                     </IconButton>
                 </Tooltip>
                 <Tooltip title='Leave Workspace' placement='right' arrow>
                     <IconButton
                         sx={{ color: 'lightsteelblue' }}
-                        onClick={() => {
-                            window.location.href = '/chat';
-                        }}
+                        onClick={leaveWorkspace}
                     >
                         <ExitToAppIcon sx={{ fontSize: '35px' }} />
                     </IconButton>

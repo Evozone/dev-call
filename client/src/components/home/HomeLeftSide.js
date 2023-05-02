@@ -1,7 +1,4 @@
-// React imports
 import React, { useState, useEffect } from 'react';
-
-// Redux imports
 import { useDispatch } from 'react-redux';
 import { notifyAction } from '../../actions/actions';
 
@@ -41,7 +38,17 @@ export default function HomeLeftSide({
 
     const [modalOpen, setModalOpen] = useState(false);
     const [senderid, setSenderid] = useState('');
+    const [supportsPWA, setSupportsPWA] = useState(false);
+    const [promptInstall, setPromptInstall] = useState(null);
 
+    useEffect(() => {
+        const handler = (e) => {
+            e.preventDefault();
+            setSupportsPWA(true);
+            setPromptInstall(e);
+        };
+        window.addEventListener('beforeinstallprompt', handler);
+    }, []);
 
     useEffect(() => {
         const unsub2 = onSnapshot(collection(db, 'chats'), (snapshot) => {
@@ -156,8 +163,15 @@ export default function HomeLeftSide({
                     />
                 )}
 
-                {/* Box with rounded corners and rgba 0.2 to 0.4 background */}
-                <HomeMenu notificationGranted={notificationGranted} setNotificationGranted={setNotificationGranted} themeChange={themeChange} mode={mode} />
+                {/* The menu icon */}
+                <HomeMenu
+                    notificationGranted={notificationGranted}
+                    setNotificationGranted={setNotificationGranted}
+                    themeChange={themeChange}
+                    mode={mode}
+                    supportsPWA={supportsPWA}
+                    promptInstall={promptInstall}
+                />
             </Box>
 
             {/* Not the header */}

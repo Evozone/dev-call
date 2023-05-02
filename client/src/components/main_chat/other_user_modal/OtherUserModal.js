@@ -111,7 +111,7 @@ export default function OtherUserModal({
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    width: '90vw',
+                    width: user.githubLink ? '90vw' : '50%',
                     height: 'fit-content',
 
                     backgroundColor:
@@ -184,14 +184,18 @@ export default function OtherUserModal({
                         <InfoSection label="Email" content={user.email} mode={mode} />
                         <FollowSection links={userLinks} mode={mode} />
                     </Stack>
-                    <Divider orientation="vertical" flexItem sx={{
-                        backgroundColor: mode === 'light' ? '#000' : '#fff',
-                        mx: 3,
-                    }} />
+                    {user.githubLink &&
+                        <Divider orientation="vertical" flexItem sx={{
+                            backgroundColor: mode === 'light' ? '#000' : '#fff',
+                            mx: 3,
+                        }} />
+                    }
                     {/* Github Stats */}
-                    <GithubStats mode={mode} userGithub={user.githubLink} />
+                    {user.githubLink &&
+                        <GithubStats mode={mode} userGithub={user.githubLink} />
+                    }
                 </Box>
             </Box>
-        </Modal>
+        </Modal >
     )
 }

@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import Editor from '@monaco-editor/react';
 import { useParams } from 'react-router-dom';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../firebaseConfig';
 
 export default function CodeEditor({
     socketRef,
@@ -16,11 +18,16 @@ export default function CodeEditor({
         document.title = 'Dev Chat+ Code';
     }, []);
 
-    const handleEditorDidMount = (editor) => {
+    const handleEditorDidMount = async(editor) => {
         editorRef.current = editor;
         const savedCode = localStorage.getItem(`${params.workspaceId}-code`);
         if (savedCode) {
             editorRef.current.setValue(savedCode);
+        }else{
+            const code = await getDoc(doc(db, 'workspace', params.workspaceId));
+            if (code.exists()) {
+                editorRef.current.setValue(code.data().code);
+            }
         }
     };
 

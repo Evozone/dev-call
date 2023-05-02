@@ -124,9 +124,27 @@ export default function HomeRightSide({ mode, chat }) {
         return t.toString().substring(4, 15);
     };
 
-    const INVITE_TEMPLATE = `Hey, I'm using Dev Chat+ for Video Calling
+    const INVITE_TEMPLATE = `Hey, I'm using Dev Chat+ for Productive Collaboration
                             and much more. Join me on this room: 
                             ${process.env.REACT_APP_BASE_URL}/meet/${chat[0]}`;
+
+    const startVideoCall = async () => {
+        dispatch(startLoadingAction());
+        await handleSendMessage(INVITE_TEMPLATE, false);
+        dispatch(stopLoadingAction());
+        window.location.href = `/meet/${chat[0]}`;
+    };
+
+    const WORK_INVITE_TEMPLATE = `Hey, I'm using Dev Chat+ for Productive Collaboration
+    and much more. Join me on this room: 
+    ${process.env.REACT_APP_BASE_URL}/workspace/${chat[0]}`;
+
+    const startWorkspace = async () => {
+        dispatch(startLoadingAction());
+        await handleSendMessage(WORK_INVITE_TEMPLATE, false);
+        dispatch(stopLoadingAction());
+        window.location.href = `/workspace/${chat[0]}`;
+    };
 
     return (
         <Box

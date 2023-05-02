@@ -6,7 +6,7 @@ import Fab from '@mui/material/Fab';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import CssBaseline from '@mui/material/CssBaseline';
 import Tooltip from '@mui/material/Tooltip';
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, setDoc } from 'firebase/firestore';
 
 import SidePanel from './SidePanel';
 import Whiteboard from './whiteboard/Whiteboard';
@@ -103,7 +103,7 @@ export default function WorkSpace() {
             await updateDoc(dbRef, data);
         } catch (error) {
             dispatch(
-                notifyAction('error', true, 'Error uploading data to cloud')
+                notifyAction(true, 'error', 'Error uploading data to cloud')
             );
         } finally {
             dispatch(stopLoadingAction());
@@ -160,24 +160,24 @@ export default function WorkSpace() {
                     />
                 </Box>
             )}
-            <Tooltip title='Backup workspace data to cloud' placement='top'>
-                <Fab
-                    sx={{
-                        position: 'absolute',
-                        bottom: 16,
-                        right: 16,
-                        backgroundColor: '#03256C',
-                        color: 'white',
+            {/* <Tooltip title='Backup workspace data to cloud' placement='top'>
+                    <Fab
+                        sx={{
+                            position: 'absolute',
+                            bottom: 16,
+                            right: 16,
+                            backgroundColor: '#03256C',
+                            color: 'white',
 
-                        '&:hover': {
-                            backgroundColor: '#2196f3',
-                        },
-                    }}
-                    onClick={uploadDataToCloud}
-                >
-                    <CloudUploadIcon />
-                </Fab>
-            </Tooltip>
+                            '&:hover': {
+                                backgroundColor: '#2196f3',
+                            },
+                        }}
+                        onClick={uploadDataToCloud}
+                    >
+                        <CloudUploadIcon />
+                    </Fab>
+                </Tooltip> */}
         </Box>
     );
 }

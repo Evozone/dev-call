@@ -136,13 +136,21 @@ export default function HomeRightSide({ mode, chat }) {
                             and much more. Join me on this room: 
                             ${process.env.REACT_APP_BASE_URL}/meet/${chat[0]}`;
 
-    const startVideoCall = () => {
-        handleSendMessage(INVITE_TEMPLATE, true);
+    const startVideoCall = async () => {
+        dispatch(startLoadingAction());
+        await handleSendMessage(INVITE_TEMPLATE, false);
+        dispatch(stopLoadingAction());
         window.location.href = `/meet/${chat[0]}`;
     };
 
-    const startWorkspace = () => {
-        handleSendMessage(INVITE_TEMPLATE, true);
+    const WORK_INVITE_TEMPLATE = `Hey, I'm using Dev Chat+ for Productive Collaboration
+    and much more. Join me on this room: 
+    ${process.env.REACT_APP_BASE_URL}/workspace/${chat[0]}`;
+
+    const startWorkspace = async () => {
+        dispatch(startLoadingAction());
+        await handleSendMessage(WORK_INVITE_TEMPLATE, false);
+        dispatch(stopLoadingAction());
         window.location.href = `/workspace/${chat[0]}`;
     };
 
@@ -175,11 +183,11 @@ export default function HomeRightSide({ mode, chat }) {
                     pl: 2,
                     ...(mode === 'dark'
                         ? {
-                              backgroundColor: 'info.dark',
-                          }
+                            backgroundColor: 'info.dark',
+                        }
                         : {
-                              backgroundColor: 'primary.main',
-                          }),
+                            backgroundColor: 'primary.main',
+                        }),
                     position: 'sticky',
                     top: 0,
                 }}

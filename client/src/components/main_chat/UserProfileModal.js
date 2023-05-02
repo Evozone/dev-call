@@ -59,11 +59,11 @@ export default function UserProfileModal({
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 setUserProfile({
-                    name: docSnap.data().name,
-                    githubLink: docSnap.data().githubLink,
-                    linkedinLink: docSnap.data().linkedinLink,
-                    twitterLink: docSnap.data().twitterLink,
-                    bio: docSnap.data().bio,
+                    name: docSnap.data().name || '',
+                    githubLink: docSnap.data().githubLink || '',
+                    linkedinLink: docSnap.data().linkedinLink || '',
+                    twitterLink: docSnap.data().twitterLink || '',
+                    bio: docSnap.data().bio || '',
                 });
             }
             dispatch(stopLoadingAction());

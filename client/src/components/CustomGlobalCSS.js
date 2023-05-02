@@ -116,27 +116,18 @@ export const markdownHTML = () => {
             maxWidth: '100%',
         },
 
-        // Dark mode
         'pre': {
-            maxWidth: '100%',
-            overflowX: 'auto',
-            color: theme === 'dark' ? '#f5f5f5' : '#1a1a1a',
-            fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
-            fontSize: '0.9rem',
-            backgroundColor: theme === 'dark' ? '#1a1a1a' : '#f5f5f5',
-            padding: '0.2rem 0.4rem',
-            borderRadius: '0.3rem',
-            border: theme === 'dark' ? '2px solid #f5f5f5' : '2px solid #1a1a1a',
-        },
-
-        'code': {
-            // Fit the parent
-            width: '100%',
+            margin: '0',
+            padding: '0',
+            fontSize: '0.8rem',
         },
 
         'table': {
             border: '1px solid #ccc',
             borderSpacing: '0',
+            backgroundColor: theme === 'dark' ? '#2d2d2d' : '#ffffff',
+            color: theme === 'dark' ? '#ffffff' : '#000000',
+            borderRadius: '10px',
         },
 
         'th': {

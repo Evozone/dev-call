@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
-import ReactMarkdown from 'react-markdown';
-import gfm from 'remark-gfm';
 import { useSelector } from 'react-redux';
+
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import CancelIcon from '@mui/icons-material/Cancel';
+
 import { markdownHTML } from '../CustomGlobalCSS';
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
+import MarkComponent from '../util/MarkComponent';
 
 export default function TextBody({ message, inputRef, sendername, boxSize = '40rem' }) {
     const endRef = useRef();
@@ -88,7 +91,8 @@ export default function TextBody({ message, inputRef, sendername, boxSize = '40r
                     color: 'white',
                     mb: 1,
                     display: 'flex',
-                    alignItems: 'flex-end',
+                    alignItems: 'flex-start',
+                    flexDirection: 'column',
                     ...(currentUser.uid === message.senderid
                         ? {
                             alignSelf: 'flex-end',
@@ -97,14 +101,6 @@ export default function TextBody({ message, inputRef, sendername, boxSize = '40r
                             backgroundColor: '#25D366',
                         }
                         : { backgroundColor: '#34B7F1' }),
-                    ...(isImage
-                        ? {
-                            flexDirection: 'column',
-                        }
-                        : {
-                            // Was: flexDirection: 'row',
-                            flexDirection: 'column',
-                        }),
                     ...(sendername && { display: 'block' }),
                 }}
             >
@@ -232,7 +228,10 @@ export default function TextBody({ message, inputRef, sendername, boxSize = '40r
                         })}
                     </Box>
                 ) : (
-                    <ReactMarkdown remarkPlugins={[gfm]}>
+                    <ReactMarkdown remarkPlugins={[gfm]}
+                        components={{
+                            code: MarkComponent,
+                        }}>
                         {message.text}
                     </ReactMarkdown>
                 )}

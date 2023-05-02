@@ -101,8 +101,19 @@ export const markdownHTML = () => {
 
     const component = <GlobalStyles styles={{
 
+        'a': {
+            color: 'white',
+            maxWidth: '100%',
+            wordBreak: 'break-word',
+        },
+
+        'a:hover': {
+            color: 'lightblue',
+        },
+
         'p': {
             margin: 0,
+            maxWidth: '100%',
         },
 
         // Dark mode

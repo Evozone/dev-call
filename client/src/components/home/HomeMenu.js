@@ -175,51 +175,6 @@ export default function HomeMenu({
                     mr: 0.5,
                 }}
             />
-<<<<<<< HEAD
-          </ListItemIcon>
-          <ListItemText primary="Notifications" />
-        </MenuItem>
-        <MenuItem onClick={themeChange}>
-          <ListItemIcon>
-            {mode === 'dark' ? (
-              <LightModeIcon
-                sx={{ color: mode === 'dark' ? 'whitesmoke' : 'primary.dark' }}
-              />
-            ) : (
-              <DarkModeIcon
-                sx={{ color: mode === 'dark' ? 'whitesmoke' : 'primary.dark' }}
-              />
-            )}
-          </ListItemIcon>
-          <ListItemText primary="Toggle Theme" />
-        </MenuItem>
-        <MenuItem onClick={handleInstall}>
-          <ListItemIcon>
-            <DownloadIcon
-              sx={{ color: mode === 'dark' ? 'whitesmoke' : 'primary.dark' }}
-            />
-          </ListItemIcon>
-          <ListItemText primary="Install App" />
-        </MenuItem>
-      </Menu>
-      <Divider
-        orientation='vertical'
-        sx={{
-          backgroundColor: mode === 'light' ? '#0b3660' : 'whitemsmoke',
-          height: '40px',
-          width: '1px',
-          my: 1,
-          mr: 0.5
-        }}
-      />
-      <Tooltip title='Logout'>
-        <IconButton onClick={logOut}>
-          <LogoutIcon sx={{}} />
-        </IconButton>
-      </Tooltip>
-    </Box>
-  )
-=======
             <Tooltip title='Logout'>
                 <IconButton onClick={logOut}>
                     <LogoutIcon sx={{ color: 'lightsteelblue' }} />
@@ -227,5 +182,4 @@ export default function HomeMenu({
             </Tooltip>
         </Box>
     );
->>>>>>> main
 }

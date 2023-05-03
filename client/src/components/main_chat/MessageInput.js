@@ -66,6 +66,7 @@ export default function MessageInput({
             sx={{
                 position: 'sticky',
                 bottom: '0',
+                zIndex: '2',
             }}
         >
             {imageModal && (

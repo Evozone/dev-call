@@ -1,35 +1,104 @@
 # <table><tr><td>![Logo](./client/public/assets/icons/maskable_icon_x48.png)</td><td> Dev Chat + </td></tr></table>
 
-Dev Chat+ is a web application developed as a Mini Project for Semester 5 of Year 3 in Computer Engineering. It is specifically designed to cater to the needs of professional users such as software developers, designers, and project managers. The application aims to provide a comprehensive platform for collaboration and communication among professionals working on various projects.
+**Dev Chat+** is a [Web2 Application](https://ethereum.org/en/developers/docs/web2-vs-web3/) specifically designed to cater to the needs of professional users such as software developers, designers, and project managers. The application aims to provide a comprehensive platform for collaboration and communication among professionals working on various projects.
+
+<sup>Dev Chat+ was a web application developed as a Mini Project for Semesters 5 and 6 of Year 3 in Computer Engineering.</sup> 
 
 ## Features
 
-Dev Chat+ offers the following key features:
+### Base Features
 
-- Chat: Users can engage in real-time text-based communication, allowing them to discuss project-related matters, share ideas, and seek feedback from team members.
+#### Chat
+- Real-time text-based communication
+- Sharing of files, images, and rich code snippets
+- Support for markdown with syntax highlighting
+- Protection against XSS attacks
 
-- Code: The application includes a built-in code editor that provides syntax highlighting, autocompletion, and other helpful features. This allows developers to collaborate on code, perform code reviews, and streamline their development workflow.
+#### Meet 
+- Integrated video conferencing capabilities
+- Scheduling and joining of meetings
+- Screen sharing and real-time discussions
 
-- Draw: Dev Chat+ provides a collaborative drawing board, enabling users to sketch diagrams, annotate designs, or brainstorm ideas together. This feature enhances visual communication and facilitates efficient collaboration.
+### Workspaces
 
-- Meet: The application facilitates virtual meetings through integrated video conferencing capabilities. Users can schedule and join meetings, share screens, and conduct discussions with team members in real-time.
+Workspaces are tools for collaborating on projects. Each workspace has its own call, code, and draw features. Users can create multiple workspaces and invite others to collaborate. Workspaces are saved to the cloud, allowing access from any device.
+
+#### Code
+- Built-in code editor with syntax highlighting and autocompletion
+- Compiler/interpreter for various languages
+- Run code and view output without leaving the application
+
+#### Call
+- Real-time audio communication with WebSockets
+
+#### Draw
+- Collaborative whiteboard for drawing and diagramming
+- Real-time updates and multiple users can draw simultaneously
+- Export drawings as images or PDFs
+
+## Installation
+
+This project was built with `create-react-app`, so you'll need to have [Node.js](https://nodejs.org/en/) and [npm](https://www.npmjs.com/) installed on your machine to run it.
+
+Check out [How to Install Node.js and npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) for instructions on how to install them.
+
+Once you have those installed, you can follow these steps to get the project up and running:
+
+1. Clone this repository to your local machine. [Cloning a repository ↗️](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository)
+2. Navigate to the project directory in your terminal. [Navigating the command line ↗️](https://www.digitalcitizen.life/command-prompt-how-use-basic-commands/)
+
+
+Note that you will also need to obtain the [environment variables](https://kinsta.com/knowledgebase/what-is-an-environment-variable/) for the server and client in order to run the project. To do this, please contact one of the project maintainers listed below.
+
+Add the environment variables to a `.env` file in the server and client directories. The file structure should look like this:
+
+```
+dev-call
+├── client
+│   ├── .env
+│   ├── package.json
+│   └── ...
+├── server
+│   ├── .env
+│   ├── package.json
+│   └── ...
+└── ...
+```
+
+#### Server
+
+1. Navigate to the `server` directory.
+2. Run `npm install` to install the project's dependencies. 
+3. Run `npm run dev` to start the development server.
+
+#### Client
+
+1. Navigate to the `client` directory.
+2. Run `npm install` to install the project's dependencies.
+3. Run `npm run start` to start the development server.
+
+## Usage
+
+Once you have the project running, you can access it by navigating to `http://localhost:3000` in your web browser. From there, you can use the chat, meet, and workspace features to collaborate with others on your projects. 
+
+If you encounter any issues or have any questions, please don't hesitate to reach out to the project maintainers listed below.
 
 ## Technologies Used 🧑🏾‍💻
 
-|          |                                                                 Technologies                                                                  |
-| -------- | :--------------------------------------------------------------------------------------------------------------------------------------------: |
+|          |                                                                   Technologies                                                                    |
+| -------- | :-----------------------------------------------------------------------------------------------------------------------------------------------: |
 | Frontend | [React](https://reactjs.org/), [Material-UI](https://material-ui.com/), [Firebase](https://firebase.google.com/), [Socket.io](https://socket.io/) |
-| Backend  |                                                                   [Firebase](https://firebase.google.com/) Firestore                                   |
-
+| Backend  |                        [Firebase](https://firebase.google.com/) Firestore, Firebase Storage (for images), Jitsi Meet SDKs                         |
+| Database |                                                [Firebase](https://firebase.google.com/) Firestore                                                 |
+| APIs     |                                                [Judge0](https://judge0.com/) for code interpreting                                                |
 ## Attribution 📝
 - [the icon "loading" is provided by loading.io](https://loading.io/icon/)
 - Logo Inspiration by [DALLE](https://labs.openai.com) (Generated by [Project Maintainer](https://github.com/TheBrahmnicBoy) via custom prompt)
-
-
+- Default Background by [DALLE](https://labs.openai.com) (Generated by [Project Maintainer](https://github.com/TheBrahmnicBoy) via custom prompt)
 
 ## Project Maintainers 🛠
 
-<table>
+<table width="100%">
     <tbody>
         <tr>
             <td align="center"><a href="https://github.com/TheBrahmnicBoy"><img alt="Bhargav Modak" src="https://avatars.githubusercontent.com/u/82528318?v=4" width="130px;"><br><sub><b>Bhargav Modak</b></sub></a><br><a href="https://twitter.com/thebrahmnicboy" target="_blank">Web Developer</a><br><a href="https://twitter.com/thebrahmnicboy" target="_blank"><img src="https://img.shields.io/badge/twitter-%2300acee.svg?&style=for-the-badge&logo=twitter&logoColor=white&alt=twitter" /></a></td>  

@@ -23,7 +23,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 // Firebase
 import { db } from '../../firebaseConfig';
-import { doc, setDoc, updateDoc, getDoc } from 'firebase/firestore';
+import { doc, updateDoc, getDoc } from 'firebase/firestore';
 
 // Actions
 import {

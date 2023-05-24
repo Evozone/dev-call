@@ -1,12 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
+
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import CancelIcon from '@mui/icons-material/Cancel';
 
-export default function TextBody({ message, inputRef, sendername }) {
+import { markdownHTML } from '../CustomGlobalCSS';
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
+import MarkComponent from '../util/MarkComponent';
+
+export default function TextBody({ message, inputRef, sendername, boxSize = '40rem' }) {
     const endRef = useRef();
 
     const currentUser = useSelector((state) => state.auth);
@@ -74,32 +80,27 @@ export default function TextBody({ message, inputRef, sendername }) {
 
     return (
         <React.Fragment>
+            {markdownHTML()}
             <Box
                 sx={{
                     borderRadius: '20px',
                     borderBottomLeftRadius: '2px',
-                    maxWidth: '30rem',
+                    maxWidth: boxSize,
                     width: 'fit-content',
                     p: '12px',
                     color: 'white',
                     mb: 1,
                     display: 'flex',
-                    alignItems: 'end',
+                    alignItems: 'flex-start',
+                    flexDirection: 'column',
                     ...(currentUser.uid === message.senderid
                         ? {
-                              alignSelf: 'flex-end',
-                              borderBottomLeftRadius: '20px',
-                              borderBottomRightRadius: '1px',
-                              backgroundColor: '#25D366',
-                          }
+                            alignSelf: 'flex-end',
+                            borderBottomLeftRadius: '20px',
+                            borderBottomRightRadius: '1px',
+                            backgroundColor: '#25D366',
+                        }
                         : { backgroundColor: '#34B7F1' }),
-                    ...(isImage
-                        ? {
-                              flexDirection: 'column',
-                          }
-                        : {
-                              flexDirection: 'row',
-                          }),
                     ...(sendername && { display: 'block' }),
                 }}
             >
@@ -116,8 +117,8 @@ export default function TextBody({ message, inputRef, sendername }) {
                                 top: '50%',
                                 left: '50%',
                                 transform: 'translate(-50%, -50%)',
-                                width: 950,
-                                height: 650,
+                                width: '80vw',
+                                height: '90vh',
                                 bgcolor: 'background.paper',
                                 boxShadow: 24,
                                 borderRadius: '10px',
@@ -157,6 +158,8 @@ export default function TextBody({ message, inputRef, sendername }) {
                         </Box>
                     </Modal>
                 )}
+
+                {/* This is for the Workspace Chat */}
                 {sendername && (
                     <Typography
                         sx={{
@@ -169,6 +172,8 @@ export default function TextBody({ message, inputRef, sendername }) {
                         {message.senderUsername}
                     </Typography>
                 )}
+
+                {/* If link, then is image? */}
                 {isLink ? (
                     <Box sx={{ wordBreak: 'break-word' }}>
                         {funcSplitMessage(message.text).map((item, index) => {
@@ -223,10 +228,15 @@ export default function TextBody({ message, inputRef, sendername }) {
                         })}
                     </Box>
                 ) : (
-                    <Typography sx={{ wordBreak: 'break-word' }}>
+                    <ReactMarkdown remarkPlugins={[gfm]}
+                        components={{
+                            code: MarkComponent,
+                        }}>
                         {message.text}
-                    </Typography>
+                    </ReactMarkdown>
                 )}
+
+                {/* Time */}
                 <Typography
                     ref={endRef}
                     sx={{
@@ -241,6 +251,6 @@ export default function TextBody({ message, inputRef, sendername }) {
                     {messageTime}
                 </Typography>
             </Box>
-        </React.Fragment>
+        </React.Fragment >
     );
 }

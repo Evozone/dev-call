@@ -25,6 +25,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
+import ChatIcon from '@mui/icons-material/Chat';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { db } from '../../firebaseConfig';
@@ -33,6 +35,9 @@ import {
     startLoadingAction,
     stopLoadingAction,
 } from '../../actions/actions';
+
+const imageRegex =
+    /(https:\/\/)([^\s(["<,>/]*)(\/)[^\s[",><]*(.png|.jpg|.jpeg|.gif)(\?[^\s[",><]*)?/gi;
 
 function TabPanel(props) {
     const {
@@ -60,7 +65,7 @@ function TabPanel(props) {
             {...other}
         >
             {value === index && !empty && !loading && !search && (
-                <Box sx={{ p: 0 }}>
+                <Box sx={{ py: 0.5, px: 1, borderRadius: '50px' }}>
                     <ListItem
                         onClick={() => {
                             setChat(item);
@@ -68,9 +73,13 @@ function TabPanel(props) {
                                 setSenderid('');
                             }
                         }}
-                        sx={{ p: 0 }}
+                        sx={{
+                            p: 0,
+                            backgroundColor: mode === 'light' ? '#F2F2F2' : '#2f3136',
+                            borderRadius: '50px',
+                        }}
                     >
-                        <ListItemButton sx={{ px: 2, height: '70px' }}>
+                        <ListItemButton sx={{ px: 1, height: '60px', borderRadius: '50px' }}>
                             <Avatar
                                 alt={item[1].userInfo.username
                                     .charAt(0)
@@ -84,24 +93,47 @@ function TabPanel(props) {
                                 }}
                             >
                                 <Typography sx={{ fontSize: '18px' }}>
-                                    {item[1].userInfo.username}
+                                    {item[1].userInfo.name}
                                 </Typography>
                                 <Typography
                                     sx={{
                                         fontSize: '14px',
-                                        color: 'lightsteelblue',
+                                        color: mode === 'light' ? 'darkgray' : 'lightsteelblue',
                                     }}
                                 >
                                     {item[1].lastMessage &&
-                                        (item[1].lastMessage.text.length > 30
-                                            ? item[1].lastMessage.text.substring(
-                                                0,
-                                                30
-                                            ) + '.......'
-                                            : item[1].lastMessage.text)}
+                                        item[1].lastMessage.text &&
+                                        item[1].lastMessage.text.match(imageRegex) ? (
+                                        <span>
+                                            🖼️{' '} Image
+                                        </span>
+                                    ) : item[1].lastMessage &&
+                                    (item[1].lastMessage.text.length > 30
+                                        ? item[1].lastMessage.text.substring(
+                                            0,
+                                            30
+                                        ) + '.......'
+                                        : item[1].lastMessage.text)}
                                 </Typography>
                             </Box>
-                            {/* <Typography>{item[1].date.seconds}</Typography> */}
+                            <Typography
+                                sx={{
+                                    position: 'absolute',
+                                    right: '20px',
+                                    fontSize: '12px',
+                                    color: mode === 'light' ? 'darkgray' : 'lightsteelblue',
+                                }}
+                            >
+                                {/* if item[1].date is the same as today's date, then extract the time only as hh:mm */}
+                                {item[1]?.date?.toDate().toDateString() ===
+                                    new Date().toDateString()
+                                    ? item[1]?.date?.toDate().toLocaleTimeString().slice(0, -3)
+                                    // else extract the date only as 12 Jan
+                                    : item[1]?.date?.toDate().toLocaleDateString("en-US", {
+                                        day: "numeric",
+                                        month: "short",
+                                    })}
+                            </Typography>
                             {item[1].userInfo.uid === senderid &&
                                 chat[1]?.userInfo?.uid !== senderid && (
                                     <Box
@@ -143,21 +175,32 @@ function TabPanel(props) {
                                 )}
                         </ListItemButton>
                     </ListItem>
-                    <Divider />
                 </Box>
             )}
             {value === index && !empty && !loading && search && (
-                <Box sx={{ p: 0 }}>
-                    <ListItem onClick={handleSelect} sx={{ p: 0 }}>
-                        <ListItemButton sx={{ px: 2, height: '70px' }}>
+                <Box sx={{ mt: 1, py: 0.5, px: 1, borderRadius: '50px' }}>
+                    <ListItem
+                        sx={{
+                            p: 0,
+                            backgroundColor: mode === 'light' ? '#F2F2F2' : '#2f3136',
+                            borderRadius: '50px',
+                        }}
+                        onClick={handleSelect}
+                    >
+                        <ListItemButton sx={{ px: 1, height: '60px', borderRadius: '50px' }}>
                             <Avatar
                                 alt={item.username.charAt(0).toUpperCase()}
                                 src={item.photoURL}
                                 sx={{ width: 50, height: 50, mr: 2 }}
                             />
-                            <Typography sx={{ mb: 3, fontSize: '18px' }}>
-                                {item.username}
-                            </Typography>
+                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                                <Typography sx={{ fontSize: '18px' }}>
+                                    {item.name}
+                                </Typography>
+                                <Typography sx={{ fontSize: '12px', color: 'darkgray' }}>
+                                    @{item.username}
+                                </Typography>
+                            </Box>
                         </ListItemButton>
                     </ListItem>
                 </Box>
@@ -226,15 +269,20 @@ export default function TabsNav({
 
     useEffect(() => {
         const getUserChats = () => {
-            const unsub = onSnapshot(
-                doc(db, 'userChats', currentUser.uid),
-                (doc) => {
-                    setUserChats(doc.data());
-                }
-            );
-            return () => {
-                unsub();
-            };
+            dispatch(notifyAction(true, 'info', 'Loading your chats...'));
+            try {
+                const unsub = onSnapshot(
+                    doc(db, 'userChats', currentUser.uid),
+                    (doc) => {
+                        setUserChats(doc.data());
+                    }
+                );
+                return () => {
+                    unsub();
+                };
+            } catch (error) {
+                console.log(error);
+            }
         };
         currentUser.uid && getUserChats();
     }, [currentUser.uid]);
@@ -349,58 +397,42 @@ export default function TabsNav({
         setValue(0);
     };
 
+    const tabStyle = {
+        p: 0,
+        fontSize: '1rem',
+        minHeight: '45px',
+        m: 1,
+        borderRadius: '30px',
+        ...(mode === 'dark'
+            ? {
+                backgroundColor: 'info.dark',
+                borderRight: '1px solid rgba(255, 255, 255, 0.12)',
+                borderBottom: '1px solid rgba(255, 255, 255, 0.12)',
+            }
+            : {
+                backgroundColor: 'primary.main',
+                borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+                borderBottom: '1px solid rgba(0, 0, 0, 0.12)',
+            }),
+    };
+
     return (
         <Box sx={{ bgcolor: 'background.paper', width: '100%' }}>
             <AppBar elevation={0} color='inherit' position='static'>
                 <Tabs
-                    sx={{ height: '75px', alignItems: 'center' }}
+                    TabIndicatorProps={{ style: { display: 'none' } }}
+                    sx={{ alignItems: 'center' }}
                     value={value}
                     onChange={handleChange}
                     textColor='inherit'
                     variant='fullWidth'
                     aria-label='full width tabs example'
                 >
-                    <Tab
-                        sx={{
-                            height: '75px',
-                            fontSize: '1.1rem',
-                            ...(mode === 'dark'
-                                ? {
-                                    borderRight:
-                                        '1px solid rgba(255, 255, 255, 0.12)',
-                                    borderBottom:
-                                        '1px solid rgba(255, 255, 255, 0.12)',
-                                }
-                                : {
-                                    borderRight:
-                                        '1px solid rgba(0, 0, 0, 0.12)',
-                                    borderBottom:
-                                        '1px solid rgba(0, 0, 0, 0.12)',
-                                }),
-                        }}
-                        label='CHATS'
-                        {...a11yProps(0)}
-                    />
-                    <Tab
-                        sx={{
-                            height: '75px',
-                            fontSize: '1.1rem',
-                            ...(mode === 'dark'
-                                ? {
-                                    borderBottom:
-                                        '1px solid rgba(255, 255, 255, 0.12)',
-                                }
-                                : {
-                                    borderBottom:
-                                        '1px solid rgba(0, 0, 0, 0.12)',
-                                }),
-                        }}
-                        label='SEARCH'
-                        {...a11yProps(1)}
-                    />
+                    <Tab sx={tabStyle} icon={<ChatIcon />} iconPosition="start" label='CHATS' {...a11yProps(0)} />
+                    <Tab sx={{ ...tabStyle, borderRight: 'none' }} icon={<PersonSearchIcon />} iconPosition="start" label='SEARCH' {...a11yProps(1)} />
                 </Tabs>
             </AppBar>
-            <List sx={{ p: 0 }}>
+            <List sx={{ p: 0, pt: 0.5 }}>
                 {userChats &&
                     Object.entries(userChats)
                         ?.sort((a, b) => b[1].date - a[1].date)
@@ -420,13 +452,15 @@ export default function TabsNav({
                             );
                         })}
             </List>
-            <List sx={{ p: 0 }}>
+            <List sx={{ p: 0 }} >
                 {value === 1 && (
-                    <React.Fragment>
+                    <Box
+                        sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
+                    >
                         <TextField
                             label='username'
                             sx={{
-                                m: 2,
+                                m: 1,
                                 width: '93%',
                                 '& .MuiOutlinedInput-root': {
                                     paddingRight: '6px',
@@ -447,8 +481,8 @@ export default function TabsNav({
                             onChange={(e) => handleSearchText(e)}
                             onKeyDown={handleKey}
                         />
-                        <Divider />
-                    </React.Fragment>
+                        <Divider flexItem />
+                    </Box>
                 )}
 
                 {searchResults && (
@@ -458,6 +492,7 @@ export default function TabsNav({
                         value={value}
                         index={1}
                         search={true}
+                        mode={mode}
                     />
                 )}
                 {!foundUser && searchText != '' && (
@@ -465,6 +500,6 @@ export default function TabsNav({
                 )}
                 {loading && <TabPanel loading={true} value={value} index={1} />}
             </List>
-        </Box>
+        </Box >
     );
 }

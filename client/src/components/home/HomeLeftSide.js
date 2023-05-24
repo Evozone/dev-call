@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { notifyAction } from '../../actions/actions';
+
+// Material UI Components
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 
+// Firebase imports
 import { collection, onSnapshot } from 'firebase/firestore';
-import { notifyAction } from '../../actions/actions';
-
 import { db } from '../../firebaseConfig';
 
+// Custom components
 import TabsNav from '../main_chat/TabsNav';
 import UserProfileModal from '../main_chat/UserProfileModal';
 import HomeMenu from './HomeMenu';
 
-const drawerWidth = 470;
+// Constants
+const drawerWidth = 400;
+
 
 export default function HomeLeftSide({
     themeChange,
@@ -78,7 +84,7 @@ export default function HomeLeftSide({
                                     true,
                                     'info',
                                     'New message from ' +
-                                        (senderUsername ? senderUsername : sid)
+                                    (senderUsername ? senderUsername : sid)
                                 )
                             );
                         }
@@ -111,34 +117,43 @@ export default function HomeLeftSide({
             {/* The header with the name of the person. */}
             <Box
                 sx={{
-                    height: '75px',
+                    height: '65px',
                     display: 'flex',
                     justifyContent: 'space-between',
                     pl: 1,
-                    backgroundColor:
-                        mode === 'light' ? 'primary.main' : 'info.dark',
+                    backgroundColor: mode === 'light' ? 'primary.main' : 'info.dark',
                     borderRight: '1px solid',
                     borderColor: 'primary.dark',
                 }}
             >
                 {/* The profile icon and name */}
-                <IconButton
-                    sx={{ borderRadius: '0' }}
-                    onClick={() => setModalOpen(true)}
-                >
-                    <Avatar
+                <Tooltip title='Update your profile' arrow>
+                    <Button
                         sx={{
-                            width: 50,
-                            height: 50,
-                            mr: 2,
+                            borderRadius: '50px',
+                            my: 1,
+                            pr: 2,
+                            backgroundColor: 'rgba(0, 0, 0, 0.2)',
+                            '&:hover': {
+                                backgroundColor: 'rgba(0, 0, 0, 0.4)',
+                            },
                         }}
-                        alt={currentUser.username.charAt(0).toUpperCase()}
-                        src={currentUser.photoURL}
-                    />
-                    <Typography sx={{ color: 'whitesmoke' }} variant='h5'>
-                        {currentUser.username}
-                    </Typography>
-                </IconButton>
+                        onClick={() => setModalOpen(true)}
+                    >
+                        <Avatar
+                            sx={{
+                                width: 40,
+                                height: 40,
+                            }}
+                            alt={currentUser.username.charAt(0).toUpperCase()}
+                            src={currentUser.photoURL}
+                        />
+                        &nbsp;
+                        <Typography sx={{ color: 'whitesmoke' }}>
+                            {currentUser.username}
+                        </Typography>
+                    </Button>
+                </Tooltip>
 
                 {modalOpen && (
                     <UserProfileModal
@@ -162,19 +177,21 @@ export default function HomeLeftSide({
             {/* Not the header */}
             <Box
                 sx={{
-                    height: 'calc(100% - 75px)',
+                    height: 'calc(100% - 65px)',
                     ...(mode === 'dark'
                         ? {
-                              borderRight:
-                                  '1px solid rgba(255, 255, 255, 0.12)',
-                          }
+                            borderRight:
+                                '1px solid rgba(255, 255, 255, 0.12)',
+                        }
                         : {
-                              borderRight: '1px solid rgba(0, 0, 0, 0.12)',
-                          }),
+                            borderRight: '1px solid rgba(0, 0, 0, 0.12)',
+                        }),
                 }}
             >
-                <TabsNav {...{ mode, chat, setChat, senderid, setSenderid }} />
+                <TabsNav
+                    {...{ mode, chat, setChat, senderid, setSenderid }}
+                />
             </Box>
         </Drawer>
-    );
+    )
 }

@@ -94,3 +94,68 @@ export const smoothScrolling = () => {
 
     return component;
 }
+
+export const markdownHTML = () => {
+
+    const theme = window.localStorage.getItem('devcallTheme');
+
+    const component = <GlobalStyles styles={{
+
+        'a': {
+            color: 'white',
+            maxWidth: '100%',
+            wordBreak: 'break-word',
+        },
+
+        'a:hover': {
+            color: 'lightblue',
+        },
+
+        'p': {
+            margin: 0,
+            maxWidth: '100%',
+        },
+
+        'pre': {
+            margin: '0',
+            padding: '0',
+            fontSize: '0.8rem',
+        },
+
+        'table': {
+            border: '1px solid #ccc',
+            borderSpacing: '0',
+            backgroundColor: theme === 'dark' ? '#2d2d2d' : '#ffffff',
+            color: theme === 'dark' ? '#ffffff' : '#000000',
+            borderRadius: '10px',
+        },
+
+        'th': {
+            border: '1px solid #ccc',
+            padding: '0.2rem 0.4rem',
+        },
+
+        'td': {
+            border: '1px solid #ccc',
+            padding: '0.2rem 0.4rem',
+        },
+
+        // Blockquote
+
+        'blockquote': {
+            borderLeft: '0.3rem solid #ccc',
+            margin: '0',
+            padding: '0.2rem 0.4rem',
+        },
+
+        // All heading are followed by br
+
+        'h1, h2, h3, h4, h5, h6': {
+            margin: '0',
+            padding: '0',
+        },
+    }} />;
+
+    return component;
+}
+
